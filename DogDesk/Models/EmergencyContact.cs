@@ -21,5 +21,7 @@ namespace DogDesk.Models
 
         [DataType(DataType.PhoneNumber)]
         public string WorkPhone { get; set; }
+
+        public List<Pet> Pets { get; set; }
     }
 }
