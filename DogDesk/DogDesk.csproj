@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>aspnet-DogDesk-31DF0D68-5666-49CB-AC4B-7AF7A5BA645A</UserSecretsId>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.1" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Views\ModelView\" />
+  </ItemGroup>
+
+</Project>
