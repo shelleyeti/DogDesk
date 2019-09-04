@@ -18,6 +18,8 @@ namespace DogDesk.Data
         public DbSet<Pet> Pets { get; set; }
         public DbSet<ServiceType> ServiceTypes { get; set; }
         public DbSet<VetRecord> VetRecords { get; set; }
+        public DbSet<ServicePet> ServicePets { get; set; }
+        public DbSet<PetOwner> PetOwners { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,29 +27,7 @@ namespace DogDesk.Data
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
-            modelBuilder.Entity<Order>()
-                .Property(b => b.DateCreated)
-                .HasDefaultValueSql("GETDATE()");
-
-            // Restrict deletion of related order when OrderProducts entry is removed
-            modelBuilder.Entity<Order>()
-                .HasMany(o => o.OrderProducts)
-                .WithOne(l => l.Order)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Product>()
-                .Property(b => b.DateCreated)
-                .HasDefaultValueSql("GETDATE()");
-
-            // Restrict deletion of related product when OrderProducts entry is removed
-            modelBuilder.Entity<Product>()
-                .HasMany(o => o.OrderProducts)
-                .WithOne(l => l.Product)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<PaymentType>()
-                .Property(b => b.DateCreated)
-                .HasDefaultValueSql("GETDATE()");
+            modelBuilder.Entity<VetRecord>().Property(m => m.Bordetella).IsRequired(false);
 
             ApplicationUser user = new ApplicationUser
             {
@@ -67,20 +47,16 @@ namespace DogDesk.Data
             user.PasswordHash = passwordHash.HashPassword(user, "Admin8*");
             modelBuilder.Entity<ApplicationUser>().HasData(user);
 
-            modelBuilder.Entity<PaymentType>().HasData(
-                new PaymentType()
+            modelBuilder.Entity<AnimalType>().HasData(
+                new AnimalType()
                 {
-                    PaymentTypeId = 1,
-                    UserId = user.Id,
-                    Description = "American Express",
-                    AccountNumber = "86753095551212"
+                    Id = 1,
+                    Animal = "Dog"
                 },
-                new PaymentType()
+                new AnimalType()
                 {
-                    PaymentTypeId = 2,
-                    UserId = user.Id,
-                    Description = "Discover",
-                    AccountNumber = "4102948572991"
+                    Id = 2,
+                    Animal = "Cat"
                 }
             );
 
@@ -88,17 +64,17 @@ namespace DogDesk.Data
                 new ServiceType()
                 {
                     Id = 1,
-                    ServiceName = "Small Boarding"
+                    ServiceName = "Small Dog Boarding"
                 },
                 new ServiceType()
                 {
                     Id = 2,
-                    ServiceName = "Medium Boarding"
+                    ServiceName = "Medium Dog Boarding"
                 },
                 new ServiceType()
                 {
                     Id = 3,
-                    ServiceName = "Large Boarding"
+                    ServiceName = "Large Dog Boarding"
                 },
                 new ServiceType()
                 {
@@ -132,91 +108,89 @@ namespace DogDesk.Data
                 }
             );
 
-            modelBuilder.Entity<Product>().HasData(
-                new Product()
+            modelBuilder.Entity<Pet>().HasData(
+                new Pet()
                 {
-                    ProductId = 1,
-                    ProductTypeId = 1,
-                    UserId = user.Id,
-                    Description = "It flies high",
-                    Title = "Kite",
-                    Quantity = 100,
-                    Price = 2.99
-                },
-                new Product()
-                {
-                    ProductId = 2,
-                    ProductTypeId = 2,
-                    UserId = user.Id,
-                    Description = "It rolls fast",
-                    Title = "Wheelbarrow",
-                    Quantity = 5,
-                    Price = 29.99
-                },
-                new Product()
-                {
-                    ProductId = 3,
-                    ProductTypeId = 3,
-                    UserId = user.Id,
-                    Description = "It cuts things",
-                    Title = "Saw",
-                    Quantity = 18,
-                    Price = 31.49
-                },
-                new Product()
-                {
-                    ProductId = 4,
-                    ProductTypeId = 3,
-                    UserId = user.Id,
-                    Description = "It puts holes in things",
-                    Title = "Electric Drill",
-                    Quantity = 12,
-                    Price = 24.89
-                },
-                new Product()
-                {
-                    ProductId = 5,
-                    ProductTypeId = 3,
-                    UserId = user.Id,
-                    Description = "It puts things together",
-                    Title = "Hammer",
-                    Quantity = 32,
-                    Price = 22.69
+                    Id =1,
+                    FirstName = "Cavy",
+                    LastName = "Arnold",
+                    Gender = "Male",
+                    BirthDate = new DateTime(2014, 8, 1),
+                    Size = "medium",
+                    Color1 = "black",
+                    Color2 = "tri-color",
+                    AnimalTypeId = 1
                 }
             );
 
-            modelBuilder.Entity<Order>().HasData(
-                new Order()
+            modelBuilder.Entity<VetRecord>().HasData(
+                new VetRecord()
                 {
-                    OrderId = 1,
-                    UserId = user.Id,
-                    PaymentTypeId = null
-                },
-                new Order()
-                {
-                    OrderId = 2,
-                    UserId = user.Id,
-                    PaymentTypeId = 2,
-                    DateCompleted = DateTime.Now.Date.AddDays(-10)
+                    Id = 1,
+                    PetId = 1,
+                    VetName = "Mobley",
+                    StreetAddress = "4709 Gallatin Pk",
+                    City = "Nahsville",
+                    ZipCode = 37216,
+                    State = "TN",
+                    WorkPhone = "615-262-0415",
+                    Allergy = "Beef",
+                    Altered = true,
+                    Rabies = new DateTime(2018, 9, 19),
+                    Bordetella = new DateTime(2018, 9, 19)
                 }
             );
 
-            modelBuilder.Entity<OrderProduct>().HasData(
-                new OrderProduct()
+            modelBuilder.Entity<Owner>().HasData(
+                new Owner()
                 {
-                    OrderProductId = 1,
-                    OrderId = 1,
-                    ProductId = 1
-                },
-                new OrderProduct()
+                    Id = 1,
+                    PetId = 1,
+                    FirstName = "Shelley",
+                    LastName = "Arnold",
+                    StreetAddress = "1234 Dog Way",
+                    City = "Nahsville",
+                    State = "TN",
+                    ZipCode = 37206,
+                    HomePhone = null,
+                    CellPhone = "615-555-5555",
+                    WorkPhone = null,
+                }
+            );
+
+            modelBuilder.Entity<EmergencyContact>().HasData(
+                new EmergencyContact()
                 {
-                    OrderProductId = 2,
-                    OrderId = 2,
-                    ProductId = 2
+                    Id = 1,
+                    PetId = 1,
+                    FirstName = "Janice",
+                    LastName = "Arant",
+                    HomePhone = null,
+                    CellPhone = "615-555-5555",
+                    WorkPhone = null,
+                }
+            );
+
+            modelBuilder.Entity<ServicePet>().HasData(
+                new ServicePet()
+                {
+                    Id = 1,
+                    UserId = user.Id,
+                    ServiceType = 2,
+                    PetId = 1,
+                    StartDate = new DateTime(2019, 9, 19),
+                    CheckoutDate = new DateTime(2019, 9, 23)
+                }
+            );
+
+            modelBuilder.Entity<PetOwner>().HasData(
+                new PetOwner()
+                {
+                    Id = 1,
+                    PetId = 1,
+                    OwnerId = 1
                 }
             );
         }
-
-
     }
 }

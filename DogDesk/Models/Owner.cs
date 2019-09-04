@@ -13,8 +13,12 @@ namespace DogDesk.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string StreetAddress { get; set; }
+        public string City { get; set; }
+
         public string State { get; set; }
-        public int Zip { get; set; }
+
+        [DataType(DataType.PostalCode)]
+        public int ZipCode { get; set; }
 
         [DataType(DataType.PhoneNumber)]
         public string HomePhone { get; set; }

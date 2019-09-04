@@ -12,7 +12,10 @@ namespace DogDesk.Models
         public int PetId { get; set; }
         public string VetName { get; set; }
         public string StreetAddress { get; set; }
+        public string City { get; set; }
         public string State { get; set; }
+
+
         public int ZipCode { get; set; }
 
         [DataType(DataType.PhoneNumber)]
@@ -20,5 +23,9 @@ namespace DogDesk.Models
 
         public string Allergy { get; set; }
         public bool Altered { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime Rabies { get; set; }
+        public DateTime? Bordetella { get; set; }
     }
 }
