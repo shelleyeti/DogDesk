@@ -20,9 +20,12 @@ namespace DogDesk.Models
         public string Color2 { get; set; }
         public int AnimalTypeId { get; set; }
 
+        [Required]
+        public int OwnerId { get; set; }
+
 
         public List<VetRecord> VetRecords { get; set; }
-        public List<Owner> Owners { get; set; }
+        public List<PetOwner> PetOwners { get; set; }
         public List<EmergencyContact> EmergencyContacts { get; set; }
         public List<ServicePet> ServicePets { get; set; }
 

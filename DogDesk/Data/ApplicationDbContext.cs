@@ -104,7 +104,7 @@ namespace DogDesk.Data
                 new ServiceType()
                 {
                     Id = 9,
-                    ServiceName = "Nails"
+                    ServiceName = "Nail Trim"
                 }
             );
 
@@ -119,7 +119,8 @@ namespace DogDesk.Data
                     Size = "medium",
                     Color1 = "black",
                     Color2 = "tri-color",
-                    AnimalTypeId = 1
+                    AnimalTypeId = 1,
+                    OwnerId = 1
                 }
             );
 
@@ -145,7 +146,6 @@ namespace DogDesk.Data
                 new Owner()
                 {
                     Id = 1,
-                    PetId = 1,
                     FirstName = "Shelley",
                     LastName = "Arnold",
                     StreetAddress = "1234 Dog Way",

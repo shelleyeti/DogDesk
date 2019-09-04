@@ -1,0 +1,74 @@
+﻿@model DogDesk.Models.Owner
+
+@{
+    ViewData["Title"] = "Create";
+}
+<h3>New Client</h3>
+<h5>Create a New Client</h5>
+<br />
+
+<div class="row">
+    <form asp-action="Create">
+        <div class="col-md-5">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HomePhone" class="control-label"></label>
+                <input asp-for="HomePhone" class="form-control" />
+                <span asp-validation-for="HomePhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CellPhone" class="control-label"></label>
+                <input asp-for="CellPhone" class="form-control" />
+                <span asp-validation-for="CellPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkPhone" class="control-label"></label>
+                <input asp-for="WorkPhone" class="form-control" />
+                <span asp-validation-for="WorkPhone" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-5 col-md-offset-1">
+            <div class="form-group">
+                <label asp-for="StreetAddress" class="control-label"></label>
+                <input asp-for="StreetAddress" class="form-control" />
+                <span asp-validation-for="StreetAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="State" class="control-label"></label>
+                <input asp-for="State" class="form-control" />
+                <span asp-validation-for="State" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ZipCode" class="control-label"></label>
+                <input asp-for="ZipCode" class="form-control" />
+                <span asp-validation-for="ZipCode" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12 form-group text-right">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div class="text-right">
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

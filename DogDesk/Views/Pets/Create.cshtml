@@ -1,0 +1,75 @@
+﻿@model DogDesk.Models.Pet
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h3>New Pet</h3>
+<h5>Add a New Pet to an Existing Client</h5>
+<br />
+
+<div class="row">
+    <form asp-action="Create">
+        <div class="col-md-5">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BirthDate" class="control-label"></label>
+                <input asp-for="BirthDate" class="form-control" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-5 col-md-offset-1">
+            <div class="form-group">
+                <label asp-for="Size" class="control-label"></label>
+                <input asp-for="Size" class="form-control" />
+                <span asp-validation-for="Size" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Color1" class="control-label"></label>
+                <input asp-for="Color1" class="form-control" />
+                <span asp-validation-for="Color1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Color2" class="control-label"></label>
+                <input asp-for="Color2" class="form-control" />
+                <span asp-validation-for="Color2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AnimalTypeId" class="control-label"></label>
+                <input asp-for="AnimalTypeId" class="form-control" />
+                <span asp-validation-for="AnimalTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OwnerId" class="control-label"></label>
+                <input asp-for="OwnerId" class="form-control" />
+                <span asp-validation-for="OwnerId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12 form-group text-right">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div class="text-right">
+    <a Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
