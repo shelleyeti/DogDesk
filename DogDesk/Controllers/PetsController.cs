@@ -95,6 +95,12 @@ namespace DogDesk
             return View(pet);
         }
 
+        public JsonResult GetOwnerList(string name)
+        {
+            var list = _context.Owners.Where(x => x.FullName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase)).Take(10).ToList();
+            return Json(list);
+        }
+
         // GET: Pets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

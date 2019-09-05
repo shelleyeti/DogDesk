@@ -54,24 +54,71 @@
                 <input asp-for="AnimalTypeId" class="form-control" />
                 <span asp-validation-for="AnimalTypeId" class="text-danger"></span>
             </div>
-            @if (Model.PetOwners.Count > 0)
+            @if (Model != null && Model.PetOwners != null && Model.PetOwners.Count > 0)
             {
                 <div class="form-group">
                     <label class="control-label">Owner Name: </label>
-                    <input asp-for="PetOwners.First().Owners.FullName" class="form-control" />
+                    <input disabled asp-for="PetOwners.First().Owners.FullName" class="form-control" />
                 </div>
                 <input type="hidden" asp-for="PetOwners.First().Owners.Id" />
             }
+            else
+            {
+                <label class="control-label">Owner Name: </label>
+                <input type="text" id="select" class="form-control" />
+                <input type="hidden" id="OwnerId" name="Id" />
+            }
             @*<div class="form-group">
-                <label asp-for="OwnerId" class="control-label"></label>
-                <input asp-for="OwnerId" class="form-control" />
-            </div>*@
+                    <label asp-for="OwnerId" class="control-label"></label>
+                    <input asp-for="OwnerId" class="form-control" />
+                </div>*@
         </div>
         <div class="col-md-12 form-group text-right">
             <input type="submit" value="Create" class="btn btn-primary" />
         </div>
     </form>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#select").typeahead({
+            minLength: 1,
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Pets/GetOwnerList/",
+                    data: {
+                        "name": request
+                    },
+                    type: "GET",
+                    contentType: "json",
+                    success: function (data) {
+                        items = [];
+                        map = {};
+                        $.each(data, function (i, item) {
+                            var id = item.id;
+                            var name = item.fullName;
+                            map[name] = {
+                                id: id,
+                                name: name
+                            };
+                            items.push(name);
+                        });
+                        response(items);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            updater: function (item) { //If simultaneously want to update value somewhere else
+                $("#OwnerId").val(map[item].id); return item;
+            }
+        });
+    });
+</script>
 
 <div class="text-right">
     <a Index">Back to List</a>
