@@ -112,14 +112,14 @@ namespace DogDesk.Data
                 new Pet()
                 {
                     Id =1,
-                    FirstName = "Cavy",
-                    LastName = "Arnold",
+                    Name = "Cavy",
                     Gender = "Male",
                     BirthDate = new DateTime(2014, 8, 1),
                     Size = "medium",
                     Color1 = "black",
                     Color2 = "tri-color",
-                    AnimalTypeId = 1
+                    AnimalTypeId = 1,
+                    Breed = "aussie mix"
                 }
             );
 

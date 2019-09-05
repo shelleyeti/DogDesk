@@ -74,7 +74,7 @@ namespace DogDesk
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OwnerId,FirstName,LastName,Gender,BirthDate,Size,Color1,Color2,AnimalTypeId")] Pet pet)
+        public async Task<IActionResult> Create([Bind("Id,OwnerId,Name,Gender,BirthDate,Size,Color1,Color2,AnimalTypeId,Breed")] Pet pet)
         {
             if (ModelState.IsValid)
             {
@@ -122,7 +122,7 @@ namespace DogDesk
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,FirstName,LastName,Gender,BirthDate,Size,Color1,Color2,AnimalTypeId")] Pet pet)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,Name,Gender,BirthDate,Size,Color1,Color2,AnimalTypeId,Breed")] Pet pet)
         {
             if (id != pet.Id)
             {

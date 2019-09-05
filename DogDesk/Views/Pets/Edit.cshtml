@@ -14,14 +14,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Gender" class="control-label"></label>
@@ -39,6 +34,11 @@
                 <span asp-validation-for="Size" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="AnimalTypeId" class="control-label"></label>
+                <input asp-for="AnimalTypeId" class="form-control" />
+                <span asp-validation-for="AnimalTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Color1" class="control-label"></label>
                 <input asp-for="Color1" class="form-control" />
                 <span asp-validation-for="Color1" class="text-danger"></span>
@@ -49,9 +49,9 @@
                 <span asp-validation-for="Color2" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AnimalTypeId" class="control-label"></label>
-                <input asp-for="AnimalTypeId" class="form-control" />
-                <span asp-validation-for="AnimalTypeId" class="text-danger"></span>
+                <label asp-for="Breed" class="control-label"></label>
+                <input asp-for="Breed" class="form-control" />
+                <span asp-validation-for="Breed" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

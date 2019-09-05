@@ -12,16 +12,10 @@
     <br />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Gender)
@@ -42,6 +36,12 @@
             @Html.DisplayFor(model => model.Size)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AnimalTypeId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AnimalTypeId)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Color1)
         </dt>
         <dd class="col-sm-10">
@@ -54,11 +54,11 @@
             @Html.DisplayFor(model => model.Color2)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AnimalTypeId)
+            @Html.DisplayNameFor(model => model.Breed)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AnimalTypeId)
-        </dd>s
+            @Html.DisplayFor(model => model.Breed)
+        </dd>
     </dl>
     
     <form asp-action="Delete">
