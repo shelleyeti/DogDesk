@@ -21,8 +21,7 @@ namespace DogDesk.Models
 
         public string State { get; set; }
 
-        [DataType(DataType.PostalCode)]
-        public int ZipCode { get; set; }
+        public string ZipCode { get; set; }
 
         [DataType(DataType.PhoneNumber)]
         public string HomePhone { get; set; }
@@ -40,7 +39,8 @@ namespace DogDesk.Models
             get
             { return $"{FirstName} {LastName}"; }
         }
-
+        
+        [NotMapped]
         public List<PetOwner> PetOwners { get; set; }
     }
 }

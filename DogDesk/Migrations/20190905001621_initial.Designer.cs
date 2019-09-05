@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DogDesk.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190904185422_ownerPet")]
-    partial class ownerPet
+    [Migration("20190905001621_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,7 +105,7 @@ namespace DogDesk.Migrations
                         {
                             Id = "000-shelley-arnold-333-7777777",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e1d0bd0c-df07-47a0-82cd-bbd49d71de4e",
+                            ConcurrencyStamp = "6c97b48b-f3af-4d5c-9f83-093954a847d0",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Shelley",
@@ -113,7 +113,7 @@ namespace DogDesk.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOaVs28d2ISTC3ApYE9y6SPkx0pxZ0c3i1ICWi6SkrwkH89HniO509WT2P+Mt005wA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECK3vw8tfz4GoUNNbTCzpGYPS1jDpUXxYC/vOxSAF1O4BGLqoRIkZhStWN2OEuHITA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
@@ -164,11 +164,13 @@ namespace DogDesk.Migrations
 
                     b.Property<string>("City");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
                     b.Property<string>("HomePhone");
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
                     b.Property<string>("State");
 
@@ -176,7 +178,7 @@ namespace DogDesk.Migrations
 
                     b.Property<string>("WorkPhone");
 
-                    b.Property<int>("ZipCode");
+                    b.Property<string>("ZipCode");
 
                     b.HasKey("Id");
 
@@ -192,7 +194,7 @@ namespace DogDesk.Migrations
                             LastName = "Arnold",
                             State = "TN",
                             StreetAddress = "1234 Dog Way",
-                            ZipCode = 37206
+                            ZipCode = "37206"
                         });
                 });
 
@@ -215,8 +217,6 @@ namespace DogDesk.Migrations
 
                     b.Property<string>("LastName");
 
-                    b.Property<int>("OwnerId");
-
                     b.Property<string>("Size");
 
                     b.HasKey("Id");
@@ -234,7 +234,6 @@ namespace DogDesk.Migrations
                             FirstName = "Cavy",
                             Gender = "Male",
                             LastName = "Arnold",
-                            OwnerId = 1,
                             Size = "medium"
                         });
                 });
@@ -249,8 +248,6 @@ namespace DogDesk.Migrations
                     b.Property<int>("PetId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.HasIndex("PetId");
 
@@ -382,7 +379,7 @@ namespace DogDesk.Migrations
 
                     b.Property<string>("WorkPhone");
 
-                    b.Property<int>("ZipCode");
+                    b.Property<string>("ZipCode");
 
                     b.HasKey("Id");
 
@@ -404,7 +401,7 @@ namespace DogDesk.Migrations
                             StreetAddress = "4709 Gallatin Pk",
                             VetName = "Mobley",
                             WorkPhone = "615-262-0415",
-                            ZipCode = 37216
+                            ZipCode = "37216"
                         });
                 });
 
@@ -529,11 +526,6 @@ namespace DogDesk.Migrations
 
             modelBuilder.Entity("DogDesk.Models.PetOwner", b =>
                 {
-                    b.HasOne("DogDesk.Models.Owner")
-                        .WithMany("PetOwners")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("DogDesk.Models.Pet")
                         .WithMany("PetOwners")
                         .HasForeignKey("PetId")

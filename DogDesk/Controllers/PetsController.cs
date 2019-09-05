@@ -49,10 +49,23 @@ namespace DogDesk
         }
 
         // GET: Pets/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id = null)
         {
-            var newPet = _context.Pets;
-            
+            if(id != null)
+            {
+                var owner = _context.Owners
+                    .FirstOrDefault(x => x.Id == id);
+                var newPet = new Pet();
+                var newPetOwner = new PetOwner();
+
+                newPetOwner.Owners = owner;
+                //From list inside pet class
+                newPet.PetOwners = new List<PetOwner>();
+                newPet.PetOwners.Add(newPetOwner);
+
+                return View(newPet);
+            }
+
             return View();
         }
 
@@ -65,8 +78,18 @@ namespace DogDesk
         {
             if (ModelState.IsValid)
             {
+                var newPetOwner = new PetOwner();
+                newPetOwner.OwnerId = pet.Id;
+
+                pet.Id = 0;
+
                 _context.Add(pet);
                 await _context.SaveChangesAsync();
+
+                newPetOwner.PetId = pet.Id;
+                _context.Add(newPetOwner);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(pet);

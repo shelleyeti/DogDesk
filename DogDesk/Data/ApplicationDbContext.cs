@@ -119,8 +119,7 @@ namespace DogDesk.Data
                     Size = "medium",
                     Color1 = "black",
                     Color2 = "tri-color",
-                    AnimalTypeId = 1,
-                    OwnerId = 1
+                    AnimalTypeId = 1
                 }
             );
 
@@ -132,7 +131,7 @@ namespace DogDesk.Data
                     VetName = "Mobley",
                     StreetAddress = "4709 Gallatin Pk",
                     City = "Nahsville",
-                    ZipCode = 37216,
+                    ZipCode = "37216",
                     State = "TN",
                     WorkPhone = "615-262-0415",
                     Allergy = "Beef",
@@ -151,10 +150,10 @@ namespace DogDesk.Data
                     StreetAddress = "1234 Dog Way",
                     City = "Nahsville",
                     State = "TN",
-                    ZipCode = 37206,
+                    ZipCode = "37206",
                     HomePhone = null,
                     CellPhone = "615-555-5555",
-                    WorkPhone = null,
+                    WorkPhone = null
                 }
             );
 
@@ -167,7 +166,7 @@ namespace DogDesk.Data
                     LastName = "Arant",
                     HomePhone = null,
                     CellPhone = "615-555-5555",
-                    WorkPhone = null,
+                    WorkPhone = null
                 }
             );
 
