@@ -22,7 +22,7 @@ namespace DogDesk.Models
 
 
         public List<VetRecord> VetRecords { get; set; }
-        public List<Owner> Owners { get; set; }
+        public List<PetOwner> PetOwners { get; set; }
         public List<EmergencyContact> EmergencyContacts { get; set; }
         public List<ServicePet> ServicePets { get; set; }
 

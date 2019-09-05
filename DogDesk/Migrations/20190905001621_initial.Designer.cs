@@ -3,15 +3,17 @@ using System;
 using DogDesk.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DogDesk.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190905001621_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,7 +105,7 @@ namespace DogDesk.Migrations
                         {
                             Id = "000-shelley-arnold-333-7777777",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "546b7086-a229-44e2-9ae4-e8102ee21a53",
+                            ConcurrencyStamp = "6c97b48b-f3af-4d5c-9f83-093954a847d0",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Shelley",
@@ -111,7 +113,7 @@ namespace DogDesk.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFkmSV1YrxP65idcQWjWeJRlyCwoGoblYpxaeEVg0+oLvdLCv8LGkaI4VF0JmfRlcQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECK3vw8tfz4GoUNNbTCzpGYPS1jDpUXxYC/vOxSAF1O4BGLqoRIkZhStWN2OEuHITA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
@@ -246,8 +248,6 @@ namespace DogDesk.Migrations
                     b.Property<int>("PetId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.HasIndex("PetId");
 
@@ -526,12 +526,7 @@ namespace DogDesk.Migrations
 
             modelBuilder.Entity("DogDesk.Models.PetOwner", b =>
                 {
-                    b.HasOne("DogDesk.Models.Owner", "Owners")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DogDesk.Models.Pet", "Pets")
+                    b.HasOne("DogDesk.Models.Pet")
                         .WithMany("PetOwners")
                         .HasForeignKey("PetId")
                         .OnDelete(DeleteBehavior.Cascade);

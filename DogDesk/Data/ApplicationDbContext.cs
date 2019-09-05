@@ -104,7 +104,7 @@ namespace DogDesk.Data
                 new ServiceType()
                 {
                     Id = 9,
-                    ServiceName = "Nails"
+                    ServiceName = "Nail Trim"
                 }
             );
 
@@ -131,7 +131,7 @@ namespace DogDesk.Data
                     VetName = "Mobley",
                     StreetAddress = "4709 Gallatin Pk",
                     City = "Nahsville",
-                    ZipCode = 37216,
+                    ZipCode = "37216",
                     State = "TN",
                     WorkPhone = "615-262-0415",
                     Allergy = "Beef",
@@ -145,16 +145,15 @@ namespace DogDesk.Data
                 new Owner()
                 {
                     Id = 1,
-                    PetId = 1,
                     FirstName = "Shelley",
                     LastName = "Arnold",
                     StreetAddress = "1234 Dog Way",
                     City = "Nahsville",
                     State = "TN",
-                    ZipCode = 37206,
+                    ZipCode = "37206",
                     HomePhone = null,
                     CellPhone = "615-555-5555",
-                    WorkPhone = null,
+                    WorkPhone = null
                 }
             );
 
@@ -167,7 +166,7 @@ namespace DogDesk.Data
                     LastName = "Arant",
                     HomePhone = null,
                     CellPhone = "615-555-5555",
-                    WorkPhone = null,
+                    WorkPhone = null
                 }
             );
 
