@@ -4,17 +4,43 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DogDesk.Migrations
 {
-    public partial class initial : Migration
+    public partial class petModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AnimalGenders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Gender = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnimalGenders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnimalSizes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Size = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnimalSizes", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AnimalTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Animal = table.Column<string>(nullable: true)
+                    Animal = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -84,26 +110,6 @@ namespace DogDesk.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pets",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    Gender = table.Column<string>(nullable: true),
-                    BirthDate = table.Column<DateTime>(nullable: false),
-                    Size = table.Column<string>(nullable: true),
-                    Color1 = table.Column<string>(nullable: true),
-                    Color2 = table.Column<string>(nullable: true),
-                    AnimalTypeId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pets", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ServiceTypes",
                 columns: table => new
                 {
@@ -114,6 +120,46 @@ namespace DogDesk.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ServiceTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: false),
+                    GenderId = table.Column<int>(nullable: false),
+                    BirthDate = table.Column<DateTime>(nullable: false),
+                    SizeId = table.Column<int>(nullable: false),
+                    Color1 = table.Column<string>(nullable: false),
+                    Color2 = table.Column<string>(nullable: true),
+                    AnimalTypeId = table.Column<int>(nullable: false),
+                    Breed = table.Column<string>(nullable: true),
+                    GenderOfAnimalId = table.Column<int>(nullable: true),
+                    SizeOfAnimalId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pets_AnimalTypes_AnimalTypeId",
+                        column: x => x.AnimalTypeId,
+                        principalTable: "AnimalTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Pets_AnimalGenders_GenderOfAnimalId",
+                        column: x => x.GenderOfAnimalId,
+                        principalTable: "AnimalGenders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Pets_AnimalSizes_SizeOfAnimalId",
+                        column: x => x.SizeOfAnimalId,
+                        principalTable: "AnimalSizes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -229,8 +275,8 @@ namespace DogDesk.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     PetId = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
                     HomePhone = table.Column<string>(nullable: true),
                     CellPhone = table.Column<string>(nullable: true),
                     WorkPhone = table.Column<string>(nullable: true)
@@ -258,6 +304,12 @@ namespace DogDesk.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PetOwners", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PetOwners_Owners_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Owners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PetOwners_Pets_PetId",
                         column: x => x.PetId,
@@ -319,6 +371,25 @@ namespace DogDesk.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AnimalGenders",
+                columns: new[] { "Id", "Gender" },
+                values: new object[,]
+                {
+                    { 1, "Male" },
+                    { 2, "Female" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AnimalSizes",
+                columns: new[] { "Id", "Size" },
+                values: new object[,]
+                {
+                    { 1, "Small" },
+                    { 2, "Medium" },
+                    { 3, "Large" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "AnimalTypes",
                 columns: new[] { "Id", "Animal" },
                 values: new object[,]
@@ -330,53 +401,23 @@ namespace DogDesk.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "000-shelley-arnold-333-7777777", 0, "6c97b48b-f3af-4d5c-9f83-093954a847d0", "admin@admin.com", true, "Shelley", "Arnold", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAECK3vw8tfz4GoUNNbTCzpGYPS1jDpUXxYC/vOxSAF1O4BGLqoRIkZhStWN2OEuHITA==", null, false, "7f434309-a4d9-48e9-9ebb-8803db794577", false, "admin@admin.com" });
-
-            migrationBuilder.InsertData(
-                table: "Owners",
-                columns: new[] { "Id", "CellPhone", "City", "FirstName", "HomePhone", "LastName", "State", "StreetAddress", "WorkPhone", "ZipCode" },
-                values: new object[] { 1, "615-555-5555", "Nahsville", "Shelley", null, "Arnold", "TN", "1234 Dog Way", null, "37206" });
-
-            migrationBuilder.InsertData(
-                table: "Pets",
-                columns: new[] { "Id", "AnimalTypeId", "BirthDate", "Color1", "Color2", "FirstName", "Gender", "LastName", "Size" },
-                values: new object[] { 1, 1, new DateTime(2014, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "black", "tri-color", "Cavy", "Male", "Arnold", "medium" });
+                values: new object[] { "000-shelley-arnold-333-7777777", 0, "60fb0c80-d9c2-450e-8d65-162bf49e48f1", "admin@admin.com", true, "Shelley", "Arnold", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEFhhXTWpG1EclMs/vWy+wJ35XbthsGiTalPKdKOEFtFNXmd0y6T7Edu6CjvxEM+3rg==", null, false, "7f434309-a4d9-48e9-9ebb-8803db794577", false, "admin@admin.com" });
 
             migrationBuilder.InsertData(
                 table: "ServiceTypes",
                 columns: new[] { "Id", "ServiceName" },
                 values: new object[,]
                 {
-                    { 1, "Small Dog Boarding" },
-                    { 2, "Medium Dog Boarding" },
-                    { 3, "Large Dog Boarding" },
-                    { 4, "Cat Boarding" },
-                    { 5, "Day Care" },
-                    { 6, "Small Dog Bath" },
                     { 7, "Medium Dog Bath" },
+                    { 6, "Small Dog Bath" },
+                    { 5, "Day Care" },
+                    { 1, "Small Dog Boarding" },
+                    { 3, "Large Dog Boarding" },
+                    { 2, "Medium Dog Boarding" },
                     { 8, "Large Dog Bath" },
+                    { 4, "Cat Boarding" },
                     { 9, "Nail Trim" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "EmergencyContacts",
-                columns: new[] { "Id", "CellPhone", "FirstName", "HomePhone", "LastName", "PetId", "WorkPhone" },
-                values: new object[] { 1, "615-555-5555", "Janice", null, "Arant", 1, null });
-
-            migrationBuilder.InsertData(
-                table: "PetOwners",
-                columns: new[] { "Id", "OwnerId", "PetId" },
-                values: new object[] { 1, 1, 1 });
-
-            migrationBuilder.InsertData(
-                table: "ServicePets",
-                columns: new[] { "Id", "CheckoutDate", "PetId", "ServiceType", "StartDate", "UserId" },
-                values: new object[] { 1, new DateTime(2019, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 2, new DateTime(2019, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), "000-shelley-arnold-333-7777777" });
-
-            migrationBuilder.InsertData(
-                table: "VetRecords",
-                columns: new[] { "Id", "Allergy", "Altered", "Bordetella", "City", "PetId", "Rabies", "State", "StreetAddress", "VetName", "WorkPhone", "ZipCode" },
-                values: new object[] { 1, "Beef", true, new DateTime(2018, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nahsville", 1, new DateTime(2018, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), "TN", "4709 Gallatin Pk", "Mobley", "615-262-0415", "37216" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -421,9 +462,29 @@ namespace DogDesk.Migrations
                 column: "PetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PetOwners_OwnerId",
+                table: "PetOwners",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PetOwners_PetId",
                 table: "PetOwners",
                 column: "PetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pets_AnimalTypeId",
+                table: "Pets",
+                column: "AnimalTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pets_GenderOfAnimalId",
+                table: "Pets",
+                column: "GenderOfAnimalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pets_SizeOfAnimalId",
+                table: "Pets",
+                column: "SizeOfAnimalId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ServicePets_PetId",
@@ -438,9 +499,6 @@ namespace DogDesk.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AnimalTypes");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -458,9 +516,6 @@ namespace DogDesk.Migrations
 
             migrationBuilder.DropTable(
                 name: "EmergencyContacts");
-
-            migrationBuilder.DropTable(
-                name: "Owners");
 
             migrationBuilder.DropTable(
                 name: "PetOwners");
@@ -481,7 +536,19 @@ namespace DogDesk.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Owners");
+
+            migrationBuilder.DropTable(
                 name: "Pets");
+
+            migrationBuilder.DropTable(
+                name: "AnimalTypes");
+
+            migrationBuilder.DropTable(
+                name: "AnimalGenders");
+
+            migrationBuilder.DropTable(
+                name: "AnimalSizes");
         }
     }
 }

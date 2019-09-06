@@ -9,6 +9,8 @@ namespace DogDesk.Models
 {
     public class PetOwner
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
@@ -17,9 +19,9 @@ namespace DogDesk.Models
         [Required]
         public int OwnerId { get; set; }
 
-        public Owner Owners { get; set; }
+        public Owner Owner { get; set; }
 
-        public Pet Pets { get; set; }
+        public Pet Pet { get; set; }
 
     }
 }

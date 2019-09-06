@@ -27,7 +27,12 @@ namespace DogDesk
         // GET: Pets
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pets.ToListAsync());
+            var attributes = _context.Pets
+                .Include(p => p.GenderOfAnimal)
+                .Include(p => p.SizeOfAnimal)
+                .Include(p => p.TypeOfAnimal);
+
+            return View(attributes);
         }
 
         // GET: Pets/Details/5
@@ -39,7 +44,11 @@ namespace DogDesk
             }
 
             var pet = await _context.Pets
+                .Include(p => p.GenderOfAnimal)
+                .Include(p => p.SizeOfAnimal)
+                .Include(p => p.TypeOfAnimal)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (pet == null)
             {
                 return NotFound();
@@ -51,53 +60,56 @@ namespace DogDesk
         // GET: Pets/Create
         public IActionResult Create(int? id = null)
         {
+            var petOwner = new PetOwner();
             if(id != null)
             {
+                ViewData["animalType"] = GetAnimalType();
+                ViewData["animalSize"] = GetAnimalSize();
+                ViewData["animalGender"] = GetAnimalGender();
+
+                petOwner.OwnerId = (int)id;
+
                 var owner = _context.Owners
                     .FirstOrDefault(x => x.Id == id);
-                var newPet = new Pet();
-                var newPetOwner = new PetOwner();
+                petOwner.Owner = owner;
 
-                newPetOwner.Owners = owner;
-                //From list inside pet class
-                newPet.PetOwners = new List<PetOwner>();
-                newPet.PetOwners.Add(newPetOwner);
-
-                return View(newPet);
+                return View(petOwner);
             }
+
+            ViewData["animalType"] = GetAnimalType();
+            ViewData["animalSize"] = GetAnimalSize();
+            ViewData["animalGender"] = GetAnimalGender();
 
             return View();
         }
 
         // POST: Pets/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OwnerId,FirstName,LastName,Gender,BirthDate,Size,Color1,Color2,AnimalTypeId")] Pet pet)
+        public async Task<IActionResult> Create(PetOwner petOwner)
         {
             if (ModelState.IsValid)
             {
-                var newPetOwner = new PetOwner();
-                newPetOwner.OwnerId = pet.Id;
-
-                pet.Id = 0;
-
-                _context.Add(pet);
+                petOwner.Id = 0;
+                _context.Pets.Add(petOwner.Pet);
                 await _context.SaveChangesAsync();
 
-                newPetOwner.PetId = pet.Id;
-                _context.Add(newPetOwner);
+                petOwner.PetId = petOwner.Pet.Id;
+
+                _context.PetOwners.Add(petOwner);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(pet);
+            return View();
         }
 
         public JsonResult GetOwnerList(string name)
         {
-            var list = _context.Owners.Where(x => x.FullName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase)).Take(10).ToList();
+            var list = _context.Owners
+                .Where(x => x.FullName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
+                .Take(10)
+                .ToList();
             return Json(list);
         }
 
@@ -109,11 +121,17 @@ namespace DogDesk
                 return NotFound();
             }
 
+            ViewBag.animalGenders = _context.AnimalGenders.ToDictionary(x => x.Id, y => y.Gender);
+            ViewBag.animalSizes = _context.AnimalSizes.ToDictionary(x => x.Id, y => y.Size);
+            ViewBag.animalTypes = _context.AnimalTypes.ToDictionary(x => x.Id, y => y.Animal);
+
             var pet = await _context.Pets.FindAsync(id);
+
             if (pet == null)
             {
                 return NotFound();
             }
+
             return View(pet);
         }
 
@@ -122,7 +140,7 @@ namespace DogDesk
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,FirstName,LastName,Gender,BirthDate,Size,Color1,Color2,AnimalTypeId")] Pet pet)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,Name,GenderId,BirthDate,SizeId,Color1,Color2,AnimalTypeId,Breed")] Pet pet)
         {
             if (id != pet.Id)
             {
@@ -181,9 +199,64 @@ namespace DogDesk
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PetExists(int id)
+        private bool PetExists(int? id)
         {
             return _context.Pets.Any(e => e.Id == id);
         }
+
+        private List<SelectListItem> GetAnimalType()
+        {
+            var selectItems = _context.AnimalTypes
+                .Select(program => new SelectListItem
+                {
+                    Text = program.Animal,
+                    Value = program.Id.ToString()
+                })
+                .ToList();
+
+            selectItems.Insert(0, new SelectListItem
+            {
+                Text = "Choose type...",
+                Value = "0"
+            });
+            return selectItems;
+        }
+
+        private List<SelectListItem> GetAnimalSize()
+        {
+            var selectItems = _context.AnimalSizes
+                .Select(program => new SelectListItem
+                {
+                    Text = program.Size,
+                    Value = program.Id.ToString()
+                })
+                .ToList();
+
+            selectItems.Insert(0, new SelectListItem
+            {
+                Text = "Choose size...",
+                Value = "0"
+            });
+            return selectItems;
+        }
+
+        private List<SelectListItem> GetAnimalGender()
+        {
+            var selectItems = _context.AnimalGenders
+                .Select(program => new SelectListItem
+                {
+                    Text = program.Gender,
+                    Value = program.Id.ToString()
+                })
+                .ToList();
+
+            selectItems.Insert(0, new SelectListItem
+            {
+                Text = "Choose gender...",
+                Value = "0"
+            });
+            return selectItems;
+        }
+
     }
 }

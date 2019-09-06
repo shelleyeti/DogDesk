@@ -11,22 +11,16 @@
     <br />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
+            @Html.DisplayNameFor(model => model.GenderId)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
+            @Html.DisplayFor(model => model.GenderOfAnimal.Gender)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.BirthDate)
@@ -35,10 +29,16 @@
             @Html.DisplayFor(model => model.BirthDate)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Size)
+            @Html.DisplayNameFor(model => model.SizeId)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Size)
+            @Html.DisplayFor(model => model.SizeOfAnimal.Size)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AnimalTypeId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TypeOfAnimal.Animal)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Color1)
@@ -53,10 +53,10 @@
             @Html.DisplayFor(model => model.Color2)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AnimalTypeId)
+            @Html.DisplayNameFor(model => model.Breed)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AnimalTypeId)
+            @Html.DisplayFor(model => model.Breed)
         </dd>
     </dl>
 </div>

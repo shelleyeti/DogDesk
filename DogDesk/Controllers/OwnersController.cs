@@ -31,10 +31,13 @@ namespace DogDesk
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                owners = _context.Owners.Where(o => o.FullName.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                owners = _context.Owners.Where(o => o.FullName
+                .Contains(searchString, StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+                return View(owners);
             }
 
-            return View(owners);
+            return View(await _context.Owners.ToListAsync());
         }
 
         // GET: Owners/Details/5
@@ -99,7 +102,7 @@ namespace DogDesk
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,StreetAddress,City,State,ZipCode,HomePhone,CellPhone,WorkPhone")] Owner owner)
+        public async Task<IActionResult> Edit(int? id, [Bind("Id,FirstName,LastName,StreetAddress,City,State,ZipCode,HomePhone,CellPhone,WorkPhone")] Owner owner)
         {
             if (id != owner.Id)
             {
@@ -158,7 +161,7 @@ namespace DogDesk
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OwnerExists(int id)
+        private bool OwnerExists(int? id)
         {
             return _context.Owners.Any(e => e.Id == id);
         }
