@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DogDesk.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190906184404_ok")]
-    partial class ok
+    [Migration("20190906205320_FK-Pet")]
+    partial class FKPet
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -161,7 +161,7 @@ namespace DogDesk.Migrations
                         {
                             Id = "000-shelley-arnold-333-7777777",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "75e21d34-7185-4210-9361-f6ee9391b582",
+                            ConcurrencyStamp = "27937653-5bf6-4133-8213-929d727de274",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Shelley",
@@ -169,7 +169,7 @@ namespace DogDesk.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJigpl3A4sdnzWO04QVL2T0GOiaMyQap6+7xTqnqhLcENpBAaniEltn+vx5Edv//bg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEaXHLfMRE9E2BAJYJQSFmJ/1VaVTQacFa1zQeMJuGP179YHBFbo25pQ3Qx2mIXbfw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
@@ -257,6 +257,12 @@ namespace DogDesk.Migrations
                     b.Property<int>("SizeId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnimalTypeId");
+
+                    b.HasIndex("GenderId");
+
+                    b.HasIndex("SizeId");
 
                     b.ToTable("Pets");
                 });
@@ -510,6 +516,24 @@ namespace DogDesk.Migrations
                     b.HasOne("DogDesk.Models.Pet")
                         .WithMany("EmergencyContacts")
                         .HasForeignKey("PetId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DogDesk.Models.Pet", b =>
+                {
+                    b.HasOne("DogDesk.Models.AnimalType", "TypeOfAnimal")
+                        .WithMany()
+                        .HasForeignKey("AnimalTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DogDesk.Models.AnimalGender", "GenderOfAnimal")
+                        .WithMany()
+                        .HasForeignKey("GenderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DogDesk.Models.AnimalSize", "SizeOfAnimal")
+                        .WithMany()
+                        .HasForeignKey("SizeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

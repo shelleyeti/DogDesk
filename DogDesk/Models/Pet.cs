@@ -40,10 +40,19 @@ namespace DogDesk.Models
         public string Breed { get; set; }
 
 
-        public List<VetRecord> VetRecords { get; set; }
+        public ICollection<VetRecord> VetRecords { get; set; }
         public virtual ICollection<PetOwner> PetOwners { get; set; }
-        public List<EmergencyContact> EmergencyContacts { get; set; }
-        public List<ServicePet> ServicePets { get; set; }
+        public ICollection<EmergencyContact> EmergencyContacts { get; set; }
+        public ICollection<ServicePet> ServicePets { get; set; }
+
+        [ForeignKey("GenderId")]
+        public AnimalGender GenderOfAnimal { get; set; }
+
+        [ForeignKey("SizeId")]
+        public AnimalSize SizeOfAnimal { get; set; }
+
+        [ForeignKey("AnimalTypeId")]
+        public AnimalType TypeOfAnimal { get; set; }
 
     }
 }

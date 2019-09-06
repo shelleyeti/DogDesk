@@ -27,7 +27,12 @@ namespace DogDesk
         // GET: Pets
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pets.ToListAsync());
+            var attributes = _context.Pets
+                .Include(p => p.GenderOfAnimal)
+                .Include(p => p.SizeOfAnimal)
+                .Include(p => p.TypeOfAnimal);
+
+            return View(attributes);
         }
 
         // GET: Pets/Details/5
@@ -39,7 +44,11 @@ namespace DogDesk
             }
 
             var pet = await _context.Pets
+                .Include(p => p.GenderOfAnimal)
+                .Include(p => p.SizeOfAnimal)
+                .Include(p => p.TypeOfAnimal)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (pet == null)
             {
                 return NotFound();
@@ -97,7 +106,10 @@ namespace DogDesk
 
         public JsonResult GetOwnerList(string name)
         {
-            var list = _context.Owners.Where(x => x.FullName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase)).Take(10).ToList();
+            var list = _context.Owners
+                .Where(x => x.FullName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
+                .Take(10)
+                .ToList();
             return Json(list);
         }
 
@@ -109,11 +121,17 @@ namespace DogDesk
                 return NotFound();
             }
 
+            ViewBag.animalGenders = _context.AnimalGenders.ToDictionary(x => x.Id, y => y.Gender);
+            ViewBag.animalSizes = _context.AnimalSizes.ToDictionary(x => x.Id, y => y.Size);
+            ViewBag.animalTypes = _context.AnimalTypes.ToDictionary(x => x.Id, y => y.Animal);
+
             var pet = await _context.Pets.FindAsync(id);
+
             if (pet == null)
             {
                 return NotFound();
             }
+
             return View(pet);
         }
 

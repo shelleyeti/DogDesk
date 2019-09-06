@@ -20,7 +20,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="GenderId" class="control-label"></label>
-                <input asp-for="GenderId" class="form-control" />
+                @Html.DropDownListFor(x => x.GenderId, new SelectList(ViewBag.animalGenders, "Key", "Value"), new { @class = "form-control" })
+
                 <span asp-validation-for="GenderId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -30,13 +31,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="SizeId" class="control-label"></label>
-                <input asp-for="SizeId" class="form-control" />
-                <span asp-validation-for="SizeId" class="text-danger"></span>
+                @Html.DropDownListFor(x => x.SizeId, new SelectList(ViewBag.animalSizes, "Key", "Value"), new { @class = "form-control" })
             </div>
             <div class="form-group">
                 <label asp-for="AnimalTypeId" class="control-label"></label>
-                <input asp-for="AnimalTypeId" class="form-control" />
-                <span asp-validation-for="AnimalTypeId" class="text-danger"></span>
+                @Html.DropDownListFor(x => x.AnimalTypeId, new SelectList(ViewBag.animalTypes, "Key", "Value"), new { @class = "form-control" })
             </div>
             <div class="form-group">
                 <label asp-for="Color1" class="control-label"></label>
