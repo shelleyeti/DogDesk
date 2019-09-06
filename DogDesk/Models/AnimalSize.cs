@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DogDesk.Models
 {
-    public class AnimalType
+    public class AnimalSize
     {
         public int Id { get; set; }
-        public string Animal { get; set; }
+        public string Size { get; set; }
     }
 }

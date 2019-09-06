@@ -12,14 +12,16 @@ namespace DogDesk.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<AnimalSize> AnimalSizes { get; set; }
         public DbSet<AnimalType> AnimalTypes { get; set; }
+        public DbSet<AnimalGender> AnimalGenders { get; set; }
         public DbSet<EmergencyContact> EmergencyContacts { get; set; }
         public DbSet<Owner> Owners { get; set; }
         public DbSet<Pet> Pets { get; set; }
         public DbSet<ServiceType> ServiceTypes { get; set; }
+        public DbSet<PetOwner> PetOwners { get; set; }
         public DbSet<VetRecord> VetRecords { get; set; }
         public DbSet<ServicePet> ServicePets { get; set; }
-        public DbSet<PetOwner> PetOwners { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +30,32 @@ namespace DogDesk.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
             modelBuilder.Entity<VetRecord>().Property(m => m.Bordetella).IsRequired(false);
+            modelBuilder.Entity<PetOwner>().HasOne(po => po.Pet).WithMany(p => p.PetOwners).HasForeignKey(po => po.PetId);
+            modelBuilder.Entity<PetOwner>().HasOne(po => po.Owner).WithMany(o => o.PetOwners).HasForeignKey(po => po.OwnerId);
+
+            modelBuilder.Entity<EmergencyContact>()
+            .Property(x => x.Id)
+            .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Owner>()
+            .Property(x => x.Id)
+            .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Pet>()
+            .Property(x => x.Id)
+            .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<PetOwner>()
+            .Property(x => x.Id)
+            .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<VetRecord>()
+            .Property(x => x.Id)
+            .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<ServicePet>()
+            .Property(x => x.Id)
+            .ValueGeneratedOnAdd();
 
             ApplicationUser user = new ApplicationUser
             {
@@ -57,6 +85,37 @@ namespace DogDesk.Data
                 {
                     Id = 2,
                     Animal = "Cat"
+                }
+            );
+
+            modelBuilder.Entity<AnimalSize>().HasData(
+                new AnimalSize()
+                {
+                    Id = 1,
+                    Size = "Small"
+                },
+                new AnimalSize()
+                {
+                    Id = 2,
+                    Size = "Medium"
+                },
+                new AnimalSize()
+                {
+                    Id = 3,
+                    Size = "Large"
+                }
+            );
+
+            modelBuilder.Entity<AnimalGender>().HasData(
+                new AnimalGender()
+                {
+                    Id = 1,
+                    Gender = "Male"
+                },
+                new AnimalGender()
+                {
+                    Id = 2,
+                    Gender = "Female"
                 }
             );
 
@@ -105,89 +164,6 @@ namespace DogDesk.Data
                 {
                     Id = 9,
                     ServiceName = "Nail Trim"
-                }
-            );
-
-            modelBuilder.Entity<Pet>().HasData(
-                new Pet()
-                {
-                    Id =1,
-                    Name = "Cavy",
-                    Gender = "Male",
-                    BirthDate = new DateTime(2014, 8, 1),
-                    Size = "medium",
-                    Color1 = "black",
-                    Color2 = "tri-color",
-                    AnimalTypeId = 1,
-                    Breed = "aussie mix"
-                }
-            );
-
-            modelBuilder.Entity<VetRecord>().HasData(
-                new VetRecord()
-                {
-                    Id = 1,
-                    PetId = 1,
-                    VetName = "Mobley",
-                    StreetAddress = "4709 Gallatin Pk",
-                    City = "Nahsville",
-                    ZipCode = "37216",
-                    State = "TN",
-                    WorkPhone = "615-262-0415",
-                    Allergy = "Beef",
-                    Altered = true,
-                    Rabies = new DateTime(2018, 9, 19),
-                    Bordetella = new DateTime(2018, 9, 19)
-                }
-            );
-
-            modelBuilder.Entity<Owner>().HasData(
-                new Owner()
-                {
-                    Id = 1,
-                    FirstName = "Shelley",
-                    LastName = "Arnold",
-                    StreetAddress = "1234 Dog Way",
-                    City = "Nahsville",
-                    State = "TN",
-                    ZipCode = "37206",
-                    HomePhone = null,
-                    CellPhone = "615-555-5555",
-                    WorkPhone = null
-                }
-            );
-
-            modelBuilder.Entity<EmergencyContact>().HasData(
-                new EmergencyContact()
-                {
-                    Id = 1,
-                    PetId = 1,
-                    FirstName = "Janice",
-                    LastName = "Arant",
-                    HomePhone = null,
-                    CellPhone = "615-555-5555",
-                    WorkPhone = null
-                }
-            );
-
-            modelBuilder.Entity<ServicePet>().HasData(
-                new ServicePet()
-                {
-                    Id = 1,
-                    UserId = user.Id,
-                    ServiceType = 2,
-                    PetId = 1,
-                    StartDate = new DateTime(2019, 9, 19),
-                    CheckoutDate = new DateTime(2019, 9, 23)
-                }
-            );
-
-            modelBuilder.Entity<PetOwner>().HasData(
-                new PetOwner()
-                {
-                    Id = 1,
-                    PetId = 1,
-                    OwnerId = 1
                 }
             );
         }

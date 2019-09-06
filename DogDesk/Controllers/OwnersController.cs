@@ -99,7 +99,7 @@ namespace DogDesk
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,StreetAddress,City,State,ZipCode,HomePhone,CellPhone,WorkPhone")] Owner owner)
+        public async Task<IActionResult> Edit(int? id, [Bind("Id,FirstName,LastName,StreetAddress,City,State,ZipCode,HomePhone,CellPhone,WorkPhone")] Owner owner)
         {
             if (id != owner.Id)
             {
@@ -158,7 +158,7 @@ namespace DogDesk
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OwnerExists(int id)
+        private bool OwnerExists(int? id)
         {
             return _context.Owners.Any(e => e.Id == id);
         }

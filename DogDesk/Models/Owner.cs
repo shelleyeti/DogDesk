@@ -9,6 +9,8 @@ namespace DogDesk.Models
 {
     public class Owner
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
@@ -40,7 +42,6 @@ namespace DogDesk.Models
             { return $"{FirstName} {LastName}"; }
         }
         
-        [NotMapped]
-        public List<PetOwner> PetOwners { get; set; }
+        public virtual ICollection<PetOwner> PetOwners { get; set; }
     }
 }

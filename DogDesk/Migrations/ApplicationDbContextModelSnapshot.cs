@@ -19,6 +19,59 @@ namespace DogDesk.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            modelBuilder.Entity("DogDesk.Models.AnimalGender", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Gender");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnimalGenders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Gender = "Male"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Gender = "Female"
+                        });
+                });
+
+            modelBuilder.Entity("DogDesk.Models.AnimalSize", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Size");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnimalSizes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Size = "Small"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Size = "Medium"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Size = "Large"
+                        });
+                });
+
             modelBuilder.Entity("DogDesk.Models.AnimalType", b =>
                 {
                     b.Property<int>("Id")
@@ -103,7 +156,7 @@ namespace DogDesk.Migrations
                         {
                             Id = "000-shelley-arnold-333-7777777",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "09cbabf0-80ad-4ea3-95ff-583735e620ac",
+                            ConcurrencyStamp = "87298cff-9c4a-4aa0-b6a4-fb33fa227573",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Shelley",
@@ -111,7 +164,7 @@ namespace DogDesk.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFHZ4/Z7lNjZBvcG+cZkiD0R9M3FNjkZU4Lw6/F+Gw5NPB7eKyYM5mFuQ8MPktOtTw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECtvigR8XKcBQ4e2zkLx8aFzCWoJ22Hst3BObmaFH27thJUHifJIL4ae83ftNxFC/Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
@@ -141,16 +194,6 @@ namespace DogDesk.Migrations
                     b.HasIndex("PetId");
 
                     b.ToTable("EmergencyContacts");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CellPhone = "615-555-5555",
-                            FirstName = "Janice",
-                            LastName = "Arant",
-                            PetId = 1
-                        });
                 });
 
             modelBuilder.Entity("DogDesk.Models.Owner", b =>
@@ -181,19 +224,6 @@ namespace DogDesk.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Owners");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CellPhone = "615-555-5555",
-                            City = "Nahsville",
-                            FirstName = "Shelley",
-                            LastName = "Arnold",
-                            State = "TN",
-                            StreetAddress = "1234 Dog Way",
-                            ZipCode = "37206"
-                        });
                 });
 
             modelBuilder.Entity("DogDesk.Models.Pet", b =>
@@ -211,29 +241,15 @@ namespace DogDesk.Migrations
 
                     b.Property<string>("Color2");
 
-                    b.Property<string>("Gender");
+                    b.Property<int>("GenderId");
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("Size");
+                    b.Property<int>("SizeId");
 
                     b.HasKey("Id");
 
                     b.ToTable("Pets");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AnimalTypeId = 1,
-                            BirthDate = new DateTime(2014, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Breed = "aussie mix",
-                            Color1 = "black",
-                            Color2 = "tri-color",
-                            Gender = "Male",
-                            Name = "Cavy",
-                            Size = "medium"
-                        });
                 });
 
             modelBuilder.Entity("DogDesk.Models.PetOwner", b =>
@@ -252,14 +268,6 @@ namespace DogDesk.Migrations
                     b.HasIndex("PetId");
 
                     b.ToTable("PetOwners");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            OwnerId = 1,
-                            PetId = 1
-                        });
                 });
 
             modelBuilder.Entity("DogDesk.Models.ServicePet", b =>
@@ -282,17 +290,6 @@ namespace DogDesk.Migrations
                     b.HasIndex("PetId");
 
                     b.ToTable("ServicePets");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CheckoutDate = new DateTime(2019, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PetId = 1,
-                            ServiceType = 2,
-                            StartDate = new DateTime(2019, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = "000-shelley-arnold-333-7777777"
-                        });
                 });
 
             modelBuilder.Entity("DogDesk.Models.ServiceType", b =>
@@ -386,23 +383,6 @@ namespace DogDesk.Migrations
                     b.HasIndex("PetId");
 
                     b.ToTable("VetRecords");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Allergy = "Beef",
-                            Altered = true,
-                            Bordetella = new DateTime(2018, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            City = "Nahsville",
-                            PetId = 1,
-                            Rabies = new DateTime(2018, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            State = "TN",
-                            StreetAddress = "4709 Gallatin Pk",
-                            VetName = "Mobley",
-                            WorkPhone = "615-262-0415",
-                            ZipCode = "37216"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -526,12 +506,12 @@ namespace DogDesk.Migrations
 
             modelBuilder.Entity("DogDesk.Models.PetOwner", b =>
                 {
-                    b.HasOne("DogDesk.Models.Owner", "Owners")
-                        .WithMany()
+                    b.HasOne("DogDesk.Models.Owner", "Owner")
+                        .WithMany("PetOwners")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("DogDesk.Models.Pet", "Pets")
+                    b.HasOne("DogDesk.Models.Pet", "Pet")
                         .WithMany("PetOwners")
                         .HasForeignKey("PetId")
                         .OnDelete(DeleteBehavior.Cascade);
