@@ -34,9 +34,10 @@ namespace DogDesk
                 owners = _context.Owners.Where(o => o.FullName
                 .Contains(searchString, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
+                return View(owners);
             }
 
-            return View(owners);
+            return View(await _context.Owners.ToListAsync());
         }
 
         // GET: Owners/Details/5
