@@ -12,15 +12,31 @@ namespace DogDesk.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
+        [Display(Name = "Gender")]
         public int GenderId { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
+
+        [Required]
+        [Display(Name = "Size")]
         public int SizeId { get; set; }
+
+        [Required]
+        [Display(Name = "Primary Color")]
         public string Color1 { get; set; }
+
+        [Display(Name = "Secondary Color")]
         public string Color2 { get; set; }
+
+        [Required]
+        [Display(Name = "Species")]
         public int AnimalTypeId { get; set; }
+
         public string Breed { get; set; }
 
 

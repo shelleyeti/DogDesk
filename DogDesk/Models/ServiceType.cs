@@ -13,6 +13,8 @@ namespace DogDesk.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        [Display(Name = "Service Type")]
         public string ServiceName { get; set; }
     }
 }

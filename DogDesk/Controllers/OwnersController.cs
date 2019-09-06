@@ -31,7 +31,9 @@ namespace DogDesk
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                owners = _context.Owners.Where(o => o.FullName.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                owners = _context.Owners.Where(o => o.FullName
+                .Contains(searchString, StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
             }
 
             return View(owners);
