@@ -25,7 +25,7 @@ namespace DogDesk
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Pets
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var attributes = _context.Pets
                 .Include(p => p.GenderOfAnimal)
@@ -47,7 +47,11 @@ namespace DogDesk
                 .Include(p => p.GenderOfAnimal)
                 .Include(p => p.SizeOfAnimal)
                 .Include(p => p.TypeOfAnimal)
+                .Include(p => p.PetOwners)
+                .Include(p => p.VetRecords)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            pet.PetOwners.ToList().ForEach(x => x.Owner = _context.Owners.FirstOrDefault(y => y.Id == x.OwnerId));
 
             if (pet == null)
             {
