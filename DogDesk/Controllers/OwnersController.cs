@@ -49,7 +49,11 @@ namespace DogDesk
             }
 
             var owner = await _context.Owners
+                .Include(p => p.PetOwners)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            owner.PetOwners.ToList().ForEach(x => x.Pet = _context.Pets.FirstOrDefault(y => y.Id == x.PetId));
+
             if (owner == null)
             {
                 return NotFound();

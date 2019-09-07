@@ -7,7 +7,7 @@
 <h3>Details</h3>
 
 <div>
-    <h5>Pet</h5>
+    <h5>Pet Information</h5>
     <br />
     <dl class="row">
         <dt class="col-sm-2">
@@ -63,4 +63,221 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
+</div>
+<hr />
+
+<div>
+    <h5>Vet Records</h5>
+    @if (Model.VetRecords != null && Model.VetRecords.Count > 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VetRecords.FirstOrDefault().VetName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VetRecords.FirstOrDefault().StreetAddress)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VetRecords.FirstOrDefault().City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VetRecords.FirstOrDefault().State)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VetRecords.FirstOrDefault().ZipCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VetRecords.FirstOrDefault().WorkPhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VetRecords.FirstOrDefault().Allergy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VetRecords.FirstOrDefault().Altered)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VetRecords.FirstOrDefault().Rabies)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VetRecords.FirstOrDefault().Bordetella)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.VetRecords)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VetName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StreetAddress)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.State)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ZipCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.WorkPhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Allergy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rabies)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Bordetella)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            <a asp-controller="VetRecords" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-controller="VetRecords" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No Vet Records Found</p>
+    }
+</div>
+<hr />
+
+<div>
+    <h5>Owners</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.PetOwners.FirstOrDefault().Owner.FullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PetOwners.FirstOrDefault().Owner.StreetAddress)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PetOwners.FirstOrDefault().Owner.City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PetOwners.FirstOrDefault().Owner.State)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PetOwners.FirstOrDefault().Owner.ZipCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PetOwners.FirstOrDefault().Owner.HomePhone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PetOwners.FirstOrDefault().Owner.CellPhone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PetOwners.FirstOrDefault().Owner.WorkPhone)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.PetOwners)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.StreetAddress)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.State)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.ZipCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.HomePhone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.CellPhone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.WorkPhone)
+                    </td>
+                    <td>
+                        <a asp-controller="Owners" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-controller="Owners" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<hr />
+
+<div>
+    <h5>Emergency Contacts</h5>
+    @if (Model.EmergencyContacts != null)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmergencyContacts.FirstOrDefault().FullName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmergencyContacts.FirstOrDefault().HomePhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmergencyContacts.FirstOrDefault().CellPhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmergencyContacts.FirstOrDefault().WorkPhone)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.EmergencyContacts)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.HomePhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CellPhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.WorkPhone)
+                        </td>
+                        <td>
+                            <a asp-controller="EmergencyContacts" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No Emergency Contacts Found</p>
+    }
 </div>
