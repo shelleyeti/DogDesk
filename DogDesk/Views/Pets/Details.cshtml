@@ -60,8 +60,10 @@
         </dd>
     </dl>
 </div>
-<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-<a asp-action="Index">Back to List</a>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
 <hr />
 
 <div>
@@ -126,7 +128,6 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.WorkPhone)
                         </td>
-
                         <td>
                             @Html.DisplayFor(modelItem => item.Allergy)
                         </td>
