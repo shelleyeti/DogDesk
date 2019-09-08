@@ -66,9 +66,9 @@
 </div>
 
 <div>
-    @using (Html.BeginForm("Create", "VetRecords", FormMethod.Post))
+    @using (Html.BeginForm("Create", "VetRecords", FormMethod.Get))
     {
-        @*<input type="hidden" asp-for="PetId" />*@
+        <input type="hidden" asp-for="Id" name="PetId" />
         <input class="btn btn-primary" type="submit" value="Add Vet Record" />
     }
 </div>

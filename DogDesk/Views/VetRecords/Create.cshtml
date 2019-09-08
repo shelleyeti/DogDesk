@@ -7,16 +7,20 @@
 <h3>Create</h3>
 
 <h5>Add a Vet Record</h5>
-<hr />
+<br />
 
 <form asp-action="Create">
     <div class="row">
         <div class="col-md-5">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="PetId" class="control-label"></label>
-                <select asp-for="PetId" class="form-control" asp-items="ViewBag.PetId"></select>
-            </div>
+            @if (Model != null && Model.Pet.Id != 0)
+            {
+                <div class="form-group">
+                    <label class="control-label">Pet Name: </label>
+                    <input disabled asp-for="Pet.Name" class="form-control" />
+                </div>
+                <input type="hidden" asp-for="Pet.Id" name="PetId" />
+            }
             <div class="form-group">
                 <label asp-for="VetName" class="control-label"></label>
                 <input asp-for="VetName" class="form-control" />

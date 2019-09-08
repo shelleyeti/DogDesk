@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DogDesk.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190906205320_FK-Pet")]
-    partial class FKPet
+    [Migration("20190908220014_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -161,7 +161,7 @@ namespace DogDesk.Migrations
                         {
                             Id = "000-shelley-arnold-333-7777777",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "27937653-5bf6-4133-8213-929d727de274",
+                            ConcurrencyStamp = "99f040ea-6519-4a72-899e-8a29006b036d",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Shelley",
@@ -169,7 +169,7 @@ namespace DogDesk.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEaXHLfMRE9E2BAJYJQSFmJ/1VaVTQacFa1zQeMJuGP179YHBFbo25pQ3Qx2mIXbfw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFuav34oFGFR3kIuLgcL7rciG84M5koUQavkCh07idu7zDqNU8BjHqf4UGAHg1VECQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
@@ -381,6 +381,8 @@ namespace DogDesk.Migrations
 
                     b.Property<int>("PetId");
 
+                    b.Property<int?>("PetOwnerId");
+
                     b.Property<DateTime>("Rabies");
 
                     b.Property<string>("State");
@@ -396,6 +398,8 @@ namespace DogDesk.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PetId");
+
+                    b.HasIndex("PetOwnerId");
 
                     b.ToTable("VetRecords");
                 });
@@ -560,10 +564,14 @@ namespace DogDesk.Migrations
 
             modelBuilder.Entity("DogDesk.Models.VetRecord", b =>
                 {
-                    b.HasOne("DogDesk.Models.Pet")
+                    b.HasOne("DogDesk.Models.Pet", "Pet")
                         .WithMany("VetRecords")
                         .HasForeignKey("PetId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DogDesk.Models.PetOwner", "PetOwner")
+                        .WithMany()
+                        .HasForeignKey("PetOwnerId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

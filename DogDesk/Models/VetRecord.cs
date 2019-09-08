@@ -44,5 +44,9 @@ namespace DogDesk.Models
         public DateTime Rabies { get; set; }
 
         public DateTime? Bordetella { get; set; }
+
+        public PetOwner PetOwner { get; set; }
+
+        public Pet Pet { get; set; }
     }
 }
