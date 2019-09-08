@@ -4,17 +4,18 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h3>Create</h3>
 
-<h4>VetRecord</h4>
+<h5>Add a Vet Record</h5>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+
+<form asp-action="Create">
+    <div class="row">
+        <div class="col-md-5">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="PetId" class="control-label"></label>
-                <select asp-for="PetId" class ="form-control" asp-items="ViewBag.PetId"></select>
+                <select asp-for="PetId" class="form-control" asp-items="ViewBag.PetId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="VetName" class="control-label"></label>
@@ -41,6 +42,8 @@
                 <input asp-for="ZipCode" class="form-control" />
                 <span asp-validation-for="ZipCode" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-5 offset-sm-2">
             <div class="form-group">
                 <label asp-for="WorkPhone" class="control-label"></label>
                 <input asp-for="WorkPhone" class="form-control" />
@@ -66,14 +69,14 @@
                 <input asp-for="Bordetella" class="form-control" />
                 <span asp-validation-for="Bordetella" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+    <div class="col-md-12 form-group text-right">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
 
-<div>
+<div class="text-right">
     <a asp-action="Index">Back to List</a>
 </div>
 

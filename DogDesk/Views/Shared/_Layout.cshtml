@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - Dog Desk</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-paper.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-minty.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -39,53 +39,48 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Dog Desk</a>
-                </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Dog Desk</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li><a asp-area="" asp-controller="Owners" asp-action="Create">New Client</a></li>
-                        <li><a asp-area="" asp-controller="Pets" asp-action="Create">New Animal</a></li>
-                        <li><a asp-area="" asp-controller="" asp-action="">Calendar</a></li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reports <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a asp-area="" asp-controller="" asp-action="">Services</a></li>
-                                <li><a asp-area="" asp-controller="" asp-action="">Times</a></li>
-                                <li><a asp-area="" asp-controller="Owners" asp-action="Index">All Clients</a></li>
-                                <li><a asp-area="" asp-controller="Pets" asp-action="Index">All Pets</a></li>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
 
-                                <li class="divider"></li>
-                                <li><a asp-area="" asp-controller="" asp-action="">Daily In/Out</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <partial name="_LoginPartial" />
-                    </ul>
-                    @* MAKE this search a view model of pet and owners *@
-                    <form class="navbar-form navbar-right" role="search" asp-controller="Owners" asp-action="Index">
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="SearchString" placeholder="Search">
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-controller="Owners" asp-action="Create">New Client<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Pets" asp-action="Create">New Animal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="" asp-action="">Calendar</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Reports
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Services</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Times</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Owners" asp-action="Index">All Clients</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Pets" asp-action="Index">All Pets</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Daily In/Out</a>
                         </div>
-                        <button type="submit" class="btn btn-default" value="Search">Submit</button>
-                    </form>
-                </div>
-
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0" role="search" asp-controller="Owners" asp-action="Index">
+                    <input class="form-control form-control-sm mr-sm-2" type="text" name="SearchString" placeholder="Search Owners">
+                    <button class="btn btn-outline-primary my-sm-0 mr-sm-5 btn-sm" type="submit" value="Search">Search</button>
+                </form>
+                <partial name="_LoginPartial" />
             </div>
         </nav>
     </header>
 
-    <div class="container">
+    <div class="container my-sm-3">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @RenderBody()
