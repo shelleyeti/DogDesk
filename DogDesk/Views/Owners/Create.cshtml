@@ -7,8 +7,9 @@
 <h5>Create a New Client</h5>
 <br />
 
-<div class="row">
-    <form asp-action="Create">
+<form asp-controller="Owners" asp-action="Create">
+
+    <div class="row">
         <div class="col-md-5">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -37,7 +38,7 @@
                 <span asp-validation-for="WorkPhone" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-5 col-md-offset-1">
+        <div class="col-md-5 offset-sm-2">
             <div class="form-group">
                 <label asp-for="StreetAddress" class="control-label"></label>
                 <input asp-for="StreetAddress" class="form-control" />
@@ -59,11 +60,11 @@
                 <span asp-validation-for="ZipCode" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-12 form-group text-right">
-            <input type="submit" value="Create" class="btn btn-primary" />
-        </div>
-    </form>
-</div>
+    </div>
+    <div class="col-md-12 form-group text-right">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
 
 <div class="text-right">
     <a asp-action="Index">Back to List</a>
