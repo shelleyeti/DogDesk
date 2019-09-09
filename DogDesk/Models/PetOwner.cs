@@ -16,12 +16,11 @@ namespace DogDesk.Models
         [Required]
         public int PetId { get; set; }
 
+        public Pet Pet { get; set; }
+
         [Required]
         public int OwnerId { get; set; }
 
         public Owner Owner { get; set; }
-
-        public Pet Pet { get; set; }
-
     }
 }

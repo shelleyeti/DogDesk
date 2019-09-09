@@ -49,8 +49,21 @@ namespace DogDesk
         }
 
         // GET: VetRecords/Create
-        public IActionResult Create()
+        public IActionResult Create(int? PetId = null)
         {
+            var petRecord = new VetRecord();
+
+            if(PetId != null)
+            {
+                petRecord.Id = (int)PetId;
+
+                var pet = _context.Pets
+                    .FirstOrDefault(x => x.Id == PetId);
+                petRecord.Pet = pet;
+
+                return View(petRecord);
+            }
+
             return View();
         }
 

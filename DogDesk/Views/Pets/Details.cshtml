@@ -65,12 +65,21 @@
     </dl>
 </div>
 
-<div>
-    @using (Html.BeginForm("Create", "VetRecords", FormMethod.Post))
-    {
-        @*<input type="hidden" asp-for="PetId" />*@
-        <input class="btn btn-primary" type="submit" value="Add Vet Record" />
-    }
+<div class="btn-group">
+    <div>
+        @using (Html.BeginForm("Create", "VetRecords", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-primary mr-sm-2" type="submit" value="Add Vet Record" />
+        }
+    </div>
+    <div>
+        @using (Html.BeginForm("Create", "ServiceType", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-secondary" type="submit" value="Schedule Service" />
+        }
+    </div>
 </div>
 
 <div>

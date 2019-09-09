@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DogDesk.Migrations
 {
-    public partial class petModel : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -135,9 +135,7 @@ namespace DogDesk.Migrations
                     Color1 = table.Column<string>(nullable: false),
                     Color2 = table.Column<string>(nullable: true),
                     AnimalTypeId = table.Column<int>(nullable: false),
-                    Breed = table.Column<string>(nullable: true),
-                    GenderOfAnimalId = table.Column<int>(nullable: true),
-                    SizeOfAnimalId = table.Column<int>(nullable: true)
+                    Breed = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -149,17 +147,17 @@ namespace DogDesk.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Pets_AnimalGenders_GenderOfAnimalId",
-                        column: x => x.GenderOfAnimalId,
+                        name: "FK_Pets_AnimalGenders_GenderId",
+                        column: x => x.GenderId,
                         principalTable: "AnimalGenders",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Pets_AnimalSizes_SizeOfAnimalId",
-                        column: x => x.SizeOfAnimalId,
+                        name: "FK_Pets_AnimalSizes_SizeId",
+                        column: x => x.SizeId,
                         principalTable: "AnimalSizes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -357,7 +355,8 @@ namespace DogDesk.Migrations
                     Allergy = table.Column<string>(nullable: true),
                     Altered = table.Column<bool>(nullable: false),
                     Rabies = table.Column<DateTime>(nullable: false),
-                    Bordetella = table.Column<DateTime>(nullable: true)
+                    Bordetella = table.Column<DateTime>(nullable: true),
+                    PetOwnerId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -368,6 +367,12 @@ namespace DogDesk.Migrations
                         principalTable: "Pets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VetRecords_PetOwners_PetOwnerId",
+                        column: x => x.PetOwnerId,
+                        principalTable: "PetOwners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -401,7 +406,7 @@ namespace DogDesk.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "000-shelley-arnold-333-7777777", 0, "60fb0c80-d9c2-450e-8d65-162bf49e48f1", "admin@admin.com", true, "Shelley", "Arnold", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEFhhXTWpG1EclMs/vWy+wJ35XbthsGiTalPKdKOEFtFNXmd0y6T7Edu6CjvxEM+3rg==", null, false, "7f434309-a4d9-48e9-9ebb-8803db794577", false, "admin@admin.com" });
+                values: new object[] { "000-shelley-arnold-333-7777777", 0, "99f040ea-6519-4a72-899e-8a29006b036d", "admin@admin.com", true, "Shelley", "Arnold", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEFuav34oFGFR3kIuLgcL7rciG84M5koUQavkCh07idu7zDqNU8BjHqf4UGAHg1VECQ==", null, false, "7f434309-a4d9-48e9-9ebb-8803db794577", false, "admin@admin.com" });
 
             migrationBuilder.InsertData(
                 table: "ServiceTypes",
@@ -477,14 +482,14 @@ namespace DogDesk.Migrations
                 column: "AnimalTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pets_GenderOfAnimalId",
+                name: "IX_Pets_GenderId",
                 table: "Pets",
-                column: "GenderOfAnimalId");
+                column: "GenderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pets_SizeOfAnimalId",
+                name: "IX_Pets_SizeId",
                 table: "Pets",
-                column: "SizeOfAnimalId");
+                column: "SizeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ServicePets_PetId",
@@ -495,6 +500,11 @@ namespace DogDesk.Migrations
                 name: "IX_VetRecords_PetId",
                 table: "VetRecords",
                 column: "PetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VetRecords_PetOwnerId",
+                table: "VetRecords",
+                column: "PetOwnerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -518,9 +528,6 @@ namespace DogDesk.Migrations
                 name: "EmergencyContacts");
 
             migrationBuilder.DropTable(
-                name: "PetOwners");
-
-            migrationBuilder.DropTable(
                 name: "ServicePets");
 
             migrationBuilder.DropTable(
@@ -534,6 +541,9 @@ namespace DogDesk.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "PetOwners");
 
             migrationBuilder.DropTable(
                 name: "Owners");

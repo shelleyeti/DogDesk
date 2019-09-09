@@ -27,7 +27,7 @@ namespace DogDesk.Models
 
         public string State { get; set; }
 
-
+        [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
 
         [Display(Name = "Work Phone")]
@@ -43,6 +43,11 @@ namespace DogDesk.Models
         [DataType(DataType.Date)]
         public DateTime Rabies { get; set; }
 
+        [DataType(DataType.Date)]
         public DateTime? Bordetella { get; set; }
+
+        public PetOwner PetOwner { get; set; }
+
+        public Pet Pet { get; set; }
     }
 }
