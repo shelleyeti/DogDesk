@@ -12,12 +12,14 @@
         var calendarEl = document.getElementById('calendar');
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: ['bootstrap', 'resourceTimeline'],
+            plugins: ['bootstrap', 'interaction', 'resourceTimeline'],
             themeSystem: 'bootstrap',
+            nowIndicator: true,
             editable: true,
             selectable: true,
             eventLimit: true,
             height: 600,
+            scrollTime :  "06:00:00",
             header: {
                 left: 'today prev,next',
                 center: 'title',
