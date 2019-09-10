@@ -39,17 +39,18 @@
     <link href='~/js/fullcalendar/core/main.css' rel='stylesheet' />
     <link href='~/js/fullcalendar/daygrid/main.css' rel='stylesheet' />
     <link href='~/js/fullcalendar/timegrid/main.css' rel='stylesheet' />
+    <link href='~/js/fullcalendar/timeline/main.css' rel='stylesheet' />
+    <link href='~/js/fullcalendar/bootstrap/main.css' rel='stylesheet' />
     @*<link href='~/js/fullcalendar/resource-timeline/main.css' rel='stylesheet' />*@
 
     <script src='~/js/fullcalendar/core/main.js'></script>
     <script src='~/js/fullcalendar/interaction/main.js'></script>
     <script src='~/js/fullcalendar/daygrid/main.js'></script>
     <script src='~/js/fullcalendar/timegrid/main.js'></script>
-
     <script src='~/js/fullcalendar/resource-common/main.js'></script>
-
     <script src='~/js/fullcalendar/resource-daygrid/main.js'></script>
     <script src='~/js/fullcalendar/resource-timegrid/main.js'></script>
+    <script src='~/js/fullcalendar/bootstrap/main.js'></script>
     @*<script src='~/js/fullcalendar/resource-timeline/main.js'></script>*@
     <script>
         $(document).ready(function () {
@@ -75,7 +76,7 @@
                         <a class="nav-link" asp-controller="Pets" asp-action="Create">New Animal</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="" asp-action="">Calendar</a>
+                        <a class="nav-link" asp-controller="ServicePets" asp-action="MainCalendar">Calendar</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

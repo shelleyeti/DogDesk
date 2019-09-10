@@ -20,10 +20,16 @@ namespace DogDesk
         }
 
         // GET: ServicePets
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> MainCalendar()
         {
             return View(await _context.ServicePets.ToListAsync());
         }
+
+        public async Task<IActionResult> TimeLineCalendar()
+        {
+            return View(await _context.ServicePets.ToListAsync());
+        }
+
 
         // GET: ServicePets/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -60,7 +66,7 @@ namespace DogDesk
             {
                 _context.Add(servicePet);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(MainCalendar));
             }
             return View(servicePet);
         }
@@ -111,7 +117,7 @@ namespace DogDesk
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(MainCalendar));
             }
             return View(servicePet);
         }
@@ -142,7 +148,7 @@ namespace DogDesk
             var servicePet = await _context.ServicePets.FindAsync(id);
             _context.ServicePets.Remove(servicePet);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MainCalendar));
         }
 
         private bool ServicePetExists(int id)

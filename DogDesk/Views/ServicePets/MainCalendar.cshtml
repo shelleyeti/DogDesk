@@ -1,0 +1,193 @@
+﻿@model IEnumerable<DogDesk.Models.ServicePet>
+
+@{
+    ViewData["Title"] = "MainCalendar";
+}
+
+<div id="calendar"></div>
+
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckoutDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckoutDate)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>*@
+
+@*<script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+              defaultView: 'dayGridMonth',
+              editable: true,
+              selectable: true,
+              height: 550,
+              plugins: ['interaction', 'resourceDayGrid', 'resourceTimeGrid', 'bootstrap'],
+            themeSystem: 'bootstrap',
+            header: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'resourceTimeGridDay,resourceTimeGridTwoDay,timeGridWeek,dayGridMonth'
+              },
+            resources: [
+        { id: 'a', title: 'Room A' },
+        { id: 'b', title: 'Room B', eventColor: 'dark' },
+        { id: 'c', title: 'Room C', eventColor: 'warning' },
+        { id: 'd', title: 'Room D', eventColor: 'red' }
+      ],
+      events: [
+        { id: '1', resourceId: 'a', start: '2019-09-06', end: '2019-08-08', title: 'event 1' },
+        { id: '2', resourceId: 'a', start: '2019-09-07T09:00:00', end: '2019-09-07T14:00:00', title: 'event 2' },
+        { id: '3', resourceId: 'b', start: '2019-09-07T12:00:00', end: '2019-09-08T06:00:00', title: 'event 3' },
+        { id: '4', resourceId: 'c', start: '2019-09-07T07:30:00', end: '2019-09-07T09:30:00', title: 'event 4' },
+        { id: '5', resourceId: 'd', start: '2019-09-07T10:00:00', end: '2019-09-07T15:00:00', title: 'event 5' }
+      ],
+
+      select: function(arg) {
+        console.log(
+          'select',
+          arg.startStr,
+          arg.endStr,
+          arg.resource ? arg.resource.id : '(no resource)'
+        );
+      },
+      dateClick: function(arg) {
+        console.log(
+          'dateClick',
+          arg.date,
+          arg.resource ? arg.resource.id : '(no resource)'
+        );
+      }
+
+        });
+
+        calendar.render();
+      });
+
+</script>*@
+
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: ['bootstrap', 'interaction', 'resourceDayGrid'],
+            themeSystem: 'bootstrap',
+            editable: true,
+            selectable: true,
+            select: function(arg) {
+                var title = prompt('Event Title:');
+                if (title) {
+                  calendar.addEvent({
+                    title: title,
+                    start: arg.start,
+                    end: arg.end,
+                    allDay: arg.allDay
+                  })
+                }
+                calendar.unselect()
+              },
+            eventLimit: true,
+            height: 600,
+            events: [
+                {
+                    title: 'All Day Event',
+                    start: '2019-09-01'
+                },
+                {
+                    title: 'Long Event',
+                    start: '2019-09-07',
+                    end: '2019-09-10'
+                },
+                {
+                    groupId: 999,
+                    title: 'Repeating Event',
+                    start: '2019-09-09T16:00:00'
+                },
+                {
+                    groupId: 999,
+                    title: 'Repeating Event',
+                    start: '2019-09-16T16:00:00'
+                },
+                {
+                    title: 'Conference',
+                    start: '2019-09-11',
+                    end: '2019-09-13'
+                },
+                {
+                    title: 'Meeting',
+                    start: '2019-09-12T10:30:00',
+                    end: '2019-09-12T12:30:00'
+                },
+                {
+                    title: 'Lunch',
+                    start: '2019-09-12T12:00:00'
+                },
+                {
+                    title: 'Meeting',
+                    start: '2019-09-12T14:30:00'
+                },
+                {
+                    title: 'Happy Hour',
+                    start: '2019-09-12T17:30:00'
+                },
+                {
+                    title: 'Dinner',
+                    start: '2019-09-12T20:00:00'
+                },
+                {
+                    title: 'Birthday Party',
+                    start: '2019-09-13T07:00:00'
+                },
+                {
+                    title: 'Click for Google',
+                    url: 'http://google.com/',
+                    start: '2019-09-28'
+                }
+            ]
+        });
+
+        calendar.render();
+    });
+
+</script>
