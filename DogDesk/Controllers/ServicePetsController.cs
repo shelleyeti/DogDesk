@@ -30,6 +30,11 @@ namespace DogDesk
             return View(await _context.ServicePets.ToListAsync());
         }
 
+        public async Task<IActionResult> ListViewCalendar()
+        {
+            return View(await _context.ServicePets.ToListAsync());
+        }
+
 
         // GET: ServicePets/Details/5
         public async Task<IActionResult> Details(int? id)

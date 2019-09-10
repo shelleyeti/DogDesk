@@ -1,0 +1,40 @@
+﻿@model IEnumerable<DogDesk.Models.ServicePet>
+
+@{
+    ViewData["Title"] = "ListViewCalendar";
+}
+
+<div id="calendar"></div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: ['bootstrap', 'interaction', 'list'],
+            timeZone: 'UTC',
+            defaultView: 'listWeek',
+            themeSystem: 'bootstrap',
+            height: 600,
+
+            // customize the button names,
+            // otherwise they'd all just say "list"
+            views: {
+                listDay: { buttonText: 'list day' },
+                listWeek: { buttonText: 'list week' },
+                listMonth: { buttonText: 'list month' }
+            },
+
+            header: {
+                left: 'title',
+                center: '',
+                right: 'listDay,listWeek,listMonth'
+            },
+            events: 'https://fullcalendar.io/demo-events.json'
+        });
+
+        calendar.render();
+    });
+
+</script>
