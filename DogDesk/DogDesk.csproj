@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Models\ViewModels\" />
+    <Folder Include="wwwroot\js\fullcalendar\" />
   </ItemGroup>
 
 

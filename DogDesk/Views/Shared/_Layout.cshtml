@@ -36,10 +36,25 @@
     </environment>
     <script src="~/js/TypeAhead.js"></script>
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href='~/js/fullcalendar/core/main.css' rel='stylesheet' />
+    <link href='~/js/fullcalendar/daygrid/main.css' rel='stylesheet' />
+    <link href='~/js/fullcalendar/timegrid/main.css' rel='stylesheet' />
+    @*<link href='~/js/fullcalendar/resource-timeline/main.css' rel='stylesheet' />*@
+
+    <script src='~/js/fullcalendar/core/main.js'></script>
+    <script src='~/js/fullcalendar/interaction/main.js'></script>
+    <script src='~/js/fullcalendar/daygrid/main.js'></script>
+    <script src='~/js/fullcalendar/timegrid/main.js'></script>
+
+    <script src='~/js/fullcalendar/resource-common/main.js'></script>
+
+    <script src='~/js/fullcalendar/resource-daygrid/main.js'></script>
+    <script src='~/js/fullcalendar/resource-timegrid/main.js'></script>
+    @*<script src='~/js/fullcalendar/resource-timeline/main.js'></script>*@
     <script>
-        $(document).ready(function() {
-          $('li.active').removeClass('active');
-          $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
+        $(document).ready(function () {
+            $('li.active').removeClass('active');
+            $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
         });
     </script>
 </head>

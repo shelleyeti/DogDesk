@@ -1,0 +1,108 @@
+﻿@model IEnumerable<DogDesk.Models.ServicePet>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div id="calendar"></div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckoutDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckoutDate)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+              defaultView: 'resourceTimeGridDay',
+              editable: true,
+              selectable:true,
+            plugins: ['interaction', 'resourceDayGrid', 'resourceTimeGrid'],
+            header: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'resourceTimeGridDay,resourceTimeGridTwoDay,timeGridWeek,dayGridMonth'
+              },
+            resources: [
+        { id: 'a', title: 'Room A' },
+        { id: 'b', title: 'Room B', eventColor: 'green' },
+        { id: 'c', title: 'Room C', eventColor: 'orange' },
+        { id: 'd', title: 'Room D', eventColor: 'red' }
+      ],
+      events: [
+        { id: '1', resourceId: 'a', start: '2019-08-06', end: '2019-08-08', title: 'event 1' },
+        { id: '2', resourceId: 'a', start: '2019-08-07T09:00:00', end: '2019-08-07T14:00:00', title: 'event 2' },
+        { id: '3', resourceId: 'b', start: '2019-08-07T12:00:00', end: '2019-08-08T06:00:00', title: 'event 3' },
+        { id: '4', resourceId: 'c', start: '2019-08-07T07:30:00', end: '2019-08-07T09:30:00', title: 'event 4' },
+        { id: '5', resourceId: 'd', start: '2019-08-07T10:00:00', end: '2019-08-07T15:00:00', title: 'event 5' }
+      ],
+
+      select: function(arg) {
+        console.log(
+          'select',
+          arg.startStr,
+          arg.endStr,
+          arg.resource ? arg.resource.id : '(no resource)'
+        );
+      },
+      dateClick: function(arg) {
+        console.log(
+          'dateClick',
+          arg.date,
+          arg.resource ? arg.resource.id : '(no resource)'
+        );
+      }
+
+        });
+
+        calendar.render();
+      });
+
+</script>
+
