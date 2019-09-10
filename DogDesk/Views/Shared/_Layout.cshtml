@@ -83,8 +83,15 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Pets" asp-action="Create">New Animal</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="ServicePets" asp-action="MainCalendar">Calendar</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Calendars
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" asp-controller="ServicePets" asp-action="ListViewCalendar">List View</a>
+                            <a class="dropdown-item" asp-controller="ServicePets" asp-action="TimeLineCalendar">Timeline View</a>
+                            <a class="dropdown-item" asp-controller="ServicePets" asp-action="MainCalendar">Monthly View</a>
+                        </div>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
