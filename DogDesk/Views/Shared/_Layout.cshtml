@@ -5,16 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Dog Desk</title>
 
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-minty.css" />
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
-              crossorigin="anonymous"
-              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
-    </environment>
+
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -42,6 +33,9 @@
     <link href='~/js/fullcalendar/timeline/main.css' rel='stylesheet' />
     <link href='~/js/fullcalendar/bootstrap/main.css' rel='stylesheet' />
     <link href='~/js/fullcalendar/resource-timeline/main.css' rel='stylesheet' />
+    <link href='~/js/fullcalendar/list/main.css' rel='stylesheet' />
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet" />
+
 
     <script src='~/js/fullcalendar/core/main.js'></script>
     <script src='~/js/fullcalendar/timeline/main.js'></script>
@@ -53,7 +47,17 @@
     <script src='~/js/fullcalendar/resource-timegrid/main.js'></script>
     <script src='~/js/fullcalendar/bootstrap/main.js'></script>
     <script src='~/js/fullcalendar/resource-timeline/main.js'></script>
-    <script src="~/js/fullcalendar//list/main.js"></script>
+    <script src='~/js/fullcalendar//list/main.js'></script>
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-minty.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
+              crossorigin="anonymous"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
+    </environment>
 
     <script>
         $(document).ready(function () {
@@ -65,6 +69,7 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <img class="mr-1" src="~/dogdesk.png" />
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Dog Desk</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

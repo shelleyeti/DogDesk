@@ -115,6 +115,9 @@
             themeSystem: 'bootstrap',
             editable: true,
             selectable: true,
+            header: {
+              right: 'prev,next today',
+            },
             select: function(arg) {
                 var title = prompt('Event Title:');
                 if (title) {
