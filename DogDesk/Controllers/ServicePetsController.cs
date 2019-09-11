@@ -29,8 +29,6 @@ namespace DogDesk
                 .Include(x => x.NameOfService);
 
             return View(servicePet);
-
-            //return View(await _context.ServicePets.ToListAsync());
         }
 
         // GET: ServicePets/MainCalendar
@@ -44,12 +42,16 @@ namespace DogDesk
         // GET: ServicePets/TmeLineCalendar
         public async Task<IActionResult> TimeLineCalendar()
         {
+            ViewData["ServiceTypes"] = GetServiceTypes();
+
             return View(await _context.ServicePets.ToListAsync());
         }
 
         // GET: ServicePets/ListViewCalendar
         public async Task<IActionResult> ListViewCalendar()
         {
+            ViewData["ServiceTypes"] = GetServiceTypes();
+
             return View(await _context.ServicePets.ToListAsync());
         }
 

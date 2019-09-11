@@ -76,10 +76,17 @@
         }
     </div>
     <div>
-        @using (Html.BeginForm("Create", "ServiceType", FormMethod.Get))
+        @using (Html.BeginForm("MainCalendar", "ServicePets", FormMethod.Get))
         {
             <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-secondary" type="submit" value="Schedule Service" />
+            <input class="btn btn-secondary mr-sm-2" type="submit" value="Schedule Boarding" />
+        }
+    </div>
+    <div>
+        @using (Html.BeginForm("TimeLineCalendar", "ServicePets", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-info" type="submit" value="Schedule Service" />
         }
     </div>
 </div>
