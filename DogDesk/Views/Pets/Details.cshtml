@@ -91,6 +91,54 @@
 <br />
 
 <div>
+    <h5>Upcoming Services</h5>
+    @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.FirstOrDefault().CheckoutDate > DateTime.Now)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().NameOfService)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ServicePets)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CheckoutDate)
+                        </td>
+                        <td>
+                            <a asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No Upcoming Services Scheduled</p>
+    }
+</div>
+<br/>
+
+<div>
     <h5>Vet Records</h5>
     @if (Model.VetRecords != null && Model.VetRecords.Count > 0)
     {
@@ -133,43 +181,43 @@
             <tbody>
                 @foreach (var item in Model.VetRecords)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.VetName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StreetAddress)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.State)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ZipCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.WorkPhone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Allergy)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Altered)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Rabies)
-                    </td>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VetName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StreetAddress)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.State)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ZipCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.WorkPhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Allergy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Altered)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rabies)
+                        </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Bordetella)
-                    </td>
-                    <td>
-                        <a asp-controller="VetRecords" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-controller="VetRecords" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    </td>
-                </tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Bordetella)
+                        </td>
+                        <td>
+                            <a asp-controller="VetRecords" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-controller="VetRecords" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
