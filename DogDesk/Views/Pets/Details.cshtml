@@ -94,49 +94,38 @@
     <h5>Upcoming Services</h5>
     @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.FirstOrDefault().CheckoutDate > DateTime.Now)
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().NameOfService)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.ServicePets)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StartDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CheckoutDate)
-                        </td>
-                        <td>
-                            <a asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        @foreach (var item in Model.ServicePets)
+        {
+            <div class="card border-info" style="width: 18rem;">
+                <div class="card-header font-weight-bold text-center">
+                    @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
+                </div>
+
+                <div class="card-body">
+                    <p class="card-text">
+                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
+                    </p>
+                    <p class="card-text">
+                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
+                    </p>
+                    <span>
+                        <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    </span>
+                    <span class="float-right">
+                        <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                    </span>
+                </div>
+            </div>
+
+        }
+
     }
     else
     {
         <p>No Upcoming Services Scheduled</p>
     }
 </div>
-<br/>
+<br />
 
 <div>
     <h5>Vet Records</h5>
