@@ -5,192 +5,234 @@
 }
 
 <div id="calendar"></div>
+<div id="event-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title event-title"></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body event-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Service Type</dt>
+                    <dd class="col-sm-8"><select asp-items="ViewBag.ServiceTypes" class="form-control pet-serviceType"></select></dd>
+                    <dt class="col-sm-4">Pet Name</dt>
+                    <dd class="col-sm-8">
+                        <input type="text" class="form-control pet-name" required autocomplete="off" />
+                        <input type="hidden" class="petId" />
+                    </dd>
+                    <dt class="col-sm-4">Start Date</dt>
+                    <dd class="col-sm-8"><input type="datetime-local" class="form-control pet-startdate" /></dd>
+                    <dt class="col-sm-4">Check Out Date</dt>
+                    <dd class="col-sm-8"><input type="datetime-local" class="form-control pet-checkoutdate" /></dd>
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-save-event" data-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-@*<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ServiceType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckoutDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ServiceType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckoutDate)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>*@
-
-@*<script>
-
-      document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-
-          var calendar = new FullCalendar.Calendar(calendarEl, {
-              defaultView: 'dayGridMonth',
-              editable: true,
-              selectable: true,
-              height: 550,
-              plugins: ['interaction', 'resourceDayGrid', 'resourceTimeGrid', 'bootstrap'],
-            themeSystem: 'bootstrap',
-            header: {
-              left: 'prev,next today',
-              center: 'title',
-              right: 'resourceTimeGridDay,resourceTimeGridTwoDay,timeGridWeek,dayGridMonth'
-              },
-            resources: [
-        { id: 'a', title: 'Room A' },
-        { id: 'b', title: 'Room B', eventColor: 'dark' },
-        { id: 'c', title: 'Room C', eventColor: 'warning' },
-        { id: 'd', title: 'Room D', eventColor: 'red' }
-      ],
-      events: [
-        { id: '1', resourceId: 'a', start: '2019-09-06', end: '2019-08-08', title: 'event 1' },
-        { id: '2', resourceId: 'a', start: '2019-09-07T09:00:00', end: '2019-09-07T14:00:00', title: 'event 2' },
-        { id: '3', resourceId: 'b', start: '2019-09-07T12:00:00', end: '2019-09-08T06:00:00', title: 'event 3' },
-        { id: '4', resourceId: 'c', start: '2019-09-07T07:30:00', end: '2019-09-07T09:30:00', title: 'event 4' },
-        { id: '5', resourceId: 'd', start: '2019-09-07T10:00:00', end: '2019-09-07T15:00:00', title: 'event 5' }
-      ],
-
-      select: function(arg) {
-        console.log(
-          'select',
-          arg.startStr,
-          arg.endStr,
-          arg.resource ? arg.resource.id : '(no resource)'
-        );
-      },
-      dateClick: function(arg) {
-        console.log(
-          'dateClick',
-          arg.date,
-          arg.resource ? arg.resource.id : '(no resource)'
-        );
-      }
-
-        });
-
-        calendar.render();
-      });
-
-</script>*@
-
+<div>
+    @using (Html.BeginForm("TimeLineCalendar", "ServicePets", FormMethod.Get))
+    {
+        @*<input type="hidden" asp-for="Id" name="PetId" />*@
+        <input class="btn btn-primary mt-sm-2" type="submit" value="Add Short Term Service" />
+    }
+</div>
 
 <script>
+    var calendar = null;
 
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        calendar = new FullCalendar.Calendar(calendarEl, {
             plugins: ['bootstrap', 'interaction', 'resourceDayGrid'],
             themeSystem: 'bootstrap',
             editable: true,
             selectable: true,
             header: {
-              right: 'prev,next today',
+                right: 'prev,next today',
             },
-            select: function(arg) {
-                var title = prompt('Event Title:');
-                if (title) {
-                  calendar.addEvent({
-                    title: title,
-                    start: arg.start,
-                    end: arg.end,
-                    allDay: arg.allDay
-                  })
-                }
+            select: function (arg) {
+                loadPetForAdd(arg);
                 calendar.unselect()
-              },
+            },
+            eventClick: function (info) {
+                loadPetInfo(info);
+                $("#event-modal").modal("show");
+            },
             eventLimit: true,
             height: 600,
             events: [
-                {
-                    title: 'All Day Event',
-                    start: '2019-09-01'
-                },
-                {
-                    title: 'Long Event',
-                    start: '2019-09-07',
-                    end: '2019-09-10'
-                },
-                {
-                    groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2019-09-09T16:00:00'
-                },
-                {
-                    groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2019-09-16T16:00:00'
-                },
-                {
-                    title: 'Conference',
-                    start: '2019-09-11',
-                    end: '2019-09-13'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2019-09-12T10:30:00',
-                    end: '2019-09-12T12:30:00'
-                },
-                {
-                    title: 'Lunch',
-                    start: '2019-09-12T12:00:00'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2019-09-12T14:30:00'
-                },
-                {
-                    title: 'Happy Hour',
-                    start: '2019-09-12T17:30:00'
-                },
-                {
-                    title: 'Dinner',
-                    start: '2019-09-12T20:00:00'
-                },
-                {
-                    title: 'Birthday Party',
-                    start: '2019-09-13T07:00:00'
-                },
-                {
-                    title: 'Click for Google',
-                    url: 'http://google.com/',
-                    start: '2019-09-28'
-                }
             ]
         });
 
         calendar.render();
+
+        $(".pet-name").typeahead({
+            minLength: 1,
+            source: function (request, response) {
+                $.ajax({
+                    url: "/ServicePets/GetPetNameList/",
+                    data: {
+                        "name": request
+                    },
+                    type: "GET",
+                    contentType: "json",
+                    success: function (data) {
+                        items = [];
+                        map = {};
+                        $.each(data, function (i, item) {
+                            var id = item.id;
+                            var name = item.name;
+                            map[name] = {
+                                id: id,
+                                name: name
+                            };
+                            items.push(name);
+                        });
+                        response(items);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            updater: function (item) { //If simultaneously want to update value somewhere else
+                $(".petId").val(map[item].id); return item;
+            }
+        });
+
+        loadServicePets();
     });
+
+    function loadServicePets() {
+        $.ajax({
+            type: "POST",
+            url: "/ServicePets/GetAllServicePets",
+            data: JSON.stringify(null),
+            contentType: "application/json",
+            dataType: "json"
+        }).done(function (response) {
+            $.each(response, function (idx, item) {
+                calendar.addEvent({
+                    //title: $(".pet-event-title").val(),
+                    start: new Date(item.startDate),
+                    end: new Date(item.checkoutDate),
+                    //allDay: arg.allDay,
+                    extendedProps: {
+                        petId: item.petId,
+                        //petName: $(".pet-name").val(),
+                        serviceTypeId: item.serviceType
+                    }
+                });
+            });
+        }).fail(function (response) {
+            console.log('Error: ' + response);
+        });
+    }
+
+    function loadPetForAdd(arg) {
+        $(".pet-name").val("");
+        $(".pet-serviceType").val(0);
+        $(".pet-startdate").val("");
+        $(".pet-checkoutdate").val("");
+        $(".petId").val("");
+
+        $(".event-title").html("Add New Event"); // title of modal
+
+        $("#event-modal").modal("show");
+
+        var startDate = moment(arg.start).local().format("YYYY-MM-DDTHH:mm");
+        var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm");
+        $(".pet-startdate").val(startDate); //arg.start.toJSON().slice(0, 19)
+        $(".pet-checkoutdate").val(endDate); //arg.end == null ? "" : arg.end.toJSON().slice(0, 19)
+
+        $(".btn-save-event").off("click");
+        $(".btn-save-event").on("click", function () {
+            calendar.addEvent({
+                //title: $(".pet-event-title").val(),
+                start: new Date($(".pet-startdate").val()),
+                end: new Date($(".pet-checkoutdate").val()),
+                allDay: arg.allDay,
+                extendedProps: {
+                    petId: $(".petId").val(),
+                    petName: $(".pet-name").val(),
+                    serviceTypeId: $(".pet-serviceType").val()
+                }
+            });
+
+            var postData = {
+                PetId: $(".petId").val(),
+                StartDate: new Date($(".pet-startdate").val()),
+                CheckoutDate: new Date($(".pet-checkoutdate").val()),
+                ServiceType: $(".pet-serviceType").val()
+            };
+
+
+            $.ajax({
+                type: "POST",
+                url: "/ServicePets/CreatePet",
+                data: JSON.stringify(postData),
+                contentType: "application/json",
+                dataType: "json"
+            }).done(function (response) {
+                console.log(response);
+            }).fail(function (response) {
+                console.log('Error: ' + response);
+            });
+        });
+    }
+
+    function loadPetInfo(info) {
+        $(".pet-name").val("");
+        $(".pet-serviceType").val(0);
+        $(".pet-startdate").val("");
+        $(".pet-checkoutdate").val("");
+        $(".petId").val("");
+
+        $(".pet-serviceType").val(info.event.extendedProps.serviceTypeId);
+
+        $(".event-title").html("Edit " + info.event.title); // title of modal
+
+        //$(".pet-event-title").val(info.event.title);
+        $(".petId").val(info.event.extendedProps.petId);
+
+        $.getJSON("/ServicePets/LookupPet?petId=" + info.event.extendedProps.petId, function (data) {
+            if (data != null) {
+                $(".pet-name").val(data.name);
+            }
+        });
+
+        var startDate = moment(info.event.start).local().format("YYYY-MM-DDTHH:mm");
+        var endDate = moment(info.event.end == null ? "" : info.event.end).local().format("YYYY-MM-DDTHH:mm");
+
+        $(".pet-startdate").val(startDate);
+        $(".pet-checkoutdate").val(endDate);
+
+        $(".btn-save-event").off("click");
+        $(".btn-save-event").on("click", function () {
+            info.event.remove();
+
+            calendar.addEvent({
+                //title: $(".pet-event-title").val(),
+                start: new Date($(".pet-startdate").val()),
+                end: new Date($(".pet-checkoutdate").val()),
+                allDay: false,
+                extendedProps: {
+                    petId: $(".petId").val(),
+                    petName: $(".pet-name").val(),
+                    serviceTypeId: $(".pet-serviceType").val()
+                }
+            })
+        });
+    }
 
 </script>

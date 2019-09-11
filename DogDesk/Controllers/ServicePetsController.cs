@@ -7,29 +7,47 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DogDesk.Data;
 using DogDesk.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace DogDesk
 {
     public class ServicePetsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public ServicePetsController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ServicePetsController(ApplicationDbContext context,
+                          UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
-        // GET: ServicePets
+        public IActionResult Index()
+        {
+            var servicePet = _context.ServicePets
+                .Include(x => x.IdOfPet)
+                .Include(x => x.NameOfService);
+
+            return View(servicePet);
+
+            //return View(await _context.ServicePets.ToListAsync());
+        }
+
+        // GET: ServicePets/MainCalendar
         public async Task<IActionResult> MainCalendar()
         {
+            ViewData["ServiceTypes"] = GetServiceTypes();
+
             return View(await _context.ServicePets.ToListAsync());
         }
 
+        // GET: ServicePets/TmeLineCalendar
         public async Task<IActionResult> TimeLineCalendar()
         {
             return View(await _context.ServicePets.ToListAsync());
         }
 
+        // GET: ServicePets/ListViewCalendar
         public async Task<IActionResult> ListViewCalendar()
         {
             return View(await _context.ServicePets.ToListAsync());
@@ -45,7 +63,10 @@ namespace DogDesk
             }
 
             var servicePet = await _context.ServicePets
+                .Include(x => x.IdOfPet)
+                .Include(x => x.NameOfService)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (servicePet == null)
             {
                 return NotFound();
@@ -159,6 +180,56 @@ namespace DogDesk
         private bool ServicePetExists(int id)
         {
             return _context.ServicePets.Any(e => e.Id == id);
+        }
+
+        public JsonResult GetPetNameList(string name)
+        {
+            var list = _context.Pets
+                .Where(x => x.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
+                .Take(10)
+                .ToList();
+            return Json(list);
+        }
+
+        public JsonResult LookupPet(int petId)
+        {
+            var pet = _context.Pets.FirstOrDefault(x => x.Id == petId);
+
+            return Json(pet);
+        }
+
+        [HttpPost]
+        public IActionResult CreatePet([FromBody]ServicePet servicePet)
+        {
+                _context.Add(servicePet);
+                _context.SaveChangesAsync();
+                return Json(new { });
+        }
+
+        [HttpPost]
+        public IActionResult GetAllServicePets()
+        {
+            var servicePets = _context.ServicePets;
+
+            return Json(servicePets.ToList());
+        }
+
+        private List<SelectListItem> GetServiceTypes()
+        {
+            var selectItems = _context.ServiceTypes
+                .Select(program => new SelectListItem
+                {
+                    Text = program.ServiceName,
+                    Value = program.Id.ToString()
+                })
+                .ToList();
+
+            selectItems.Insert(0, new SelectListItem
+            {
+                Text = "Choose type...",
+                Value = "0"
+            });
+            return selectItems;
         }
     }
 }

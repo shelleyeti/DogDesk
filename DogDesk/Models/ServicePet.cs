@@ -13,9 +13,9 @@ namespace DogDesk.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [Display(Name = "Created By")]
         public string UserId { get; set; }
 
-        [Display(Name = "Service Type")]
         public int ServiceType { get; set; }
 
         public int PetId { get; set; }
@@ -27,5 +27,13 @@ namespace DogDesk.Models
         [Display(Name = "Checkout Date")]
         [DataType(DataType.Date)]
         public DateTime CheckoutDate { get; set; }
+
+        [ForeignKey("PetId")]
+        [Display(Name = "Pet Name")]
+        public Pet IdOfPet { get; set; }
+
+        [ForeignKey("ServiceType")]
+        [Display(Name = "Service Type")]
+        public ServiceType NameOfService { get; set; }
     }
 }

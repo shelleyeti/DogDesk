@@ -48,6 +48,7 @@
     <script src='~/js/fullcalendar/bootstrap/main.js'></script>
     <script src='~/js/fullcalendar/resource-timeline/main.js'></script>
     <script src='~/js/fullcalendar//list/main.js'></script>
+    <script src="~/js/moment.min.js"></script>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-minty.css" />
     </environment>
@@ -116,7 +117,7 @@
         </nav>
     </header>
 
-    <div class="container my-sm-3">
+    <div class="container my-sm-3 pb-sm-4">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @RenderBody()
