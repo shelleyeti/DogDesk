@@ -7,31 +7,51 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DogDesk.Data;
 using DogDesk.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace DogDesk
 {
     public class ServicePetsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public ServicePetsController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ServicePetsController(ApplicationDbContext context,
+                          UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
-        // GET: ServicePets
+        public IActionResult Index()
+        {
+            var servicePet = _context.ServicePets
+                .Include(x => x.IdOfPet)
+                .Include(x => x.NameOfService);
+
+            return View(servicePet);
+        }
+
+        // GET: ServicePets/MainCalendar
         public async Task<IActionResult> MainCalendar()
         {
+            ViewData["ServiceTypes"] = GetLongServiceTypes();
+
             return View(await _context.ServicePets.ToListAsync());
         }
 
+        // GET: ServicePets/TmeLineCalendar
         public async Task<IActionResult> TimeLineCalendar()
         {
+            ViewData["ServiceTypes"] = GetShortServiceTypes();
+
             return View(await _context.ServicePets.ToListAsync());
         }
 
+        // GET: ServicePets/ListViewCalendar
         public async Task<IActionResult> ListViewCalendar()
         {
+            //ViewData["ServiceTypes"] = GetShortServiceTypes();
+
             return View(await _context.ServicePets.ToListAsync());
         }
 
@@ -45,7 +65,10 @@ namespace DogDesk
             }
 
             var servicePet = await _context.ServicePets
+                .Include(x => x.IdOfPet)
+                .Include(x => x.NameOfService)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (servicePet == null)
             {
                 return NotFound();
@@ -159,6 +182,120 @@ namespace DogDesk
         private bool ServicePetExists(int id)
         {
             return _context.ServicePets.Any(e => e.Id == id);
+        }
+
+        public JsonResult GetPetNameList(string name)
+        {
+            var list = _context.Pets
+                .Where(x => x.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
+                .Take(10)
+                .ToList();
+            return Json(list);
+        }
+
+        public JsonResult LookupPet(int petId)
+        {
+            var pet = _context.Pets.FirstOrDefault(x => x.Id == petId);
+
+            return Json(pet);
+        }
+
+        [HttpPost]
+        public IActionResult CreatePet([FromBody]ServicePet servicePet)
+        {
+                _context.Add(servicePet);
+                _context.SaveChanges();
+                return Json(servicePet);
+        }
+
+        [HttpPost]
+        public IActionResult UpdatePetService([FromBody]ServicePet servicePet)
+        {
+            _context.Update(servicePet);
+            _context.SaveChanges();
+            return Json(servicePet);
+        }
+
+        [HttpPost]
+        public IActionResult GetAllServicePets()
+        {
+            var servicePets = _context.ServicePets;
+
+            foreach(var sp in servicePets)
+            {
+                sp.IdOfPet = new Pet
+                {
+                    Name = _context.Pets.FirstOrDefault(p => p.Id == sp.PetId).Name
+                };
+
+                sp.NameOfService = new ServiceType
+                {
+                    ServiceName = _context.ServiceTypes.FirstOrDefault(s => s.Id == sp.ServiceType).ServiceName
+                };
+            }
+            //.Include(p => p.IdOfPet)
+            //.Include(s => s.NameOfService).ToListAsync();
+
+            //servicePets.ToList().ForEach(p => p.IdOfPet = _context.Pets.FirstOrDefault(pt => pt.Id == p.PetId));
+            //servicePets.ToList().ForEach(s => s.NameOfService = _context.ServiceTypes.FirstOrDefault(st => st.Id == s.ServiceType));
+
+            return Json(servicePets.ToList());
+        }
+
+        private List<SelectListItem> GetServiceTypes()
+        {
+            var selectItems = _context.ServiceTypes
+                .Select(program => new SelectListItem
+                {
+                    Text = program.ServiceName,
+                    Value = program.Id.ToString()
+                })
+                .ToList();
+
+            selectItems.Insert(0, new SelectListItem
+            {
+                Text = "Choose type...",
+                Value = "0"
+            });
+            return selectItems;
+        }
+
+        private List<SelectListItem> GetLongServiceTypes()
+        {
+            var selectItems = _context.ServiceTypes
+                .Where(x => x.ServiceName == "Small Dog Boarding" || x.ServiceName == "Medium Dog Boarding" || x.ServiceName == "Large Dog Boarding" || x.ServiceName == "Cat Boarding" || x.ServiceName == "Day Care")
+                .Select(program => new SelectListItem
+                {
+                    Text = program.ServiceName,
+                    Value = program.Id.ToString()
+                })
+                .ToList();
+
+            selectItems.Insert(0, new SelectListItem
+            {
+                Text = "Choose type...",
+                Value = "0"
+            });
+            return selectItems;
+        }
+
+        private List<SelectListItem> GetShortServiceTypes()
+        {
+            var selectItems = _context.ServiceTypes
+                .Where(x => x.ServiceName == "Nail Trim" || x.ServiceName == "Small Dog Bath" || x.ServiceName == "Medium Dog Bath" || x.ServiceName == "Large Dog Bath")
+                .Select(program => new SelectListItem
+                {
+                    Text = program.ServiceName,
+                    Value = program.Id.ToString()
+                })
+                .ToList();
+
+            selectItems.Insert(0, new SelectListItem
+            {
+                Text = "Choose type...",
+                Value = "0"
+            });
+            return selectItems;
         }
     }
 }

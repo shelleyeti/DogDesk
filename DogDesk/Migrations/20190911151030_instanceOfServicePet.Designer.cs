@@ -3,15 +3,17 @@ using System;
 using DogDesk.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DogDesk.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190911151030_instanceOfServicePet")]
+    partial class instanceOfServicePet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,7 +161,7 @@ namespace DogDesk.Migrations
                         {
                             Id = "000-shelley-arnold-333-7777777",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "11bb590a-8268-44e3-9186-eea556f8359e",
+                            ConcurrencyStamp = "9131df12-3f0b-43ac-9cfc-21489fdfbd9a",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Shelley",
@@ -167,7 +169,7 @@ namespace DogDesk.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBalhafWEmzgv6QooW8BH1zFmLlLBu8QOPkJ5UlYeA5c+zTX5wM2/rhL6x1eTob/vw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOYSHDYIAMkh2vV4sMcvbEA1IcVeS3Y4hYseEwEDyzMsb6EcgVERIPQF/kf6kPps5Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
@@ -292,6 +294,8 @@ namespace DogDesk.Migrations
 
                     b.Property<int>("PetId");
 
+                    b.Property<int?>("ServiceNameId");
+
                     b.Property<int>("ServiceType");
 
                     b.Property<DateTime>("StartDate");
@@ -302,7 +306,7 @@ namespace DogDesk.Migrations
 
                     b.HasIndex("PetId");
 
-                    b.HasIndex("ServiceType");
+                    b.HasIndex("ServiceNameId");
 
                     b.ToTable("ServicePets");
                 });
@@ -556,15 +560,14 @@ namespace DogDesk.Migrations
 
             modelBuilder.Entity("DogDesk.Models.ServicePet", b =>
                 {
-                    b.HasOne("DogDesk.Models.Pet", "IdOfPet")
+                    b.HasOne("DogDesk.Models.Pet", "Pet")
                         .WithMany("ServicePets")
                         .HasForeignKey("PetId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("DogDesk.Models.ServiceType", "NameOfService")
+                    b.HasOne("DogDesk.Models.ServiceType", "ServiceName")
                         .WithMany()
-                        .HasForeignKey("ServiceType")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ServiceNameId");
                 });
 
             modelBuilder.Entity("DogDesk.Models.VetRecord", b =>
