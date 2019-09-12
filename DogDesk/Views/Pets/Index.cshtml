@@ -7,6 +7,12 @@
 <h3>All Pets</h3>
 <br />
 
+<form class="form-inline my-2 my-lg-0" role="search" asp-controller="Pets" asp-action="Index">
+    <input class="form-control form-control-sm mr-sm-2" type="text" name="SearchString" placeholder="Search Pets">
+    <button class="btn btn-primary my-sm-0 mr-sm-5 btn-sm" type="submit" value="Search">Search</button>
+</form>
+<br />
+
 <table class="table">
     <thead>
         <tr>
@@ -38,37 +44,38 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GenderOfAnimal.Gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BirthDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SizeOfAnimal.Size)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeOfAnimal.Animal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Breed)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GenderOfAnimal.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BirthDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SizeOfAnimal.Size)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeOfAnimal.Animal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Breed)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

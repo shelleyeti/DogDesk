@@ -25,8 +25,18 @@ namespace DogDesk
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Pets
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
+            var pets = new List<Pet>();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                pets = _context.Pets.Where(o => o.Name
+                .Contains(searchString, StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+                return View(pets);
+            }
+
             var attributes = _context.Pets
                 .Include(p => p.GenderOfAnimal)
                 .Include(p => p.SizeOfAnimal)
@@ -48,7 +58,7 @@ namespace DogDesk
                 .Include(p => p.SizeOfAnimal)
                 .Include(p => p.TypeOfAnimal)
                 .Include(p => p.PetOwners)
-                .Include(p => p.VetRecords)
+                .Include(p => p.VetRecords)//.OrderByDescending(x => x.Id).Take(2).ToList())
                 .Include(p => p.PetContacts)
                 .Include(p => p.ServicePets)
                 .ThenInclude(x => x.NameOfService)

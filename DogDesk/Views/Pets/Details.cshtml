@@ -7,43 +7,7 @@
 <h3>Details</h3>
 <h5>Pet Information</h5>
 
-<div class="btn-group">
-    <div>
-        @using (Html.BeginForm("Create", "VetRecords", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-primary mr-sm-3" type="submit" value="Add New Vet Record" />
-        }
-    </div>
-    <div>
-        @using (Html.BeginForm("MainCalendar", "ServicePets", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-secondary mr-sm-3" type="submit" value="Schedule Boarding" />
-        }
-    </div>
-    <div>
-        @using (Html.BeginForm("TimeLineCalendar", "ServicePets", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-info mr-sm-3" type="submit" value="Schedule Add-On Service" />
-        }
-    </div>
-    <div>
-        @using (Html.BeginForm("Create", "EmergencyContacts", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-success mr-sm-3" type="submit" value="Add New a Contact" />
-        }
-    </div>
-    <div>
-        @using (Html.BeginForm("AddOwner", "Owners", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-warning" type="submit" value="Add a New Owner" />
-        }
-    </div>
-</div>
+
 
 <br />
 <div>
@@ -102,8 +66,6 @@
         </dd>
     </dl>
 </div>
-
-
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
