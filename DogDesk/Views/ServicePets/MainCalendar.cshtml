@@ -44,6 +44,7 @@
 </div>
 
 <script>
+
     var calendar = null;
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -70,7 +71,7 @@
             height: 600,
             events: [
             ],
-            maxTime: "12:00:00",
+            //maxTime: "12:00:00",
             displayEventTime: false
         });
 
@@ -126,13 +127,13 @@
             dataType: "json",
             success: function (response) {
                 $.each(response, function (idx, item) {
-                    var end = new Date(moment(item.checkoutDate).local().add(2, "hours").format("YYYY-MM-DDTHH:mm:ss"))
+                    var end = new Date(moment(item.checkoutDate).format("YYYY-MM-DDTHH:mm:ss"))
 
                     calendar.addEvent({
                         title: item.idOfPet.name,
                         start: new Date(item.startDate),
                         end: end,
-                        //allDay: arg.allDay,
+                        allDay: true,
                         extendedProps: {
                             id: item.id,
                             petId: item.petId,
@@ -158,7 +159,7 @@
         $("#event-modal").modal("show");
 
         var startDate = moment(arg.start).local().format("MM-DD-YYYY");
-        var endDate = moment(arg.end).subtract(1, 'days').add(19, "hours").local().format("MM-DD-YYYY"); 
+        var endDate = moment(arg.end).local().format("MM-DD-YYYY"); //.subtract(1, 'days')
         //var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm");
         $(".pet-startdate").val(startDate); //arg.start.toJSON().slice(0, 19)
         $(".pet-checkoutdate").val(endDate); //arg.end == null ? "" : arg.end.toJSON().slice(0, 19)
@@ -166,13 +167,13 @@
         $(".btn-save-event").off("click");
         $(".btn-save-event").on("click", function () {
 
-            var end = new Date(moment($(".pet-checkoutdate").val()).local().add(2, "hours").format("YYYY-MM-DDTHH:mm:ss"))
+            var end = new Date(moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"))
 
             var event = calendar.addEvent({
                 title: $(".pet-name").val(),
                 start: new Date($(".pet-startdate").val()),
                 end: end,
-                allDay: false,
+                allDay: true,
                 extendedProps: {
                     id: 0,
                     petId: $(".petId").val(),
@@ -184,10 +185,9 @@
             var postData = {
                 PetId: $(".petId").val(),
                 StartDate: moment($(".pet-startdate").val()).local().format("MM-DD-YYYY"),
-                CheckoutDate: moment($(".pet-checkoutdate").val()).add(1, "minutes").local().format("MM-DD-YYYY"),
+                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("MM-DD-YYYY"),
                 ServiceType: $(".pet-serviceType").val()
             };
-
 
             $.ajax({
                 type: "POST",
@@ -233,13 +233,13 @@
         $(".btn-save-event").on("click", function () {
             info.event.remove();
 
-            var end = new Date(moment($(".pet-checkoutdate").val()).local().add(2, "hours").format("YYYY-MM-DDTHH:mm:ss"))
+            var end = new Date(moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"))
 
             calendar.addEvent({
                 title: $(".pet-name").val(),
                 start: new Date($(".pet-startdate").val()),
                 end: end,
-                allDay: false,
+                allDay: true,
                 extendedProps: {
                     id: info.event.extendedProps.id,
                     petId: $(".petId").val(),
@@ -252,10 +252,9 @@
                 Id: info.event.extendedProps.id,
                 PetId: $(".petId").val(),
                 StartDate: moment($(".pet-startdate").val()).local().format("MM-DD-YYYY"),
-                CheckoutDate: moment($(".pet-checkoutdate").val()).add(1, "minutes").local().format("MM-DD-YYYY"),
+                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("MM-DD-YYYY"),
                 ServiceType: $(".pet-serviceType").val()
             };
-
 
             $.ajax({
                 type: "POST",

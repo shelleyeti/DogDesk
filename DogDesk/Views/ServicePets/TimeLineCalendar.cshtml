@@ -36,6 +36,7 @@
 </div>
 
 <script>
+
     var calendar = null;
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -47,6 +48,7 @@
             nowIndicator: true,
             editable: true,
             selectable: true,
+            eventStartEditable: false,
             select: function (arg) {
                 loadPetForAdd(arg);
                 calendar.unselect()
@@ -63,13 +65,107 @@
             },
             aspectRatio: 1.6,
             defaultView: 'resourceTimelineDay',
-            resourceGroupField: 'building',
+            resourceGroupField: 'type',
             resources: [
-                { id: 'a', building: '460 Bryant', title: 'Auditorium A' },
-                { id: 'b', building: '460 Bryant', title: 'Auditorium B' },
-                { id: 'c', building: '460 Bryant', title: 'Auditorium C' },
-                { id: 'g', building: '564 Pacific', title: 'Auditorium G' },
-                { id: 'h', building: '564 Pacific', title: 'Auditorium H' }
+                {
+                    id: 'a',
+                    title: 'Bath',
+                    type: 'Morning Bath',
+                    businessHours: {
+                        startTime: '07:30',
+                        endTime: '08:30'
+                    }
+                },
+                {
+                    id: 'b',
+                    title: 'Bath',
+                    type: 'Morning Bath',
+                    businessHours: {
+                        startTime: '08:30',
+                        endTime: '09:30'
+                    }
+                },
+                {
+                    id: 'c',
+                    title: 'Bath',
+                    type: 'Morning Bath',
+                    businessHours: {
+                        startTime: '09:30',
+                        endTime: '10:30'
+                    }
+                },
+                {
+                    id: 'd',
+                    title: 'Bath',
+                    type: 'Morning Bath',
+                    businessHours: {
+                        startTime: '10:30',
+                        endTime: '11:30'
+                    }
+                },
+                {
+                    id: 'e',
+                    title: 'Bath',
+                    type: 'Morning Bath',
+                    businessHours: {
+                        startTime: '11:30',
+                        endTime: '12:30'
+                    }
+                },
+                {
+                    id: 'f',
+                    title: 'Bath',
+                    type: 'Afternoon Bath',
+                    businessHours: {
+                        startTime: '15:30',
+                        endTime: '16:30'
+                    }
+                },
+                {
+                    id: 'g',
+                    title: 'Bath',
+                    type: 'Afternoon Bath',
+                    businessHours: {
+                        startTime: '16:30',
+                        endTime: '17:30'
+                    }
+                },
+                {
+                    id: 'h',
+                    title: 'Bath',
+                    type: 'Afternoon Bath',
+                    businessHours: {
+                        startTime: '17:30',
+                        endTime: '18:30'
+                    }
+                },
+                {
+                    id: 'i',
+                    title: 'Bath',
+                    type: 'Afternoon Bath',
+                    businessHours: {
+                        startTime: '18:30',
+                        endTime: '19:30'
+                    }
+                },
+                {
+                    id: 'j',
+                    title: 'Bath',
+                    type: 'Afternoon Bath',
+                    businessHours: {
+                        startTime: '19:30',
+                        endTime: '20:30'
+                    }
+                },
+                {
+                    id: 'k',
+                    title: 'Bath',
+                    type: 'Afternoon Bath',
+                    businessHours: {
+                        startTime: '20:30',
+                        endTime: '21:30'
+                    }
+                }
             ]
         });
 
@@ -115,33 +211,37 @@
         loadServicePets();
     });
 
-        function loadServicePets() {
+    //Loads all the Pet up when Calendar loads
+    function loadServicePets() {
         $.ajax({
             type: "POST",
             url: "/ServicePets/GetAllServicePets",
             data: JSON.stringify(null),
             contentType: "application/json",
-            dataType: "json"
-        }).done(function (response) {
-            $.each(response, function (idx, item) {
-                calendar.addEvent({
-                    //title: $(".pet-event-title").val(),
-                    start: new Date(item.startDate),
-                    end: new Date(item.checkoutDate),
-                    //allDay: arg.allDay,
-                    extendedProps: {
-                        petId: item.petId,
-                        //petName: $(".pet-name").val(),
-                        serviceTypeId: item.serviceType
-                    }
+            dataType: "json",
+            success: function (response) {
+                $.each(response, function (idx, item) {
+                    //var end = new Date(moment(item.checkoutDate);//.local().format("YYYY-MM-DDTHH:mm:ss"))
+
+                    calendar.addEvent({
+                        title: item.idOfPet.name,
+                        start: new Date(item.startDate),
+                        end: new Date(item.checkoutDate),
+                        allDay: true,
+                        extendedProps: {
+                            id: item.id,
+                            petId: item.petId,
+                            petName: item.idOfPet.name,
+                            serviceType: item.nameOfService.serviceName,
+                            serviceTypeId: item.serviceType
+                        }
+                    });
                 });
-            });
-        }).fail(function (response) {
-            console.log('Error: ' + response);
+            }
         });
     }
 
-        function loadPetForAdd(arg) {
+    function loadPetForAdd(arg) {
         $(".pet-name").val("");
         $(".pet-serviceType").val(0);
         $(".pet-startdate").val("");
@@ -152,19 +252,24 @@
 
         $("#event-modal").modal("show");
 
-        var startDate = moment(arg.start).local().format("YYYY-MM-DDTHH:mm");
-        var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm");
+        var startDate = moment(arg.start).local().format("MM-DD-YYYYTHH:mm:ss");
+        var endDate = moment(arg.end).subtract(1, 'days').add(19, "hours").local().format("MM-DD-YYYYTHH:mm:ss"); 
+        //var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm");
         $(".pet-startdate").val(startDate); //arg.start.toJSON().slice(0, 19)
         $(".pet-checkoutdate").val(endDate); //arg.end == null ? "" : arg.end.toJSON().slice(0, 19)
 
         $(".btn-save-event").off("click");
         $(".btn-save-event").on("click", function () {
-            calendar.addEvent({
-                //title: $(".pet-event-title").val(),
+
+            var end = new Date(moment($(".pet-checkoutdate").val()).local().add(2, "hours").format("YYYY-MM-DDTHH:mm:ss"))
+
+            var event = calendar.addEvent({
+                title: $(".pet-name").val(),
                 start: new Date($(".pet-startdate").val()),
-                end: new Date($(".pet-checkoutdate").val()),
-                allDay: arg.allDay,
+                end: end,
+                allDay: false,
                 extendedProps: {
+                    id: 0,
                     petId: $(".petId").val(),
                     petName: $(".pet-name").val(),
                     serviceTypeId: $(".pet-serviceType").val()
@@ -173,8 +278,8 @@
 
             var postData = {
                 PetId: $(".petId").val(),
-                StartDate: new Date($(".pet-startdate").val()),
-                CheckoutDate: new Date($(".pet-checkoutdate").val()),
+                StartDate: moment($(".pet-startdate").val()).local().format("MM-DD-YYYYTHH:mm:ss"),
+                CheckoutDate: moment($(".pet-checkoutdate").val()).add(1, "minutes").local().format("MM-DD-YYYYTHH:mm:ss"),
                 ServiceType: $(".pet-serviceType").val()
             };
 
@@ -186,14 +291,14 @@
                 contentType: "application/json",
                 dataType: "json"
             }).done(function (response) {
-                console.log(response);
+                event.setExtendedProp("id", response.id);
             }).fail(function (response) {
                 console.log('Error: ' + response);
             });
         });
     }
 
-        function loadPetInfo(info) {
+    function loadPetInfo(info) {
         $(".pet-name").val("");
         $(".pet-serviceType").val(0);
         $(".pet-startdate").val("");
@@ -213,8 +318,8 @@
             }
         });
 
-        var startDate = moment(info.event.start).local().format("YYYY-MM-DDTHH:mm");
-        var endDate = moment(info.event.end == null ? "" : info.event.end).local().format("YYYY-MM-DDTHH:mm");
+        var startDate = moment(info.event.start).local().format("MM-DD-YYYYTHH:mm:ss");
+        var endDate = moment(info.event.end == null ? "" : info.event.end).local().format("MM-DD-YYYYTHH:mm:ss");
 
         $(".pet-startdate").val(startDate);
         $(".pet-checkoutdate").val(endDate);
@@ -223,20 +328,43 @@
         $(".btn-save-event").on("click", function () {
             info.event.remove();
 
+            var end = new Date(moment($(".pet-checkoutdate").val()).local().add(2, "hours").format("YYYY-MM-DDTHH:mm:ss"))
+
             calendar.addEvent({
-                //title: $(".pet-event-title").val(),
+                title: $(".pet-name").val(),
                 start: new Date($(".pet-startdate").val()),
-                end: new Date($(".pet-checkoutdate").val()),
+                end: end,
                 allDay: false,
                 extendedProps: {
+                    id: info.event.extendedProps.id,
                     petId: $(".petId").val(),
                     petName: $(".pet-name").val(),
                     serviceTypeId: $(".pet-serviceType").val()
                 }
-            })
+            });
+
+            var postData = {
+                Id: info.event.extendedProps.id,
+                PetId: $(".petId").val(),
+                StartDate: moment($(".pet-startdate").val()).local().format("MM-DD-YYYYTHH:mm:ss"),
+                CheckoutDate: moment($(".pet-checkoutdate").val()).add(1, "minutes").local().format("MM-DD-YYYYTHH:mm:ss"),
+                ServiceType: $(".pet-serviceType").val()
+            };
+
+
+            $.ajax({
+                type: "POST",
+                url: "/ServicePets/UpdatePetService",
+                data: JSON.stringify(postData),
+                contentType: "application/json",
+                dataType: "json"
+            }).done(function (response) {
+                console.log("updated");
+            }).fail(function (response) {
+                console.log('Error: ' + response);
+            });
         });
     }
-
 
 </script>
 

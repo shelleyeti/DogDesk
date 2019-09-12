@@ -85,6 +85,37 @@ namespace DogDesk
             return View(owner);
         }
 
+        // GET: Owners/AddOwner
+        public IActionResult AddOwner(int PetId)
+        {
+            var newPetOwner = new PetOwner();
+            var pet = _context.Pets.FirstOrDefault(x => x.Id == PetId);
+            newPetOwner.Pet = pet;
+
+            return View(newPetOwner);
+        }
+
+        // POST: Owners/AddOwner
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddOwner(PetOwner petOwner)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(petOwner.Owner);
+                await _context.SaveChangesAsync();
+
+                petOwner.OwnerId = petOwner.Owner.Id;
+                _context.PetOwners.Add(petOwner);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Pets");
+            }
+            return View(petOwner);
+        }
+
         // GET: Owners/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

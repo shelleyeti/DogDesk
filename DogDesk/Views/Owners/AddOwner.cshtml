@@ -1,0 +1,80 @@
+﻿@model DogDesk.Models.PetOwner
+
+@{
+    ViewData["Title"] = "AddOwner";
+}
+<h3>New Client</h3>
+<h5>Add a New Client to an Existing Pet</h5>
+<br />
+
+<form asp-controller="Owners" asp-action="AddOwner">
+
+    <div class="row">
+        <div class="col-md-5">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Owner.FirstName" class="control-label"></label>
+                <input asp-for="Owner.FirstName" class="form-control" />
+                <span asp-validation-for="Owner.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Owner.LastName" class="control-label"></label>
+                <input asp-for="Owner.LastName" class="form-control" />
+                <span asp-validation-for="Owner.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Owner.HomePhone" class="control-label"></label>
+                <input asp-for="Owner.HomePhone" class="form-control" />
+                <span asp-validation-for="Owner.HomePhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Owner.CellPhone" class="control-label"></label>
+                <input asp-for="Owner.CellPhone" class="form-control" />
+                <span asp-validation-for="Owner.CellPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Owner.WorkPhone" class="control-label"></label>
+                <input asp-for="Owner.WorkPhone" class="form-control" />
+                <span asp-validation-for="Owner.WorkPhone" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-5 offset-sm-2">
+            <div class="form-group">
+                <label asp-for="Owner.StreetAddress" class="control-label"></label>
+                <input asp-for="Owner.StreetAddress" class="form-control" />
+                <span asp-validation-for="Owner.StreetAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Owner.City" class="control-label"></label>
+                <input asp-for="Owner.City" class="form-control" />
+                <span asp-validation-for="Owner.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Owner.State" class="control-label"></label>
+                <input asp-for="Owner.State" class="form-control" />
+                <span asp-validation-for="Owner.State" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Owner.ZipCode" class="control-label"></label>
+                <input asp-for="Owner.ZipCode" class="form-control" />
+                <span asp-validation-for="Owner.ZipCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Pet Name: </label>
+                <input disabled asp-for="Pet.Name" class="form-control" />
+            </div>
+            <input type="hidden" asp-for="Pet.Id" name="PetId" />
+        </div>
+    </div>
+    <div class="col-md-12 form-group text-right">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div class="text-right">
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

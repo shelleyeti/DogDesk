@@ -12,7 +12,6 @@ namespace DogDesk.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int PetId { get; set; }
 
         [Required]
         [Display(Name = "First Name")]
@@ -41,5 +40,7 @@ namespace DogDesk.Models
             get
             { return $"{FirstName} {LastName}"; }
         }
+
+
     }
 }

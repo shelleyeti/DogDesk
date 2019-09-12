@@ -51,13 +51,20 @@
             dataType: "json",
             success: function (response) {
                 $.each(response, function (idx, item) {
-                    var end = new Date(moment(item.checkoutDate).local().add(2, "hours").format("YYYY-MM-DDTHH:mm:ss"))
+                    //var end = new Date(moment(item.checkoutDate).local().add(2, "hours").format("YYYY-MM-DDTHH:mm:ss"))
+                    var allDay = false;
+                    if (item.nameOfService.serviceName == "Small Dog Boarding" ||
+                        item.nameOfService.serviceName == "Medium Dog Boarding" ||
+                        item.nameOfService.serviceName == "Large Dog Boarding" ||
+                        item.nameOfService.serviceName == "Cat Boarding" ||
+                        item.nameOfService.serviceName == "Day Care")
+                        allDay = true;
 
                     calendar.addEvent({
                         title: item.idOfPet.name + ":" + " " + item.nameOfService.serviceName,
                         start: new Date(item.startDate),
-                        end: end,
-                        //allDay: arg.allDay,
+                        end: new Date(moment(item.checkoutDate)),
+                        allDay: allDay,
                         extendedProps: {
                             id: item.id,
                             petId: item.petId,

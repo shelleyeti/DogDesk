@@ -49,9 +49,13 @@ namespace DogDesk
         }
 
         // GET: EmergencyContacts/Create
-        public IActionResult Create()
+        public IActionResult Create(int PetId)
         {
-            return View();
+            var newEContact = new PetContact();
+            var pet = _context.Pets.FirstOrDefault(x => x.Id == PetId);
+            newEContact.Pet = pet;
+
+            return View(newEContact);
         }
 
         // POST: EmergencyContacts/Create
@@ -59,15 +63,20 @@ namespace DogDesk
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PetId,FirstName,LastName,HomePhone,CellPhone,WorkPhone")] EmergencyContact emergencyContact)
+        public async Task<IActionResult> Create(PetContact petContact)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(emergencyContact);
+                _context.Add(petContact.EmergencyContact);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                petContact.EmergencyContactId = petContact.EmergencyContact.Id;
+                _context.PetContactss.Add(petContact);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Pets");
             }
-            return View(emergencyContact);
+            return View(petContact);
         }
 
         // GET: EmergencyContacts/Edit/5
