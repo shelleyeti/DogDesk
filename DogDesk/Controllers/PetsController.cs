@@ -58,7 +58,7 @@ namespace DogDesk
                 .Include(p => p.SizeOfAnimal)
                 .Include(p => p.TypeOfAnimal)
                 .Include(p => p.PetOwners)
-                .Include(p => p.VetRecords)//.OrderByDescending(x => x.Id).Take(2).ToList())
+                .Include(p => p.VetRecords)
                 .Include(p => p.PetContacts)
                 .Include(p => p.ServicePets)
                 .ThenInclude(x => x.NameOfService)
@@ -66,7 +66,7 @@ namespace DogDesk
 
             pet.PetOwners.ToList().ForEach(x => x.Owner = _context.Owners.FirstOrDefault(y => y.Id == x.OwnerId));
             pet.PetContacts.ToList().ForEach(x => x.EmergencyContact = _context.EmergencyContacts.FirstOrDefault(y => y.Id == x.EmergencyContactId));
-
+            pet.VetRecords = pet.VetRecords.OrderByDescending(x => x.Id).Take(3).ToList();
 
             if (pet == null)
             {
