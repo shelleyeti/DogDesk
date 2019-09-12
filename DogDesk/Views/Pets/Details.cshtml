@@ -5,12 +5,48 @@
 }
 
 <h3>Details</h3>
+<h5>Pet Information</h5>
 
+<div class="btn-group">
+    <div>
+        @using (Html.BeginForm("Create", "VetRecords", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-sm btn-primary mr-sm-3" type="submit" value="Add New Vet Record" />
+        }
+    </div>
+    <div>
+        @using (Html.BeginForm("MainCalendar", "ServicePets", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-sm btn-secondary mr-sm-3" type="submit" value="Schedule Boarding" />
+        }
+    </div>
+    <div>
+        @using (Html.BeginForm("TimeLineCalendar", "ServicePets", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-sm btn-info mr-sm-3" type="submit" value="Schedule Add-On Service" />
+        }
+    </div>
+    <div>
+        @using (Html.BeginForm("Create", "EmergencyContacts", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-sm btn-success mr-sm-3" type="submit" value="Add New a Contact" />
+        }
+    </div>
+    <div>
+        @using (Html.BeginForm("AddOwner", "Owners", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-sm btn-warning" type="submit" value="Add a New Owner" />
+        }
+    </div>
+</div>
+
+<br />
 <div>
-    <h5>Pet Information</h5>
-    <br />
-
-
     <div class="form-group">
         <label>Add Picture</label>
         <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
@@ -67,29 +103,6 @@
     </dl>
 </div>
 
-<div class="btn-group">
-    <div>
-        @using (Html.BeginForm("Create", "VetRecords", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-primary mr-sm-2" type="submit" value="Add Vet Record" />
-        }
-    </div>
-    <div>
-        @using (Html.BeginForm("MainCalendar", "ServicePets", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-secondary mr-sm-2" type="submit" value="Schedule Boarding" />
-        }
-    </div>
-    <div>
-        @using (Html.BeginForm("TimeLineCalendar", "ServicePets", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-info" type="submit" value="Schedule Add-On Service" />
-        }
-    </div>
-</div>
 
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
@@ -102,33 +115,32 @@
     <h5>Upcoming Services</h5>
     @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate > DateTime.Now))
     {
-        @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
-        {
-            <div class="card border-info" style="width: 18rem;">
-                <div class="card-header font-weight-bold text-center">
-                    @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
-                </div>
+        <div class="card-deck">
+            @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
+            {
+                <div class="card border-info" style="max-width: 18rem;">
+                    <div class="card-header font-weight-bold text-center">
+                        @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
+                    </div>
 
-                <div class="card-body">
-                    <p class="card-text">
-                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
-                    </p>
-                    <p class="card-text">
-                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
-                    </p>
-                    <span>
-                        <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    </span>
-                    <span class="">
-                        <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </span>
-                    <span class="float-right">
-                        <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
-                    </span>
+                    <div class="card-body">
+                        <p class="card-text">
+                            @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
+                        </p>
+                        <p class="card-text">
+                            @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
+                        </p>
+                        <div class="text-center">
+                            <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <span> | </span>
+                            <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                            <span> | </span>
+                            <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-        }
+            }
+        </div>
 
     }
     else
@@ -299,13 +311,6 @@
             }
         </tbody>
     </table>
-    <div>
-        @using (Html.BeginForm("AddOwner", "Owners", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-primary" type="submit" value="Add Owner" />
-        }
-    </div>
 </div>
 <br />
 
@@ -350,7 +355,9 @@
                         </td>
                         <td>
                             <a asp-controller="EmergencyContacts" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-controller="EmergencyContacts" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
                         </td>
                     </tr>
                 }
@@ -361,11 +368,4 @@
     {
         <p>No Emergency Contacts Found</p>
     }
-    <div>
-        @using (Html.BeginForm("Create", "EmergencyContacts", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-primary" type="submit" value="Add a Contact" />
-        }
-    </div>
 </div>
