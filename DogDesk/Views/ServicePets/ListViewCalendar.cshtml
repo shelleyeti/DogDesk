@@ -8,14 +8,16 @@
 
 <script>
 
+    var calendar = null;
+
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        calendar = new FullCalendar.Calendar(calendarEl, {
             plugins: ['bootstrap', 'list'],
+            themeSystem: 'bootstrap',
             timeZone: 'UTC',
             defaultView: 'listWeek',
-            themeSystem: 'bootstrap',
             height: 600,
 
             // customize the button names,
@@ -31,10 +33,118 @@
                 center: '',
                 right: 'listDay,listWeek,listMonth'
             },
-            events: 'https://fullcalendar.io/demo-events.json'
+            events: []
         });
 
         calendar.render();
+
+        loadServicePets();
     });
+
+    //Loads all the Pet up when Calendar loads
+    function loadServicePets() {
+        $.ajax({
+            type: "POST",
+            url: "/ServicePets/GetAllServicePets",
+            data: JSON.stringify(null),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                $.each(response, function (idx, item) {
+                    //var end = new Date(moment(item.checkoutDate).local().add(2, "hours").format("YYYY-MM-DDTHH:mm:ss"))
+                    var allDay = false;
+                    if (item.nameOfService.serviceName == "Small Dog Boarding" ||
+                        item.nameOfService.serviceName == "Medium Dog Boarding" ||
+                        item.nameOfService.serviceName == "Large Dog Boarding" ||
+                        item.nameOfService.serviceName == "Cat Boarding" ||
+                        item.nameOfService.serviceName == "Day Care")
+                        allDay = true;
+
+                    calendar.addEvent({
+                        title: item.idOfPet.name + ":" + " " + item.nameOfService.serviceName,
+                        start: new Date(item.startDate),
+                        end: new Date(moment(item.checkoutDate)),
+                        allDay: allDay,
+                        extendedProps: {
+                            id: item.id,
+                            petId: item.petId,
+                            petName: item.idOfPet.name,
+                            serviceType: item.nameOfService.serviceName,
+                            serviceTypeId: item.serviceType
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    function loadPetInfo(info) {
+        $(".pet-name").val("");
+        $(".pet-serviceType").val(0);
+        $(".pet-startdate").val("");
+        $(".pet-checkoutdate").val("");
+        $(".petId").val("");
+
+        $(".pet-serviceType").val(info.event.extendedProps.serviceTypeId);
+
+        //$(".event-title").html("Edit " + info.event.title); // title of modal
+
+        $(".pet-event-title").val(info.event.title);
+        $(".petId").val(info.event.extendedProps.petId);
+
+        $.getJSON("/ServicePets/LookupPet?petId=" + info.event.extendedProps.petId, function (data) {
+            if (data != null) {
+                $(".pet-name").val(data.name);
+            }
+        });
+
+        var startDate = moment(info.event.start).local().format("MM-DD-YYYY");
+        var endDate = moment(info.event.end == null ? "" : info.event.end).local().format("MM-DD-YYYY");
+
+        $(".pet-startdate").val(startDate);
+        $(".pet-checkoutdate").val(endDate);
+
+        $(".btn-save-event").off("click");
+        $(".btn-save-event").on("click", function () {
+            info.event.remove();
+
+            var end = new Date(moment($(".pet-checkoutdate").val()).local().add(2, "hours").format("YYYY-MM-DDTHH:mm:ss"))
+
+            calendar.addEvent({
+                title: $(".pet-name").val(),
+                start: new Date($(".pet-startdate").val()),
+                end: end,
+                allDay: false,
+                extendedProps: {
+                    id: info.event.extendedProps.id,
+                    petId: $(".petId").val(),
+                    petName: $(".pet-name").val(),
+                    serviceTypeId: $(".pet-serviceType").val()
+                }
+            });
+
+            var postData = {
+                Id: info.event.extendedProps.id,
+                PetId: $(".petId").val(),
+                StartDate: moment($(".pet-startdate").val()).local().format("MM-DD-YYYY"),
+                CheckoutDate: moment($(".pet-checkoutdate").val()).add(1, "minutes").local().format("MM-DD-YYYY"),
+                ServiceType: $(".pet-serviceType").val()
+            };
+
+
+            $.ajax({
+                type: "POST",
+                url: "/ServicePets/UpdatePetService",
+                data: JSON.stringify(postData),
+                contentType: "application/json",
+                dataType: "json"
+            }).done(function (response) {
+                console.log("updated");
+            }).fail(function (response) {
+                console.log('Error: ' + response);
+            });
+        });
+    }
+
 
 </script>

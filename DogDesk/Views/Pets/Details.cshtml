@@ -72,21 +72,21 @@
         @using (Html.BeginForm("Create", "VetRecords", FormMethod.Get))
         {
             <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-primary mr-sm-2" type="submit" value="Add Vet Record" />
+            <input class="btn btn-sm btn-primary mr-sm-2" type="submit" value="Add Vet Record" />
         }
     </div>
     <div>
         @using (Html.BeginForm("MainCalendar", "ServicePets", FormMethod.Get))
         {
             <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-secondary mr-sm-2" type="submit" value="Schedule Boarding" />
+            <input class="btn btn-sm btn-secondary mr-sm-2" type="submit" value="Schedule Boarding" />
         }
     </div>
     <div>
         @using (Html.BeginForm("TimeLineCalendar", "ServicePets", FormMethod.Get))
         {
             <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-info" type="submit" value="Schedule Add-On Service" />
+            <input class="btn btn-sm btn-info" type="submit" value="Schedule Add-On Service" />
         }
     </div>
 </div>
@@ -97,11 +97,12 @@
 </div>
 <br />
 
+@*Services*@
 <div>
     <h5>Upcoming Services</h5>
-    @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.FirstOrDefault().CheckoutDate > DateTime.Now)
+    @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate > DateTime.Now))
     {
-        @foreach (var item in Model.ServicePets)
+        @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
         {
             <div class="card border-info" style="width: 18rem;">
                 <div class="card-header font-weight-bold text-center">
@@ -137,6 +138,7 @@
 </div>
 <br />
 
+@* Vet Records *@
 <div>
     <h5>Vet Records</h5>
     @if (Model.VetRecords != null && Model.VetRecords.Count > 0)
@@ -228,6 +230,7 @@
 </div>
 <br />
 
+@* Owners *@
 <div>
     <h5>Owners</h5>
     <table class="table">
@@ -296,46 +299,54 @@
             }
         </tbody>
     </table>
+    <div>
+        @using (Html.BeginForm("AddOwner", "Owners", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-sm btn-primary" type="submit" value="Add Owner" />
+        }
+    </div>
 </div>
 <br />
 
+@* Contacts *@
 <div>
     <h5>Emergency Contacts</h5>
-    @if (Model.EmergencyContacts != null)
+    @if (Model.PetContacts != null)
     {
         <table class="table">
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.EmergencyContacts.FirstOrDefault().FullName)
+                        @Html.DisplayNameFor(model => model.PetContacts.FirstOrDefault().EmergencyContact.FullName)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EmergencyContacts.FirstOrDefault().HomePhone)
+                        @Html.DisplayNameFor(model => model.PetContacts.FirstOrDefault().EmergencyContact.HomePhone)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EmergencyContacts.FirstOrDefault().CellPhone)
+                        @Html.DisplayNameFor(model => model.PetContacts.FirstOrDefault().EmergencyContact.CellPhone)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EmergencyContacts.FirstOrDefault().WorkPhone)
+                        @Html.DisplayNameFor(model => model.PetContacts.FirstOrDefault().EmergencyContact.WorkPhone)
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.EmergencyContacts)
+                @foreach (var item in Model.PetContacts)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.FullName)
+                            @Html.DisplayFor(modelItem => item.EmergencyContact.FullName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.HomePhone)
+                            @Html.DisplayFor(modelItem => item.EmergencyContact.HomePhone)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CellPhone)
+                            @Html.DisplayFor(modelItem => item.EmergencyContact.CellPhone)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.WorkPhone)
+                            @Html.DisplayFor(modelItem => item.EmergencyContact.WorkPhone)
                         </td>
                         <td>
                             <a asp-controller="EmergencyContacts" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -350,4 +361,11 @@
     {
         <p>No Emergency Contacts Found</p>
     }
+    <div>
+        @using (Html.BeginForm("Create", "EmergencyContacts", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-sm btn-primary" type="submit" value="Add a Contact" />
+        }
+    </div>
 </div>

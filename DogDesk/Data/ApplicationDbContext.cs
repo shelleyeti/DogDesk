@@ -20,6 +20,7 @@ namespace DogDesk.Data
         public DbSet<Pet> Pets { get; set; }
         public DbSet<ServiceType> ServiceTypes { get; set; }
         public DbSet<PetOwner> PetOwners { get; set; }
+        public DbSet<PetContact> PetContactss { get; set; }
         public DbSet<VetRecord> VetRecords { get; set; }
         public DbSet<ServicePet> ServicePets { get; set; }
 

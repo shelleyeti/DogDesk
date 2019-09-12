@@ -49,11 +49,14 @@ namespace DogDesk
                 .Include(p => p.TypeOfAnimal)
                 .Include(p => p.PetOwners)
                 .Include(p => p.VetRecords)
+                .Include(p => p.PetContacts)
                 .Include(p => p.ServicePets)
                 .ThenInclude(x => x.NameOfService)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             pet.PetOwners.ToList().ForEach(x => x.Owner = _context.Owners.FirstOrDefault(y => y.Id == x.OwnerId));
+            pet.PetContacts.ToList().ForEach(x => x.EmergencyContact = _context.EmergencyContacts.FirstOrDefault(y => y.Id == x.EmergencyContactId));
+
 
             if (pet == null)
             {

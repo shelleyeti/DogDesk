@@ -42,6 +42,7 @@ namespace DogDesk.Models
 
         public ICollection<VetRecord> VetRecords { get; set; }
         public virtual ICollection<PetOwner> PetOwners { get; set; }
+        public virtual ICollection<PetContact> PetContacts { get; set; }
         public ICollection<EmergencyContact> EmergencyContacts { get; set; }
         public ICollection<ServicePet> ServicePets { get; set; }
 
