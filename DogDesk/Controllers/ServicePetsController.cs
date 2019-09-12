@@ -204,14 +204,40 @@ namespace DogDesk
         public IActionResult CreatePet([FromBody]ServicePet servicePet)
         {
                 _context.Add(servicePet);
-                _context.SaveChangesAsync();
-                return Json(new { });
+                _context.SaveChanges();
+                return Json(servicePet);
+        }
+
+        [HttpPost]
+        public IActionResult UpdatePetService([FromBody]ServicePet servicePet)
+        {
+            _context.Update(servicePet);
+            _context.SaveChanges();
+            return Json(servicePet);
         }
 
         [HttpPost]
         public IActionResult GetAllServicePets()
         {
             var servicePets = _context.ServicePets;
+
+            foreach(var sp in servicePets)
+            {
+                sp.IdOfPet = new Pet
+                {
+                    Name = _context.Pets.FirstOrDefault(p => p.Id == sp.PetId).Name
+                };
+
+                sp.NameOfService = new ServiceType
+                {
+                    ServiceName = _context.ServiceTypes.FirstOrDefault(s => s.Id == sp.ServiceType).ServiceName
+                };
+            }
+            //.Include(p => p.IdOfPet)
+            //.Include(s => s.NameOfService).ToListAsync();
+
+            //servicePets.ToList().ForEach(p => p.IdOfPet = _context.Pets.FirstOrDefault(pt => pt.Id == p.PetId));
+            //servicePets.ToList().ForEach(s => s.NameOfService = _context.ServiceTypes.FirstOrDefault(st => st.Id == s.ServiceType));
 
             return Json(servicePets.ToList());
         }

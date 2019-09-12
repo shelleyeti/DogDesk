@@ -86,7 +86,7 @@
         @using (Html.BeginForm("TimeLineCalendar", "ServicePets", FormMethod.Get))
         {
             <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-info" type="submit" value="Schedule Service" />
+            <input class="btn btn-info" type="submit" value="Schedule Add-On Service" />
         }
     </div>
 </div>
@@ -117,6 +117,9 @@
                     </p>
                     <span>
                         <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    </span>
+                    <span class="">
+                        <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     </span>
                     <span class="float-right">
                         <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
