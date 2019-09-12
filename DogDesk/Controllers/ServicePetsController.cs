@@ -34,7 +34,7 @@ namespace DogDesk
         // GET: ServicePets/MainCalendar
         public async Task<IActionResult> MainCalendar()
         {
-            ViewData["ServiceTypes"] = GetServiceTypes();
+            ViewData["ServiceTypes"] = GetLongServiceTypes();
 
             return View(await _context.ServicePets.ToListAsync());
         }
@@ -42,7 +42,7 @@ namespace DogDesk
         // GET: ServicePets/TmeLineCalendar
         public async Task<IActionResult> TimeLineCalendar()
         {
-            ViewData["ServiceTypes"] = GetServiceTypes();
+            ViewData["ServiceTypes"] = GetShortServiceTypes();
 
             return View(await _context.ServicePets.ToListAsync());
         }
@@ -50,7 +50,7 @@ namespace DogDesk
         // GET: ServicePets/ListViewCalendar
         public async Task<IActionResult> ListViewCalendar()
         {
-            ViewData["ServiceTypes"] = GetServiceTypes();
+            //ViewData["ServiceTypes"] = GetShortServiceTypes();
 
             return View(await _context.ServicePets.ToListAsync());
         }
@@ -245,6 +245,44 @@ namespace DogDesk
         private List<SelectListItem> GetServiceTypes()
         {
             var selectItems = _context.ServiceTypes
+                .Select(program => new SelectListItem
+                {
+                    Text = program.ServiceName,
+                    Value = program.Id.ToString()
+                })
+                .ToList();
+
+            selectItems.Insert(0, new SelectListItem
+            {
+                Text = "Choose type...",
+                Value = "0"
+            });
+            return selectItems;
+        }
+
+        private List<SelectListItem> GetLongServiceTypes()
+        {
+            var selectItems = _context.ServiceTypes
+                .Where(x => x.ServiceName == "Small Dog Boarding" || x.ServiceName == "Medium Dog Boarding" || x.ServiceName == "Large Dog Boarding" || x.ServiceName == "Cat Boarding" || x.ServiceName == "Day Care")
+                .Select(program => new SelectListItem
+                {
+                    Text = program.ServiceName,
+                    Value = program.Id.ToString()
+                })
+                .ToList();
+
+            selectItems.Insert(0, new SelectListItem
+            {
+                Text = "Choose type...",
+                Value = "0"
+            });
+            return selectItems;
+        }
+
+        private List<SelectListItem> GetShortServiceTypes()
+        {
+            var selectItems = _context.ServiceTypes
+                .Where(x => x.ServiceName == "Nail Trim" || x.ServiceName == "Small Dog Bath" || x.ServiceName == "Medium Dog Bath" || x.ServiceName == "Large Dog Bath")
                 .Select(program => new SelectListItem
                 {
                     Text = program.ServiceName,
