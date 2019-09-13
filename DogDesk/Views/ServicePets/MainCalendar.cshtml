@@ -39,7 +39,7 @@
     @using (Html.BeginForm("TimeLineCalendar", "ServicePets", FormMethod.Get))
     {
         @*<input type="hidden" asp-for="Id" name="PetId" />*@
-        <input class="btn btn-info mt-sm-2" type="submit" value="Schedule Add-On Service" />
+        <input class="btn btn-sm btn-info float-right mt-sm-2" type="submit" value="Schedule Add-On Service" />
     }
 </div>
 
@@ -68,11 +68,16 @@
                 $("#event-modal").modal("show");
             },
             eventLimit: true,
-            height: 600,
+            height: 575,
             events: [
             ],
             //maxTime: "12:00:00",
-            displayEventTime: false
+            displayEventTime: false,
+            validRange: function (nowDate) {
+                return {
+                    start: nowDate,
+                };
+            }
         });
 
         calendar.render();
@@ -158,8 +163,8 @@
 
         $("#event-modal").modal("show");
 
-        var startDate = moment(arg.start).local().format("MM-DD-YYYY");
-        var endDate = moment(arg.end).local().format("MM-DD-YYYY"); //.subtract(1, 'days')
+        var startDate = moment(arg.start).local().format("YYYY-MM-DDTHH:mm:ss");
+        var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm:ss"); //.subtract(1, 'days')
         //var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm");
         $(".pet-startdate").val(startDate); //arg.start.toJSON().slice(0, 19)
         $(".pet-checkoutdate").val(endDate); //arg.end == null ? "" : arg.end.toJSON().slice(0, 19)
@@ -184,8 +189,8 @@
 
             var postData = {
                 PetId: $(".petId").val(),
-                StartDate: moment($(".pet-startdate").val()).local().format("MM-DD-YYYY"),
-                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("MM-DD-YYYY"),
+                StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
+                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
                 ServiceType: $(".pet-serviceType").val()
             };
 
@@ -223,8 +228,8 @@
             }
         });
 
-        var startDate = moment(info.event.start).local().format("MM-DD-YYYY");
-        var endDate = moment(info.event.end == null ? "" : info.event.end).local().format("MM-DD-YYYY");
+        var startDate = moment(info.event.start).local().format("YYYY-MM-DDTHH:mm:ss");
+        var endDate = moment(info.event.end == null ? "" : info.event.end).local().format("YYYY-MM-DDTHH:mm:ss");
 
         $(".pet-startdate").val(startDate);
         $(".pet-checkoutdate").val(endDate);
@@ -251,8 +256,8 @@
             var postData = {
                 Id: info.event.extendedProps.id,
                 PetId: $(".petId").val(),
-                StartDate: moment($(".pet-startdate").val()).local().format("MM-DD-YYYY"),
-                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("MM-DD-YYYY"),
+                StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
+                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
                 ServiceType: $(".pet-serviceType").val()
             };
 

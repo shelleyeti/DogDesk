@@ -4,8 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h3>Details</h3>
-<h5>Pet Information</h5>
+<h3>Pet Information</h3>
 <br />
 
 <div class="btn-group">
@@ -55,102 +54,132 @@
 <br />
 
 <div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.GenderId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.GenderOfAnimal.Gender)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BirthDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.BirthDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SizeId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SizeOfAnimal.Size)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AnimalTypeId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TypeOfAnimal.Animal)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Color1)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Color1)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Color2)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Color2)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Breed)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Breed)
-        </dd>
-    </dl>
+    <div class="row">
+        <div class="col col-md-4">
+            <h5>Details</h5>
+            <div class="card bg-light">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold text-center"> @Html.DisplayFor(model => model.Name)</h5>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.GenderId, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.GenderOfAnimal.Gender)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.BirthDate, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.BirthDate)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.SizeId, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.SizeOfAnimal.Size)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.AnimalTypeId, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.TypeOfAnimal.Animal)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.Color1, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.Color1)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.Color2, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.Color2)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.Breed, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.Breed)
+                    </p>
+                    <div class="text-center">
+                        <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                        <span> | </span>
+                        <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@Model.Id"> Details </a>
+                        <span> | </span>
+                        <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                    </div>
+                </div>
+                </div>
+
+            </div>
+            <div class="col col-sm-8">
+                <h5>Upcoming Services</h5>
+                @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate > DateTime.Now))
+                {
+                    <div class="card-deck">
+                        @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
+                        {
+                            <div class="card border-info" style="max-width: 18rem;">
+                                <div class="card-header font-weight-bold text-center">
+                                    @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
+                                    </p>
+                                    <p class="card-text">
+                                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
+                                    </p>
+                                    <div class="text-center">
+                                        <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                        <span> | </span>
+                                        <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                                        <span> | </span>
+                                        <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>No Upcoming Services Scheduled</p>
+                }
+            </div>
+        </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
 <br />
 
 @*Services*@
-<div>
-    <h5>Upcoming Services</h5>
-    @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate > DateTime.Now))
-    {
-        <div class="card-deck">
-            @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
-            {
-                <div class="card border-info" style="max-width: 18rem;">
-                    <div class="card-header font-weight-bold text-center">
-                        @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
-                    </div>
+@*<div>
+        <h5>Upcoming Services</h5>
+        @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate > DateTime.Now))
+        {
+            <div class="card-deck">
+                @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
+                {
+                    <div class="card border-info" style="max-width: 18rem;">
+                        <div class="card-header font-weight-bold text-center">
+                            @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
+                        </div>
 
-                    <div class="card-body">
-                        <p class="card-text">
-                            @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
-                        </p>
-                        <p class="card-text">
-                            @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
-                        </p>
-                        <div class="text-center">
-                            <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <span> | </span>
-                            <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
-                            <span> | </span>
-                            <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <div class="card-body">
+                            <p class="card-text">
+                                @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
+                            </p>
+                            <p class="card-text">
+                                @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
+                            </p>
+                            <div class="text-center">
+                                <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <span> | </span>
+                                <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                                <span> | </span>
+                                <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
 
-    }
-    else
-    {
-        <p>No Upcoming Services Scheduled</p>
-    }
-</div>
-<br />
+        }
+        else
+        {
+            <p>No Upcoming Services Scheduled</p>
+        }
+    </div>
+    <br />*@
 
 @* Vet Records *@
 <div>
