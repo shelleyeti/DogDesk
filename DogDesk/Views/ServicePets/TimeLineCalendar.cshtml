@@ -43,12 +43,18 @@
         var calendarEl = document.getElementById('calendar');
 
         calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: ['bootstrap', 'interaction', 'resourceTimeline'],
+            plugins: ['bootstrap', 'interaction', 'timeGrid'],
             themeSystem: 'bootstrap',
             nowIndicator: true,
             editable: true,
             selectable: true,
             eventStartEditable: false,
+            defaultView: 'timeGridWeek',
+            header: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'timeGridWeek,timeGridDay'
+            },
             select: function (arg) {
                 loadPetForAdd(arg);
                 calendar.unselect()
@@ -58,115 +64,16 @@
                 $("#event-modal").modal("show");
             },
             height: 600,
-            header: {
-                left: 'today prev,next',
-                center: 'title',
-                right: 'resourceTimelineDay,resourceTimelineWeek'
-            },
-            aspectRatio: 1.6,
-            defaultView: 'resourceTimelineDay',
-            resourceGroupField: 'type',
-            resources: [
-                {
-                    id: 'a',
-                    title: 'Bath',
-                    type: 'Morning Bath',
-                    businessHours: {
-                        startTime: '07:30',
-                        endTime: '08:30'
-                    }
-                },
-                {
-                    id: 'b',
-                    title: 'Bath',
-                    type: 'Morning Bath',
-                    businessHours: {
-                        startTime: '08:30',
-                        endTime: '09:30'
-                    }
-                },
-                {
-                    id: 'c',
-                    title: 'Bath',
-                    type: 'Morning Bath',
-                    businessHours: {
-                        startTime: '09:30',
-                        endTime: '10:30'
-                    }
-                },
-                {
-                    id: 'd',
-                    title: 'Bath',
-                    type: 'Morning Bath',
-                    businessHours: {
-                        startTime: '10:30',
-                        endTime: '11:30'
-                    }
-                },
-                {
-                    id: 'e',
-                    title: 'Bath',
-                    type: 'Morning Bath',
-                    businessHours: {
-                        startTime: '11:30',
-                        endTime: '12:30'
-                    }
-                },
-                {
-                    id: 'f',
-                    title: 'Bath',
-                    type: 'Afternoon Bath',
-                    businessHours: {
-                        startTime: '15:30',
-                        endTime: '16:30'
-                    }
-                },
-                {
-                    id: 'g',
-                    title: 'Bath',
-                    type: 'Afternoon Bath',
-                    businessHours: {
-                        startTime: '16:30',
-                        endTime: '17:30'
-                    }
-                },
-                {
-                    id: 'h',
-                    title: 'Bath',
-                    type: 'Afternoon Bath',
-                    businessHours: {
-                        startTime: '17:30',
-                        endTime: '18:30'
-                    }
-                },
-                {
-                    id: 'i',
-                    title: 'Bath',
-                    type: 'Afternoon Bath',
-                    businessHours: {
-                        startTime: '18:30',
-                        endTime: '19:30'
-                    }
-                },
-                {
-                    id: 'j',
-                    title: 'Bath',
-                    type: 'Afternoon Bath',
-                    businessHours: {
-                        startTime: '19:30',
-                        endTime: '20:30'
-                    }
-                },
-                {
-                    id: 'k',
-                    title: 'Bath',
-                    type: 'Afternoon Bath',
-                    businessHours: {
-                        startTime: '20:30',
-                        endTime: '21:30'
-                    }
-                }
-            ]
+            events: [
+            ],
+            allDaySlot: false,
+            slotDuration: '00:15:00',
+            scrollTime: '06:30:00',
+            businessHours: {
+              daysOfWeek: [ 0, 1, 2, 3, 4, 5, 6 ], 
+              startTime: '06:30', 
+              endTime: '18:00'
+            }
         });
 
         calendar.render();
@@ -221,13 +128,13 @@
             dataType: "json",
             success: function (response) {
                 $.each(response, function (idx, item) {
-                    //var end = new Date(moment(item.checkoutDate);//.local().format("YYYY-MM-DDTHH:mm:ss"))
+                    var end = new Date(moment(item.checkoutDate).format("YYYY-MM-DDTHH:mm:ss"))
 
                     calendar.addEvent({
                         title: item.idOfPet.name,
                         start: new Date(item.startDate),
-                        end: new Date(item.checkoutDate),
-                        allDay: true,
+                        end: end,
+                        allDay: false,
                         extendedProps: {
                             id: item.id,
                             petId: item.petId,
@@ -252,16 +159,15 @@
 
         $("#event-modal").modal("show");
 
-        var startDate = moment(arg.start).local().format("MM-DD-YYYYTHH:mm:ss");
-        var endDate = moment(arg.end).subtract(1, 'days').add(19, "hours").local().format("MM-DD-YYYYTHH:mm:ss"); 
-        //var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm");
+        var startDate = moment(arg.start).local().format("YYYY-MM-DDTHH:mm:ssY");
+        var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm:ssY"); //.subtract(1, 'days')
         $(".pet-startdate").val(startDate); //arg.start.toJSON().slice(0, 19)
         $(".pet-checkoutdate").val(endDate); //arg.end == null ? "" : arg.end.toJSON().slice(0, 19)
 
         $(".btn-save-event").off("click");
         $(".btn-save-event").on("click", function () {
 
-            var end = new Date(moment($(".pet-checkoutdate").val()).local().add(2, "hours").format("YYYY-MM-DDTHH:mm:ss"))
+            var end = new Date(moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"))
 
             var event = calendar.addEvent({
                 title: $(".pet-name").val(),
@@ -278,11 +184,10 @@
 
             var postData = {
                 PetId: $(".petId").val(),
-                StartDate: moment($(".pet-startdate").val()).local().format("MM-DD-YYYYTHH:mm:ss"),
-                CheckoutDate: moment($(".pet-checkoutdate").val()).add(1, "minutes").local().format("MM-DD-YYYYTHH:mm:ss"),
+                StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ssY"),
+                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ssY"),
                 ServiceType: $(".pet-serviceType").val()
             };
-
 
             $.ajax({
                 type: "POST",
@@ -318,8 +223,8 @@
             }
         });
 
-        var startDate = moment(info.event.start).local().format("MM-DD-YYYYTHH:mm:ss");
-        var endDate = moment(info.event.end == null ? "" : info.event.end).local().format("MM-DD-YYYYTHH:mm:ss");
+        var startDate = moment(info.event.start).local().format("YYYY-MM-DDTHH:mm:ssY");
+        var endDate = moment(info.event.end == null ? "" : info.event.end).local().format("YYYY-MM-DDTHH:mm:ssY");
 
         $(".pet-startdate").val(startDate);
         $(".pet-checkoutdate").val(endDate);
@@ -328,7 +233,7 @@
         $(".btn-save-event").on("click", function () {
             info.event.remove();
 
-            var end = new Date(moment($(".pet-checkoutdate").val()).local().add(2, "hours").format("YYYY-MM-DDTHH:mm:ss"))
+            var end = new Date(moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"))
 
             calendar.addEvent({
                 title: $(".pet-name").val(),
@@ -346,11 +251,10 @@
             var postData = {
                 Id: info.event.extendedProps.id,
                 PetId: $(".petId").val(),
-                StartDate: moment($(".pet-startdate").val()).local().format("MM-DD-YYYYTHH:mm:ss"),
-                CheckoutDate: moment($(".pet-checkoutdate").val()).add(1, "minutes").local().format("MM-DD-YYYYTHH:mm:ss"),
+                StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ssY"),
+                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ssY"),
                 ServiceType: $(".pet-serviceType").val()
             };
-
 
             $.ajax({
                 type: "POST",
