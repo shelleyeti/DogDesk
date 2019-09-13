@@ -215,6 +215,46 @@ namespace DogDesk
             return Json(servicePets.ToList());
         }
 
+        public IActionResult GetShortServicePets()
+        {
+            var servicePets = _context.ServicePets
+                .Where(x => x.ServiceType == 1 || x.ServiceType == 2 || x.ServiceType == 7 || x.ServiceType == 8 || x.ServiceType == 9);
+
+            foreach (var sp in servicePets)
+            {
+                sp.IdOfPet = new Pet
+                {
+                    Name = _context.Pets.FirstOrDefault(p => p.Id == sp.PetId).Name
+                };
+
+                sp.NameOfService = new ServiceType
+                {
+                    ServiceName = _context.ServiceTypes.FirstOrDefault(s => s.Id == sp.ServiceType).ServiceName
+                };
+            }
+            return Json(servicePets.ToList());
+        }
+
+        public IActionResult GetLongServicePets()
+        {
+            var servicePets = _context.ServicePets
+                .Where(x => x.ServiceType == 5 || x.ServiceType == 1 || x.ServiceType == 3 || x.ServiceType == 2 || x.ServiceType == 4);
+
+            foreach (var sp in servicePets)
+            {
+                sp.IdOfPet = new Pet
+                {
+                    Name = _context.Pets.FirstOrDefault(p => p.Id == sp.PetId).Name
+                };
+
+                sp.NameOfService = new ServiceType
+                {
+                    ServiceName = _context.ServiceTypes.FirstOrDefault(s => s.Id == sp.ServiceType).ServiceName
+                };
+            }
+            return Json(servicePets.ToList());
+        }
+
         private List<SelectListItem> GetServiceTypes()
         {
             var selectItems = _context.ServiceTypes

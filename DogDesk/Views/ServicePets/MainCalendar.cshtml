@@ -57,7 +57,8 @@
             selectable: true,
             eventStartEditable: false,
             header: {
-                right: 'prev,next today',
+                left: 'prev,next today',
+                center: 'title',
             },
             select: function (arg) {
                 loadPetForAdd(arg);
@@ -126,7 +127,7 @@
     function loadServicePets() {
         $.ajax({
             type: "POST",
-            url: "/ServicePets/GetAllServicePets",
+            url: "/ServicePets/GetLongServicePets",
             data: JSON.stringify(null),
             contentType: "application/json",
             dataType: "json",
@@ -163,7 +164,7 @@
 
         $("#event-modal").modal("show");
 
-        var startDate = moment(arg.start).local().format("YYYY-MM-DDTHH:mm:ss");
+        var startDate = moment(arg.start).local().format("MM-DD-YYYY");
         var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm:ss"); //.subtract(1, 'days')
         //var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm");
         $(".pet-startdate").val(startDate); //arg.start.toJSON().slice(0, 19)

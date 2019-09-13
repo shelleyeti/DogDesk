@@ -127,7 +127,7 @@
     function loadServicePets() {
         $.ajax({
             type: "POST",
-            url: "/ServicePets/GetAllServicePets",
+            url: "/ServicePets/GetShortServicePets",
             data: JSON.stringify(null),
             contentType: "application/json",
             dataType: "json",
@@ -164,8 +164,8 @@
 
         $("#event-modal").modal("show");
 
-        var startDate = moment(arg.start).local().format("YYYY-MM-DDTHH:mm:ssY");
-        var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm:ssY"); //.subtract(1, 'days')
+        var startDate = moment(arg.start).local().format("YYYY-MM-DDTHH:mm:ss");
+        var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm:ss"); //.subtract(1, 'days')
         $(".pet-startdate").val(startDate); //arg.start.toJSON().slice(0, 19)
         $(".pet-checkoutdate").val(endDate); //arg.end == null ? "" : arg.end.toJSON().slice(0, 19)
 
@@ -189,8 +189,8 @@
 
             var postData = {
                 PetId: $(".petId").val(),
-                StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ssY"),
-                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ssY"),
+                StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
+                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
                 ServiceType: $(".pet-serviceType").val()
             };
 
@@ -228,8 +228,8 @@
             }
         });
 
-        var startDate = moment(info.event.start).local().format("YYYY-MM-DDTHH:mm:ssY");
-        var endDate = moment(info.event.end == null ? "" : info.event.end).local().format("YYYY-MM-DDTHH:mm:ssY");
+        var startDate = moment(info.event.start).local().format("YYYY-MM-DDTHH:mm:ss");
+        var endDate = moment(info.event.end == null ? "" : info.event.end).local().format("YYYY-MM-DDTHH:mm:ss");
 
         $(".pet-startdate").val(startDate);
         $(".pet-checkoutdate").val(endDate);
@@ -256,8 +256,8 @@
             var postData = {
                 Id: info.event.extendedProps.id,
                 PetId: $(".petId").val(),
-                StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ssY"),
-                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ssY"),
+                StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
+                CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
                 ServiceType: $(".pet-serviceType").val()
             };
 
