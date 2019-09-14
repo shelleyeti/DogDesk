@@ -166,7 +166,6 @@
 
         var startDate = moment(arg.start).local().format("YYYY-MM-DDTHH:mm:ss");
         var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm:ss"); //.subtract(1, 'days')
-        //var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm");
         $(".pet-startdate").val(startDate); //arg.start.toJSON().slice(0, 19)
         $(".pet-checkoutdate").val(endDate); //arg.end == null ? "" : arg.end.toJSON().slice(0, 19)
 
