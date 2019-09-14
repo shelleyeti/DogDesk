@@ -15,6 +15,8 @@ namespace DogDesk
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         public ServicePetsController(ApplicationDbContext context,
                           UserManager<ApplicationUser> userManager)
         {
@@ -27,6 +29,15 @@ namespace DogDesk
             var servicePet = _context.ServicePets
                 .Include(x => x.IdOfPet)
                 .Include(x => x.NameOfService);
+
+            foreach(var item in servicePet)
+            {
+                var userName = _context.ApplicationUsers.FirstOrDefault(x => x.Id == item.UserId);
+                if (userName != null)
+                {
+                    item.UserId = userName.FullName;
+                }
+            }
 
             return View(servicePet);
         }
@@ -59,6 +70,7 @@ namespace DogDesk
         // GET: ServicePets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -68,6 +80,12 @@ namespace DogDesk
                 .Include(x => x.IdOfPet)
                 .Include(x => x.NameOfService)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var userName = _context.ApplicationUsers.FirstOrDefault(x => x.Id == servicePet.UserId);
+            if (userName != null)
+            {
+            servicePet.UserId = userName.FullName;
+            }
 
             if (servicePet == null)
             {
@@ -90,6 +108,7 @@ namespace DogDesk
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,UserId,ServiceType,PetId,StartDate,CheckoutDate")] ServicePet servicePet)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Add(servicePet);
@@ -99,56 +118,6 @@ namespace DogDesk
             return View(servicePet);
         }
 
-        // GET: ServicePets/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var servicePet = await _context.ServicePets.FindAsync(id);
-            if (servicePet == null)
-            {
-                return NotFound();
-            }
-            return View(servicePet);
-        }
-
-        // POST: ServicePets/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ServiceType,PetId,StartDate,CheckoutDate")] ServicePet servicePet)
-        {
-            if (id != servicePet.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(servicePet);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ServicePetExists(servicePet.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(MainCalendar));
-            }
-            return View(servicePet);
-        }
 
         // GET: ServicePets/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -203,7 +172,9 @@ namespace DogDesk
         [HttpPost]
         public IActionResult CreatePet([FromBody]ServicePet servicePet)
         {
-                _context.Add(servicePet);
+            servicePet.UserId = _userManager.GetUserAsync(HttpContext.User).Result.Id;
+
+            _context.Add(servicePet);
                 _context.SaveChanges();
                 return Json(servicePet);
         }
@@ -211,6 +182,8 @@ namespace DogDesk
         [HttpPost]
         public IActionResult UpdatePetService([FromBody]ServicePet servicePet)
         {
+            servicePet.UserId = _userManager.GetUserAsync(HttpContext.User).Result.Id;
+
             _context.Update(servicePet);
             _context.SaveChanges();
             return Json(servicePet);
@@ -239,6 +212,46 @@ namespace DogDesk
             //servicePets.ToList().ForEach(p => p.IdOfPet = _context.Pets.FirstOrDefault(pt => pt.Id == p.PetId));
             //servicePets.ToList().ForEach(s => s.NameOfService = _context.ServiceTypes.FirstOrDefault(st => st.Id == s.ServiceType));
 
+            return Json(servicePets.ToList());
+        }
+
+        public IActionResult GetShortServicePets()
+        {
+            var servicePets = _context.ServicePets
+                .Where(x => x.ServiceType == 1 || x.ServiceType == 2 || x.ServiceType == 7 || x.ServiceType == 8 || x.ServiceType == 9);
+
+            foreach (var sp in servicePets)
+            {
+                sp.IdOfPet = new Pet
+                {
+                    Name = _context.Pets.FirstOrDefault(p => p.Id == sp.PetId).Name
+                };
+
+                sp.NameOfService = new ServiceType
+                {
+                    ServiceName = _context.ServiceTypes.FirstOrDefault(s => s.Id == sp.ServiceType).ServiceName
+                };
+            }
+            return Json(servicePets.ToList());
+        }
+
+        public IActionResult GetLongServicePets()
+        {
+            var servicePets = _context.ServicePets
+                .Where(x => x.ServiceType == 5 || x.ServiceType == 1 || x.ServiceType == 3 || x.ServiceType == 2 || x.ServiceType == 4);
+
+            foreach (var sp in servicePets)
+            {
+                sp.IdOfPet = new Pet
+                {
+                    Name = _context.Pets.FirstOrDefault(p => p.Id == sp.PetId).Name
+                };
+
+                sp.NameOfService = new ServiceType
+                {
+                    ServiceName = _context.ServiceTypes.FirstOrDefault(s => s.Id == sp.ServiceType).ServiceName
+                };
+            }
             return Json(servicePets.ToList());
         }
 

@@ -4,139 +4,182 @@
     ViewData["Title"] = "Details";
 }
 
-<h3>Details</h3>
-
-<div>
-    <h5>Pet Information</h5>
-    <br />
-
-
-    <div class="form-group">
-        <label>Add Picture</label>
-        <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
-    </div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.GenderId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.GenderOfAnimal.Gender)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BirthDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.BirthDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SizeId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SizeOfAnimal.Size)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AnimalTypeId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TypeOfAnimal.Animal)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Color1)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Color1)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Color2)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Color2)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Breed)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Breed)
-        </dd>
-    </dl>
-</div>
+<h3>Pet Information</h3>
+<br />
 
 <div class="btn-group">
     <div>
         @using (Html.BeginForm("Create", "VetRecords", FormMethod.Get))
         {
             <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-primary mr-sm-2" type="submit" value="Add Vet Record" />
+            <input class="btn btn-sm btn-primary mr-sm-4" type="submit" value="Add New Vet Record" />
         }
     </div>
     <div>
         @using (Html.BeginForm("MainCalendar", "ServicePets", FormMethod.Get))
         {
             <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-secondary mr-sm-2" type="submit" value="Schedule Boarding" />
+            <input class="btn btn-sm btn-secondary mr-sm-4" type="submit" value="Schedule Boarding" />
         }
     </div>
     <div>
         @using (Html.BeginForm("TimeLineCalendar", "ServicePets", FormMethod.Get))
         {
             <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-info" type="submit" value="Schedule Add-On Service" />
+            <input class="btn btn-sm btn-info mr-sm-4" type="submit" value="Schedule Add-On Service" />
+        }
+    </div>
+    <div>
+        @using (Html.BeginForm("AddOwner", "Owners", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-sm btn-warning mr-sm-4" type="submit" value="Add New Owner" />
+        }
+    </div>
+    <div>
+        @using (Html.BeginForm("Create", "EmergencyContacts", FormMethod.Get))
+        {
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <input class="btn btn-sm btn-danger mr-sm-4" type="submit" value="Add New Contact" />
         }
     </div>
 </div>
+<br />
+
+<div class="form-group">
+    <br />
+    <label>Add Picture</label>
+    <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+</div>
+<br />
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="row">
+        <div class="col col-md-4">
+            <h5>Details</h5>
+            <div class="card bg-light">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold text-center"> @Html.DisplayFor(model => model.Name)</h5>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.GenderId, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.GenderOfAnimal.Gender)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.BirthDate, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.BirthDate)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.SizeId, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.SizeOfAnimal.Size)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.AnimalTypeId, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.TypeOfAnimal.Animal)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.Color1, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.Color1)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.Color2, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.Color2)
+                    </p>
+                    <p class="card-text">
+                        @Html.LabelFor(model => model.Breed, new { @class = "font-weight-bold mb-sm-0" }):
+                        @Html.DisplayFor(model => model.Breed)
+                    </p>
+                    <div class="text-center">
+                        <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                        <span> | </span>
+                        <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@Model.Id"> Details </a>
+                        <span> | </span>
+                        <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                    </div>
+                </div>
+                </div>
+
+            </div>
+            <div class="col col-sm-8">
+                <h5>Upcoming Services</h5>
+                @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate > DateTime.Now))
+                {
+                    <div class="card-deck">
+                        @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
+                        {
+                            <div class="card border-info" style="max-width: 18rem;">
+                                <div class="card-header font-weight-bold text-center">
+                                    @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
+                                    </p>
+                                    <p class="card-text">
+                                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
+                                    </p>
+                                    <div class="text-center">
+                                        <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                        <span> | </span>
+                                        <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                                        <span> | </span>
+                                        <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>No Upcoming Services Scheduled</p>
+                }
+            </div>
+        </div>
 </div>
+
 <br />
 
 @*Services*@
-<div>
-    <h5>Upcoming Services</h5>
-    @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate > DateTime.Now))
-    {
-        @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
+@*<div>
+        <h5>Upcoming Services</h5>
+        @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate > DateTime.Now))
         {
-            <div class="card border-info" style="width: 18rem;">
-                <div class="card-header font-weight-bold text-center">
-                    @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
-                </div>
+            <div class="card-deck">
+                @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
+                {
+                    <div class="card border-info" style="max-width: 18rem;">
+                        <div class="card-header font-weight-bold text-center">
+                            @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
+                        </div>
 
-                <div class="card-body">
-                    <p class="card-text">
-                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
-                    </p>
-                    <p class="card-text">
-                        @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
-                    </p>
-                    <span>
-                        <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    </span>
-                    <span class="">
-                        <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </span>
-                    <span class="float-right">
-                        <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
-                    </span>
-                </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
+                            </p>
+                            <p class="card-text">
+                                @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
+                            </p>
+                            <div class="text-center">
+                                <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <span> | </span>
+                                <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                                <span> | </span>
+                                <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
 
         }
-
-    }
-    else
-    {
-        <p>No Upcoming Services Scheduled</p>
-    }
-</div>
-<br />
+        else
+        {
+            <p>No Upcoming Services Scheduled</p>
+        }
+    </div>
+    <br />*@
 
 @* Vet Records *@
 <div>
@@ -299,13 +342,6 @@
             }
         </tbody>
     </table>
-    <div>
-        @using (Html.BeginForm("AddOwner", "Owners", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-primary" type="submit" value="Add Owner" />
-        }
-    </div>
 </div>
 <br />
 
@@ -350,7 +386,9 @@
                         </td>
                         <td>
                             <a asp-controller="EmergencyContacts" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-controller="EmergencyContacts" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
                         </td>
                     </tr>
                 }
@@ -361,11 +399,4 @@
     {
         <p>No Emergency Contacts Found</p>
     }
-    <div>
-        @using (Html.BeginForm("Create", "EmergencyContacts", FormMethod.Get))
-        {
-            <input type="hidden" asp-for="Id" name="PetId" />
-            <input class="btn btn-sm btn-primary" type="submit" value="Add a Contact" />
-        }
-    </div>
 </div>

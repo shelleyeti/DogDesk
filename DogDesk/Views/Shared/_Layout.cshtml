@@ -36,7 +36,6 @@
     <link href='~/js/fullcalendar/list/main.css' rel='stylesheet' />
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet" />
 
-
     <script src='~/js/fullcalendar/core/main.js'></script>
     <script src='~/js/fullcalendar/timeline/main.js'></script>
     <script src='~/js/fullcalendar/interaction/main.js'></script>
@@ -50,7 +49,7 @@
     <script src='~/js/fullcalendar//list/main.js'></script>
     <script src="~/js/moment.min.js"></script>
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-minty.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-shelley.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -67,6 +66,7 @@
         });
     </script>
 </head>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -75,43 +75,46 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+        
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" asp-controller="Owners" asp-action="Create">New Client<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Pets" asp-action="Create">New Animal</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Calendars
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" asp-controller="ServicePets" asp-action="ListViewCalendar">List View</a>
-                            <a class="dropdown-item" asp-controller="ServicePets" asp-action="TimeLineCalendar">Timeline View</a>
-                            <a class="dropdown-item" asp-controller="ServicePets" asp-action="MainCalendar">Monthly View</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Reports
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Services</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Times</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Owners" asp-action="Index">All Clients</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Pets" asp-action="Index">All Pets</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Daily In/Out</a>
-                        </div>
-                    </li>
-                </ul>
-                <form class="form-inline my-2 my-lg-0" role="search" asp-controller="Owners" asp-action="Index">
-                    <input class="form-control form-control-sm mr-sm-2" type="text" name="SearchString" placeholder="Search Owners">
-                    <button class="btn btn-primary my-sm-0 mr-sm-5 btn-sm" type="submit" value="Search">Search</button>
-                </form>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" asp-controller="Owners" asp-action="Create">New Client<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Pets" asp-action="Create">New Animal</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Calendars
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-controller="ServicePets" asp-action="ListViewCalendar">List View</a>
+                                <a class="dropdown-item" asp-controller="ServicePets" asp-action="TimeLineCalendar">Timeline View</a>
+                                <a class="dropdown-item" asp-controller="ServicePets" asp-action="MainCalendar">Monthly View</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Reports
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Services</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Times</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Owners" asp-action="Index">All Clients</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Pets" asp-action="Index">All Pets</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Daily In/Out</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0" role="search" asp-controller="Owners" asp-action="Index">
+                        <input class="form-control form-control-sm mr-sm-2" type="text" name="SearchString" placeholder="Search Owners">
+                        <button class="btn btn-primary my-sm-0 mr-sm-5 btn-sm" type="submit" value="Search">Search</button>
+                    </form>
+                }
                 <partial name="_LoginPartial" />
             </div>
         </nav>
