@@ -102,6 +102,7 @@
                         <span> | </span>
                         <a class="card-link" asp-controller="Pets" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
                     </div>
+                    <input type="hidden" asp-for="Id" name="PetId" />
                 </div>
             </div>
 
@@ -126,6 +127,7 @@
                                     @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
                                 </p>
                                 <div class="text-center">
+                                    <input type="hidden" asp-for="Id" name="PetId" />
                                     <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                                     <span> | </span>
                                     <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
@@ -143,7 +145,7 @@
             }
         </div>
         <br />
-        <div>
+        <div class="row">
             @{
                 var hasCurrentRabies = Model.VetRecords.FirstOrDefault(x => x.Rabies <= DateTime.Now && x.Rabies >= DateTime.Now.AddDays(-365)) != null;
 
@@ -270,6 +272,7 @@
                             @Html.DisplayFor(modelItem => item.Bordetella)
                         </td>
                         <td>
+                            <input type="hidden" asp-for="Id" name="PetId" />
                             <a asp-controller="VetRecords" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                             <a asp-controller="VetRecords" asp-action="Details" asp-route-id="@item.Id">Details</a>
                         </td>
@@ -347,6 +350,7 @@
                         @Html.DisplayFor(modelItem => item.Owner.WorkPhone)
                     </td>
                     <td>
+                        <input type="hidden" asp-for="Id" name="PetId" />
                         <a asp-controller="Owners" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                         <a asp-controller="Owners" asp-action="Details" asp-route-id="@item.Id">Details</a>
                     </td>
@@ -397,6 +401,7 @@
                             @Html.DisplayFor(modelItem => item.EmergencyContact.WorkPhone)
                         </td>
                         <td>
+                            <input type="hidden" asp-for="Id" name="PetId" />
                             <a asp-controller="EmergencyContacts" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                             <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.Id">Details</a> |
                             <a asp-controller="EmergencyContacts" asp-action="Delete" asp-route-id="@item.Id">Delete</a>

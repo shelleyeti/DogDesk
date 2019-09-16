@@ -1,31 +1,26 @@
 ﻿@model DogDesk.Models.ServicePet
 
-@{
-    ViewData["Title"] = "Create";
-}
-
-<h3>Create</h3>
-
-<h5>Service Pet</h5>
+<h4>Service Pet</h4>
 <br />
-
-<form asp-action="Create">
+<form asp-action="Edit">
     <div class="row">
         <div class="col-md-5">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" class="form-control" />
+                <input asp-for="UserId" disabled class="form-control" />
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ServiceType" class="control-label"></label>
-                <input asp-for="ServiceType" class="form-control" />
+                <select asp-for="ServiceType" class="form-control" asp-items="ViewBag.ServiceType"></select>
                 <span asp-validation-for="ServiceType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PetId" class="control-label"></label>
-                <select asp-for="PetId" class="form-control" asp-items="ViewBag.PetId"></select>
+                <label asp-for="IdOfPet" class="control-label"></label>
+                <input asp-for="IdOfPet.Name" disabled class="form-control" />
+                <span asp-validation-for="IdOfPet" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
@@ -37,15 +32,27 @@
                 <input asp-for="CheckoutDate" class="form-control" />
                 <span asp-validation-for="CheckoutDate" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-5 offset-sm-2">
             <div class="form-group">
                 <label asp-for="ServiceNote" class="control-label"></label>
                 <input asp-for="ServiceNote" class="form-control" />
                 <span asp-validation-for="ServiceNote" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="CheckinTime" class="control-label"></label>
+                <input asp-for="CheckinTime" disabled class="form-control" />
+                <span asp-validation-for="CheckinTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckoutTime" class="control-label"></label>
+                <input asp-for="CheckoutTime" disabled class="form-control" />
+                <span asp-validation-for="CheckoutTime" class="text-danger"></span>
+            </div>
         </div>
     </div>
     <div class="col-md-12 form-group text-right">
-        <input type="submit" value="Create" class="btn btn-primary" />
+        <input type="submit" value="Save" class="btn btn-primary" />
     </div>
 </form>
 

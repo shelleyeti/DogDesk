@@ -106,7 +106,7 @@ namespace DogDesk
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,ServiceType,PetId,StartDate,CheckoutDate")] ServicePet servicePet)
+        public async Task<IActionResult> Create([Bind("Id,UserId,ServiceType,PetId,StartDate,CheckoutDate,ServiceNote")] ServicePet servicePet)
         {
 
             if (ModelState.IsValid)
@@ -118,6 +118,70 @@ namespace DogDesk
             return View(servicePet);
         }
 
+        // GET: ServicePets/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            var servicePetDetails = _context.ServicePets
+                .Include(x => x.IdOfPet)
+                .Include(x => x.NameOfService);
+
+            foreach (var item in servicePetDetails)
+            {
+                var userName = _context.ApplicationUsers.FirstOrDefault(x => x.Id == item.UserId);
+                if (userName != null)
+                {
+                    item.UserId = userName.FullName;
+                }
+            }
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var servicePet = await _context.ServicePets.FindAsync(id);
+
+            if (servicePet == null)
+            {
+                return NotFound();
+            }
+            return View(servicePet);
+        }
+
+        // POST: ServicePets/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ServiceType,PetId,StartDate,CheckoutDate,ServiceNote")] ServicePet servicePet)
+        {
+            if (id != servicePet.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(servicePet);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ServicePetExists(servicePet.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(MainCalendar));
+            }
+            return View(servicePet);
+        }
 
         // GET: ServicePets/Delete/5
         public async Task<IActionResult> Delete(int? id)

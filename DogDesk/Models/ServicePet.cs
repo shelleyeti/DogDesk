@@ -36,6 +36,7 @@ namespace DogDesk.Models
         [Display(Name = "Service Type")]
         public ServiceType NameOfService { get; set; }
 
+        [Display(Name = "Service Notes")]
         public string ServiceNote { get; set; }
 
         [Display(Name = "Check-In Time")]
