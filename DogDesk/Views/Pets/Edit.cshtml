@@ -59,8 +59,10 @@
                 <input asp-for="AmountFood" class="form-control" />
                 <span asp-validation-for="AmountFood" class="text-danger"></span>
             </div>
-            <label asp-for="PetNote" class="control-label"></label>
-            @Html.TextAreaFor(model => model.PetNote, new { @class = "form-control", @rows = 3 })
+            <div>
+                <label asp-for="PetNote" class="control-label"></label>
+                @Html.TextAreaFor(model => model.PetNote, new { @class = "form-control", @rows = 3 })
+            </div>
         </div>
     </div>
     <div class="col-md-12 form-group text-right">

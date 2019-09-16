@@ -233,6 +233,17 @@ namespace DogDesk
         }
 
         [HttpPost]
+        public IActionResult CheckInPet(ServicePet servicePet)
+        {
+            servicePet.CheckinTime = DateTime.Now;
+
+            _context.Update(servicePet);
+            _context.SaveChanges();
+            Json(servicePet);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
         public IActionResult GetAllServicePets()
         {
             var servicePets = _context.ServicePets;

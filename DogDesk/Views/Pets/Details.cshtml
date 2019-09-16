@@ -111,33 +111,86 @@
             <h5>Upcoming Services</h5>
             @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate > DateTime.Now))
             {
-                <div class="card-deck">
-                    @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
-                    {
-                        <div class="card border-info" style="max-width: 18rem;">
-                            <div class="card-header font-weight-bold text-center">
-                                @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
-                            </div>
+        <div class="card-columns">
+            @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
+            {
+            <div>
+                @{
+                    var hasCurrentRabies = Model.VetRecords.FirstOrDefault(x => x.Rabies <= DateTime.Now && x.Rabies >= DateTime.Now.AddDays(-365)) != null;
 
-                            <div class="card-body">
-                                <p class="card-text">
-                                    @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
-                                </p>
-                                <p class="card-text">
-                                    @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
-                                </p>
-                                <div class="text-center">
-                                    <input type="hidden" asp-for="Id" name="PetId" />
-                                    <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <span> | </span>
-                                    <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
-                                    <span> | </span>
-                                    <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                </div>
-                            </div>
-                        </div>
+                    var hasCurrentBordetella = true;
+
+                    if (Model.AnimalTypeId == 1)
+                    {
+                        hasCurrentBordetella = Model.VetRecords.FirstOrDefault(x => x.Bordetella <= DateTime.Now && x.Bordetella >= DateTime.Now.AddDays(-365)) != null;
                     }
+
+                    var hasCurrentVetRecord = hasCurrentRabies && hasCurrentBordetella;
+
+                    var checkInDate = Model.ServicePets.FirstOrDefault(x => x.StartDate == DateTime.Now.Date) != null;
+
+                    var checkOutDate = Model.ServicePets.FirstOrDefault(x => x.CheckinTime <= DateTime.Now.Date) != null;
+                }
+            </div>
+
+                <div class="card border-info">
+                    <div class="card-header font-weight-bold text-center">
+                        @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
+
+
+                        @if (!hasCurrentVetRecord || !checkInDate)
+                        {
+                            @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
+                            {
+                                <input type="hidden" asp-for="Id" name="PetId" />
+                                <input class="btn btn-sm btn-info disabled" type="submit" disabled value="Check-In" />
+                            }
+                        }
+                        else if (hasCurrentVetRecord && checkInDate)
+                        {
+                            @using (Html.BeginForm("CheckInPet", "ServicePets", FormMethod.Post))
+                            {
+                                <input type="hidden" asp-for="Id" name="PetId" />
+                                <input type="hidden" asp-for="@item.Id" name="Id" />
+                                <input type="hidden" asp-for="@item.ServiceType" name="ServiceType" />
+                                <input type="hidden" asp-for="@item.UserId" name="UserId" />
+                                <input type="hidden" asp-for="@item.ServiceNote" name="ServiceNote" />
+                                <input type="hidden" asp-for="@item.StartDate" name="StartDate" />
+                                <input type="hidden" asp-for="@item.CheckoutDate" name="CheckoutDate" />
+
+                                <input class="btn btn-sm btn-info" type="submit" value="Check-In Pet" />
+                            }
+                        }
+                        else if (hasCurrentVetRecord && checkOutDate)
+                        {
+                            @using (Html.BeginForm("CheckOutPet", "ServicePets", FormMethod.Post))
+                            {
+                                <input type="hidden" asp-for="Id" name="PetId" />
+                                <input class="btn btn-sm btn-info" type="submit" value="Check-Out Pet" />
+                            }
+                        }
+
+                    </div>
+
+                    <div class="card-body">
+                        <p class="card-text">
+                            @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
+                        </p>
+                        <p class="card-text">
+                            @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
+                        </p>
+                        <div class="text-center">
+                            <input type="hidden" asp-for="Id" name="PetId" />
+                            <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <span> | </span>
+                            <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                            <span> | </span>
+                            <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </div>
+                    </div>
                 </div>
+            }
+        </div>
             }
             else
             {
@@ -145,7 +198,7 @@
             }
         </div>
         <br />
-        <div class="row">
+        @*<div>
             @{
                 var hasCurrentRabies = Model.VetRecords.FirstOrDefault(x => x.Rabies <= DateTime.Now && x.Rabies >= DateTime.Now.AddDays(-365)) != null;
 
@@ -173,21 +226,22 @@
             }
             else if (hasCurrentVetRecord && checkInDate)
             {
-                @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
+                @using (Html.BeginForm("CheckInPet", "ServicePets", FormMethod.Post))
                 {
                     <input type="hidden" asp-for="Id" name="PetId" />
+                    <input type="hidden"asp-for="s" name="Id" />
                     <input class="btn btn-sm btn-danger mr-sm-4" type="submit" value="Check-In Pet" />
                 }
             }
             else if (hasCurrentVetRecord && checkOutDate)
             {
-                @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
+                @using (Html.BeginForm("CheckOutPet", "ServicePets", FormMethod.Post))
                 {
                     <input type="hidden" asp-for="Id" name="PetId" />
-                    <input class="btn btn-sm btn-danger disabled mr-sm-4" type="submit" value="Check-In Pet" />
+                    <input class="btn btn-sm btn-danger disabled mr-sm-4" type="submit" value="Check-Out Pet" />
                 }
             }
-        </div>
+        </div>*@
     </div>
 </div>
 

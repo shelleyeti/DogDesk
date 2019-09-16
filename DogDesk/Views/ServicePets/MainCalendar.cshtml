@@ -25,6 +25,8 @@
                     <dd class="col-sm-8"><input type="datetime" class="form-control pet-startdate" /></dd>
                     <dt class="col-sm-4">Check Out Date</dt>
                     <dd class="col-sm-8"><input type="datetime" class="form-control pet-checkoutdate" /></dd>
+                    <dt class="col-sm-4">Service Notes</dt>
+                    <dd class="col-sm-8"><input type="text" class="form-control pet-servicenote" /></dd>
                 </dl>
             </div>
             <div class="modal-footer">
@@ -158,6 +160,7 @@
         $(".pet-serviceType").val(0);
         $(".pet-startdate").val("");
         $(".pet-checkoutdate").val("");
+        $(".pet-servicenote").val("");
         $(".petId").val("");
 
         $(".event-title").html("Add New Event"); // title of modal
@@ -191,7 +194,8 @@
                 PetId: $(".petId").val(),
                 StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
                 CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
-                ServiceType: $(".pet-serviceType").val()
+                ServiceType: $(".pet-serviceType").val(),
+                ServiceNote: $(".pet-serviceNote").val()
             };
 
             $.ajax({
@@ -213,6 +217,7 @@
         $(".pet-serviceType").val(0);
         $(".pet-startdate").val("");
         $(".pet-checkoutdate").val("");
+        $(".pet-servicenote").val("");
         $(".petId").val("");
 
         $(".pet-serviceType").val(info.event.extendedProps.serviceTypeId);
@@ -258,7 +263,8 @@
                 PetId: $(".petId").val(),
                 StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
                 CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
-                ServiceType: $(".pet-serviceType").val()
+                ServiceType: $(".pet-serviceType").val(),
+                ServiceNote: $(".pet-serviceNote").val()
             };
 
             $.ajax({
