@@ -26,7 +26,7 @@
                     <dt class="col-sm-4">Check Out Date</dt>
                     <dd class="col-sm-8"><input type="datetime" class="form-control pet-checkoutdate" /></dd>
                     <dt class="col-sm-4">Service Notes</dt>
-                    <dd class="col-sm-8"><input type="text" class="form-control pet-servicenote" /></dd>
+                    <dd class="col-sm-8"><textarea class="form-control pet-serviceNote"></textarea></dd>
                 </dl>
             </div>
             <div class="modal-footer">
@@ -147,7 +147,8 @@
                             petId: item.petId,
                             petName: item.idOfPet.name,
                             serviceType: item.nameOfService.serviceName,
-                            serviceTypeId: item.serviceType
+                            serviceTypeId: item.serviceType,
+                            serviceNote: item.serviceNote
                         }
                     });
                 });
@@ -160,7 +161,7 @@
         $(".pet-serviceType").val(0);
         $(".pet-startdate").val("");
         $(".pet-checkoutdate").val("");
-        $(".pet-servicenote").val("");
+        $(".pet-serviceNote").val("");
         $(".petId").val("");
 
         $(".event-title").html("Add New Event"); // title of modal
@@ -186,7 +187,8 @@
                     id: 0,
                     petId: $(".petId").val(),
                     petName: $(".pet-name").val(),
-                    serviceTypeId: $(".pet-serviceType").val()
+                    serviceTypeId: $(".pet-serviceType").val(),
+                    serviceNote: $(".pet-serviceNote").val()
                 }
             });
 
@@ -217,10 +219,11 @@
         $(".pet-serviceType").val(0);
         $(".pet-startdate").val("");
         $(".pet-checkoutdate").val("");
-        $(".pet-servicenote").val("");
+        $(".pet-serviceNote").val("");
         $(".petId").val("");
 
         $(".pet-serviceType").val(info.event.extendedProps.serviceTypeId);
+        $(".pet-serviceNote").val(info.event.extendedProps.serviceNote);
 
         $(".event-title").html("Edit " + info.event.title); // title of modal
 
@@ -254,7 +257,8 @@
                     id: info.event.extendedProps.id,
                     petId: $(".petId").val(),
                     petName: $(".pet-name").val(),
-                    serviceTypeId: $(".pet-serviceType").val()
+                    serviceTypeId: $(".pet-serviceType").val(),
+                    serviceNote: $(".pet-serviceNote").val()
                 }
             });
 
