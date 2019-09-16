@@ -55,7 +55,11 @@ namespace DogDesk
         {
             ViewData["ServiceTypes"] = GetShortServiceTypes();
 
-            return View(await _context.ServicePets.ToListAsync());
+            var shortServiceView = await _context.ServicePets
+                .Where(x => x.ServiceType == 1 || x.ServiceType == 2 || x.ServiceType == 8 || x.ServiceType == 9)
+                .ToListAsync();
+
+            return View(shortServiceView);
         }
 
         // GET: ServicePets/ListViewCalendar
