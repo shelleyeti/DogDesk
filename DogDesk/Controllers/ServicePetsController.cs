@@ -95,32 +95,11 @@ namespace DogDesk
             return View(servicePet);
         }
 
-        // GET: ServicePets/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ServicePets/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,ServiceType,PetId,StartDate,CheckoutDate,ServiceNote")] ServicePet servicePet)
-        {
-
-            if (ModelState.IsValid)
-            {
-                _context.Add(servicePet);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(MainCalendar));
-            }
-            return View(servicePet);
-        }
-
         // GET: ServicePets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewData["ServiceTypes"] = GetServiceTypes();
+
             var servicePetDetails = _context.ServicePets
                 .Include(x => x.IdOfPet)
                 .Include(x => x.NameOfService);

@@ -125,6 +125,7 @@ namespace DogDesk
             }
 
             var owner = await _context.Owners.FindAsync(id);
+
             if (owner == null)
             {
                 return NotFound();

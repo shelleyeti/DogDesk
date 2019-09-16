@@ -13,8 +13,8 @@
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ServiceType" class="control-label"></label>
-                <select asp-for="ServiceType" class="form-control" asp-items="ViewBag.ServiceType"></select>
+                <label asp-for="NameOfService" class="control-label"></label>
+                <input disabled asp-for="NameOfService.ServiceName" class="form-control" />
                 <span asp-validation-for="ServiceType" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -34,10 +34,9 @@
             </div>
         </div>
         <div class="col-md-5 offset-sm-2">
-            <div class="form-group">
+            <div>
                 <label asp-for="ServiceNote" class="control-label"></label>
-                <input asp-for="ServiceNote" class="form-control" />
-                <span asp-validation-for="ServiceNote" class="text-danger"></span>
+                @Html.TextAreaFor(model => model.ServiceNote, new { @class = "form-control", @rows = 3 })
             </div>
             <div class="form-group">
                 <label asp-for="CheckinTime" class="control-label"></label>
