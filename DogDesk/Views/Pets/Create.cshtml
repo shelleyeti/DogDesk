@@ -54,6 +54,13 @@
                 <input asp-for="Pet.Breed" class="form-control" />
                 <span asp-validation-for="Pet.Breed" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Pet.AmountFood" class="control-label"></label>
+                <input asp-for="Pet.AmountFood" class="form-control" />
+                <span asp-validation-for="Pet.AmountFood" class="text-danger"></span>
+            </div>
+            <label asp-for="Pet.PetNote" class="control-label"></label>
+            @Html.TextAreaFor(model => model.Pet.PetNote, new { @class = "form-control", @rows = 3 })
             @if (Model != null && Model.Owner.Id != 0)
             {
                 <div class="form-group">
@@ -71,7 +78,7 @@
         </div>
     </div>
     <div class="col-md-12 form-group text-right">
-        <input type="submit" value="Create" class="btn btn-primary" />
+        <input type="submit" value="Create" class="btn btn-primary mt-sm-2" />
     </div>
 </form>
 

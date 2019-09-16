@@ -39,6 +39,12 @@ namespace DogDesk.Models
 
         public string Breed { get; set; }
 
+        [Display(Name = "Notes")]
+        public string PetNote { get; set; }
+
+        [Display(Name = "Amount of Food")]
+        public string AmountFood { get; set; }
+
 
         public ICollection<VetRecord> VetRecords { get; set; }
         public virtual ICollection<PetOwner> PetOwners { get; set; }
