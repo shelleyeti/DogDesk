@@ -15,22 +15,31 @@
             <div class="modal-body event-body">
                 <dl class="row">
                     <dt class="col-sm-4">Service Type</dt>
-                    <dd class="col-sm-8"><select asp-items="ViewBag.ServiceTypes" class="form-control pet-serviceType"></select></dd>
+                    <dd class="col-sm-8">
+                        <select asp-items="ViewBag.ServiceTypes" class="form-control pet-serviceType"></select>
+                        <span class="petServiceTypeRequired"></span>
+                    </dd>
                     <dt class="col-sm-4">Pet Name</dt>
                     <dd class="col-sm-8">
                         <input type="text" class="form-control pet-name" required autocomplete="off" />
+                        <span class="petNameRequired"></span>
                         <input type="hidden" class="petId" />
                     </dd>
                     <dt class="col-sm-4">Start Date</dt>
-                    <dd class="col-sm-8"><input type="datetime" class="form-control pet-startdate" /></dd>
+                    <dd class="col-sm-8"><input type="datetime" class="form-control pet-startdate" />
+                        <span class="validStartDate"></span>
+                    </dd>
                     <dt class="col-sm-4">Check Out Date</dt>
-                    <dd class="col-sm-8"><input type="datetime" class="form-control pet-checkoutdate" /></dd>
+                    <dd class="col-sm-8"><input type="datetime" class="form-control pet-checkoutdate" />
+                        <span class="validCheckoutDate"></span>
+
+                    </dd>
                     <dt class="col-sm-4">Service Notes</dt>
                     <dd class="col-sm-8"><textarea class="form-control pet-serviceNote"></textarea></dd>
                 </dl>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-save-event" data-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-primary btn-save-event">Save</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -163,6 +172,10 @@
         $(".pet-checkoutdate").val("");
         $(".pet-serviceNote").val("");
         $(".petId").val("");
+        $(".validStartDate").val("");
+        $(".validCheckoutDate").val("");
+        $(".petServiceTypeRequired").html("");
+        $(".petNameRequired").html("");
 
         $(".event-title").html("Add New Event"); // title of modal
 
@@ -175,6 +188,8 @@
 
         $(".btn-save-event").off("click");
         $(".btn-save-event").on("click", function () {
+            if (!formValidation())
+                return;
 
             var end = new Date(moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"))
 
@@ -211,6 +226,9 @@
             }).fail(function (response) {
                 console.log('Error: ' + response);
             });
+
+            $("#event-modal").modal("hide");
+
         });
     }
 
@@ -221,6 +239,10 @@
         $(".pet-checkoutdate").val("");
         $(".pet-serviceNote").val("");
         $(".petId").val("");
+        $(".validStartDate").val("");
+        $(".validCheckoutDate").val("");
+        $(".petServiceTypeRequired").html("");
+        $(".petNameRequired").html("");
 
         $(".pet-serviceType").val(info.event.extendedProps.serviceTypeId);
         $(".pet-serviceNote").val(info.event.extendedProps.serviceNote);
@@ -244,6 +266,9 @@
 
         $(".btn-save-event").off("click");
         $(".btn-save-event").on("click", function () {
+            if (!formValidation())
+                return;
+
             info.event.remove();
 
             var end = new Date(moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"))
@@ -283,6 +308,48 @@
                 console.log('Error: ' + response);
             });
         });
+    }
+
+    function formValidation() {
+        var isValidStartDate = moment($(".pet-startdate").val()).isValid();
+        var isValidCheckoutDate = moment($(".pet-checkoutdate").val()).isValid;
+        var hasServiceType = true;
+        var hasPetName = true;
+
+        $(".petServiceTypeRequired").html("");
+        $(".petNameRequired").html("");
+
+        if (isValidCheckoutDate && isValidStartDate) {
+            isValidCheckoutDate = !(moment($(".pet-checkoutdate").val()) < moment($(".pet-startdate").val()));
+        }
+
+        if (isValidStartDate) {
+            $(".validStartDate").html("");
+        }
+        else
+        {
+             $(".validStartDate").html("Please select a vaild date");
+        }
+
+        if (isValidCheckoutDate) {
+            $(".validCheckoutDate").html("");
+        }
+        else
+        {
+             $(".validCheckoutDate").html("Please select a vaild date");
+        }
+
+        if ($(".pet-serviceType").val() == "" || $(".pet-serviceType").val() == 0) {
+            hasServiceType = false;
+            $(".petServiceTypeRequired").html("Service Type is required");
+        }
+
+        if ($(".pet-name").val() == "") {
+            hasPetName = false;
+            $(".petNameRequired").html("Pet Name is required");
+        }
+
+        return isValidStartDate && isValidCheckoutDate && hasServiceType && hasPetName;
     }
 
 </script>
