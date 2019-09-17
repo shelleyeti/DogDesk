@@ -244,6 +244,17 @@ namespace DogDesk
         }
 
         [HttpPost]
+        public IActionResult CheckOutPet(ServicePet servicePet)
+        {
+            servicePet.CheckoutTime = DateTime.Now;
+
+            _context.Update(servicePet);
+            _context.SaveChanges();
+            Json(servicePet);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
         public IActionResult GetAllServicePets()
         {
             var servicePets = _context.ServicePets;
