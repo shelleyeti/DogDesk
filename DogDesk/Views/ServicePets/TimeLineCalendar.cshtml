@@ -168,7 +168,7 @@
     }
 
     function loadPetForAdd(arg) {
-        $(".pet-name").val("");
+       $(".pet-name").val("");
         $(".pet-serviceType").val(0);
         $(".pet-startdate").val("");
         $(".pet-checkoutdate").val("");
@@ -228,6 +228,9 @@
             }).fail(function (response) {
                 console.log('Error: ' + response);
             });
+
+            $("#event-modal").modal("hide");
+
         });
     }
 
@@ -306,6 +309,9 @@
             }).fail(function (response) {
                 console.log('Error: ' + response);
             });
+
+            $("#event-modal").modal("hide");
+
         });
     }
 

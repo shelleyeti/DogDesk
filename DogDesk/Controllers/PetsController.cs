@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using DogDesk.Data;
 using DogDesk.Models;
 using Microsoft.AspNetCore.Identity;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace DogDesk
 {
@@ -159,7 +161,7 @@ namespace DogDesk
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,Name,GenderId,BirthDate,SizeId,Color1,Color2,AnimalTypeId,Breed,AmountFood,PetNote")] Pet pet)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,Name,GenderId,BirthDate,SizeId,Color1,Color2,AnimalTypeId,Breed,AmountFood,PetNote,PetImage")] Pet pet)
         {
             if (id != pet.Id)
             {
@@ -217,6 +219,35 @@ namespace DogDesk
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost("FileUpload")]
+        public async Task<IActionResult> UploadImage(List<IFormFile> files)
+        {
+            long size = files.Sum(f => f.Length);
+
+            var filePaths = new List<string>();
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    // full path to file in temp location
+                    var filePath = Path.GetTempFileName();
+                    filePaths.Add(filePath);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                }
+            }
+
+            // process uploaded files
+            // Don't rely on or trust the FileName property without validation.
+
+            return Ok(new { count = files.Count, size, filePaths });
+        }
+
+
 
         private bool PetExists(int? id)
         {

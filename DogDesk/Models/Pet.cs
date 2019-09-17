@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -44,6 +45,9 @@ namespace DogDesk.Models
 
         [Display(Name = "Amount of Food")]
         public string AmountFood { get; set; }
+
+        [DataType(DataType.Upload)]
+        public string PetImage { get; set; }
 
 
         public ICollection<VetRecord> VetRecords { get; set; }
