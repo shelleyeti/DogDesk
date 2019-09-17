@@ -159,7 +159,7 @@ namespace DogDesk
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,Name,GenderId,BirthDate,SizeId,Color1,Color2,AnimalTypeId,Breed")] Pet pet)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,Name,GenderId,BirthDate,SizeId,Color1,Color2,AnimalTypeId,Breed,AmountFood,PetNote")] Pet pet)
         {
             if (id != pet.Id)
             {

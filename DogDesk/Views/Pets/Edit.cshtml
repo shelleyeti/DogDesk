@@ -7,7 +7,7 @@
 <h3>Edit</h3>
 
 <h5>Pet</h5>
-<hr />
+<br />
 
 <form asp-controller="Pets" asp-action="Edit">
     <div class="row">
@@ -54,10 +54,19 @@
                 <input asp-for="Breed" class="form-control" />
                 <span asp-validation-for="Breed" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="AmountFood" class="control-label"></label>
+                <input asp-for="AmountFood" class="form-control" />
+                <span asp-validation-for="AmountFood" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="PetNote" class="control-label"></label>
+                @Html.TextAreaFor(model => model.PetNote, new { @class = "form-control", @rows = 3 })
+            </div>
         </div>
     </div>
     <div class="col-md-12 form-group text-right">
-        <input type="submit" value="Save" class="btn btn-primary" />
+        <input type="submit" value="Save" class="btn btn-primary mt-sm-2" />
     </div>
 </form>
 

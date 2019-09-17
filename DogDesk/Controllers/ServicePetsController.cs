@@ -95,29 +95,72 @@ namespace DogDesk
             return View(servicePet);
         }
 
-        // GET: ServicePets/Create
-        public IActionResult Create()
+        // GET: ServicePets/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
-        }
+            ViewData["ServiceTypes"] = GetServiceTypes();
 
-        // POST: ServicePets/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,ServiceType,PetId,StartDate,CheckoutDate")] ServicePet servicePet)
-        {
+            var servicePetDetails = _context.ServicePets
+                .Include(x => x.IdOfPet)
+                .Include(x => x.NameOfService);
 
-            if (ModelState.IsValid)
+            foreach (var item in servicePetDetails)
             {
-                _context.Add(servicePet);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(MainCalendar));
+                var userName = _context.ApplicationUsers.FirstOrDefault(x => x.Id == item.UserId);
+                if (userName != null)
+                {
+                    item.UserId = userName.FullName;
+                }
+            }
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var servicePet = await _context.ServicePets.FindAsync(id);
+
+            if (servicePet == null)
+            {
+                return NotFound();
             }
             return View(servicePet);
         }
 
+        // POST: ServicePets/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ServiceType,PetId,StartDate,CheckoutDate,ServiceNote")] ServicePet servicePet)
+        {
+            if (id != servicePet.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(servicePet);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ServicePetExists(servicePet.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(MainCalendar));
+            }
+            return View(servicePet);
+        }
 
         // GET: ServicePets/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -190,6 +233,28 @@ namespace DogDesk
         }
 
         [HttpPost]
+        public IActionResult CheckInPet(ServicePet servicePet)
+        {
+            servicePet.CheckinTime = DateTime.Now;
+
+            _context.Update(servicePet);
+            _context.SaveChanges();
+            Json(servicePet);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public IActionResult CheckOutPet(ServicePet servicePet)
+        {
+            servicePet.CheckoutTime = DateTime.Now;
+
+            _context.Update(servicePet);
+            _context.SaveChanges();
+            Json(servicePet);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
         public IActionResult GetAllServicePets()
         {
             var servicePets = _context.ServicePets;
@@ -218,7 +283,7 @@ namespace DogDesk
         public IActionResult GetShortServicePets()
         {
             var servicePets = _context.ServicePets
-                .Where(x => x.ServiceType == 1 || x.ServiceType == 2 || x.ServiceType == 7 || x.ServiceType == 8 || x.ServiceType == 9);
+                .Where(x => x.ServiceType == 6 || x.ServiceType == 7 || x.ServiceType == 8 || x.ServiceType == 9);
 
             foreach (var sp in servicePets)
             {

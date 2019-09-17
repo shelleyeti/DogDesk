@@ -25,6 +25,8 @@
                     <dd class="col-sm-8"><input type="datetime" class="form-control pet-startdate" /></dd>
                     <dt class="col-sm-4">Check Out Date</dt>
                     <dd class="col-sm-8"><input type="datetime" class="form-control pet-checkoutdate" /></dd>
+                    <dt class="col-sm-4">Service Notes</dt>
+                    <dd class="col-sm-8"><textarea class="form-control pet-serviceNote"></textarea></dd>
                 </dl>
             </div>
             <div class="modal-footer">
@@ -145,7 +147,8 @@
                             petId: item.petId,
                             petName: item.idOfPet.name,
                             serviceType: item.nameOfService.serviceName,
-                            serviceTypeId: item.serviceType
+                            serviceTypeId: item.serviceType,
+                            serviceNote: item.serviceNote
                         }
                     });
                 });
@@ -158,15 +161,15 @@
         $(".pet-serviceType").val(0);
         $(".pet-startdate").val("");
         $(".pet-checkoutdate").val("");
+        $(".pet-serviceNote").val("");
         $(".petId").val("");
 
         $(".event-title").html("Add New Event"); // title of modal
 
         $("#event-modal").modal("show");
 
-        var startDate = moment(arg.start).local().format("MM-DD-YYYY");
+        var startDate = moment(arg.start).local().format("YYYY-MM-DDTHH:mm:ss");
         var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm:ss"); //.subtract(1, 'days')
-        //var endDate = moment(arg.end).local().format("YYYY-MM-DDTHH:mm");
         $(".pet-startdate").val(startDate); //arg.start.toJSON().slice(0, 19)
         $(".pet-checkoutdate").val(endDate); //arg.end == null ? "" : arg.end.toJSON().slice(0, 19)
 
@@ -184,7 +187,8 @@
                     id: 0,
                     petId: $(".petId").val(),
                     petName: $(".pet-name").val(),
-                    serviceTypeId: $(".pet-serviceType").val()
+                    serviceTypeId: $(".pet-serviceType").val(),
+                    serviceNote: $(".pet-serviceNote").val()
                 }
             });
 
@@ -192,7 +196,8 @@
                 PetId: $(".petId").val(),
                 StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
                 CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
-                ServiceType: $(".pet-serviceType").val()
+                ServiceType: $(".pet-serviceType").val(),
+                ServiceNote: $(".pet-serviceNote").val()
             };
 
             $.ajax({
@@ -214,9 +219,11 @@
         $(".pet-serviceType").val(0);
         $(".pet-startdate").val("");
         $(".pet-checkoutdate").val("");
+        $(".pet-serviceNote").val("");
         $(".petId").val("");
 
         $(".pet-serviceType").val(info.event.extendedProps.serviceTypeId);
+        $(".pet-serviceNote").val(info.event.extendedProps.serviceNote);
 
         $(".event-title").html("Edit " + info.event.title); // title of modal
 
@@ -250,7 +257,8 @@
                     id: info.event.extendedProps.id,
                     petId: $(".petId").val(),
                     petName: $(".pet-name").val(),
-                    serviceTypeId: $(".pet-serviceType").val()
+                    serviceTypeId: $(".pet-serviceType").val(),
+                    serviceNote: $(".pet-serviceNote").val()
                 }
             });
 
@@ -259,7 +267,8 @@
                 PetId: $(".petId").val(),
                 StartDate: moment($(".pet-startdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
                 CheckoutDate: moment($(".pet-checkoutdate").val()).local().format("YYYY-MM-DDTHH:mm:ss"),
-                ServiceType: $(".pet-serviceType").val()
+                ServiceType: $(".pet-serviceType").val(),
+                ServiceNote: $(".pet-serviceNote").val()
             };
 
             $.ajax({

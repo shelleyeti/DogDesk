@@ -20,11 +20,11 @@ namespace DogDesk.Models
 
         public int PetId { get; set; }
 
-        [Display(Name = "Date of Service")]
+        [Display(Name = "Start of Service")]
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
 
-        [Display(Name = "Checkout Date")]
+        [Display(Name = "End of Service")]
         [DataType(DataType.Date)]
         public DateTime CheckoutDate { get; set; }
 
@@ -35,5 +35,14 @@ namespace DogDesk.Models
         [ForeignKey("ServiceType")]
         [Display(Name = "Service Type")]
         public ServiceType NameOfService { get; set; }
+
+        [Display(Name = "Service Notes")]
+        public string ServiceNote { get; set; }
+
+        [Display(Name = "Check-In Time")]
+        public DateTime CheckinTime { get; set; }
+
+        [Display(Name = "Check-Out Time")]
+        public DateTime CheckoutTime { get; set; }
     }
 }

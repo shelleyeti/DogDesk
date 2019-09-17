@@ -1,0 +1,61 @@
+﻿@model DogDesk.Models.ServicePet
+
+<h4>Service Pet</h4>
+<br />
+<form asp-action="Edit">
+    <div class="row">
+        <div class="col-md-5">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" disabled class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NameOfService" class="control-label"></label>
+                <input disabled asp-for="NameOfService.ServiceName" class="form-control" />
+                <span asp-validation-for="ServiceType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdOfPet" class="control-label"></label>
+                <input asp-for="IdOfPet.Name" disabled class="form-control" />
+                <span asp-validation-for="IdOfPet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckoutDate" class="control-label"></label>
+                <input asp-for="CheckoutDate" class="form-control" />
+                <span asp-validation-for="CheckoutDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-5 offset-sm-2">
+            <div>
+                <label asp-for="ServiceNote" class="control-label"></label>
+                @Html.TextAreaFor(model => model.ServiceNote, new { @class = "form-control", @rows = 3 })
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckinTime" class="control-label"></label>
+                <input asp-for="CheckinTime" disabled class="form-control" />
+                <span asp-validation-for="CheckinTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckoutTime" class="control-label"></label>
+                <input asp-for="CheckoutTime" disabled class="form-control" />
+                <span asp-validation-for="CheckoutTime" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 form-group text-right">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+<div class="text-right">
+    <a asp-action="Index">Back to List</a>
+</div>
+
