@@ -279,8 +279,6 @@ namespace DogDesk
             return RedirectToAction("Details", "Pets", new { id = model.PetId });
         }
 
-
-
         private bool PetExists(int? id)
         {
             return _context.Pets.Any(e => e.Id == id);

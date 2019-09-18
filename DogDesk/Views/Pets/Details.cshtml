@@ -127,10 +127,10 @@
             <h5>Upcoming Services</h5>
             @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate > DateTime.Now))
             {
-        <div class="card-columns">
+                <div class="card-columns">
             @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
             {
-            <div>
+                <div>
                 @{
                     var hasCurrentRabies = Model.VetRecords.FirstOrDefault(x => x.Rabies <= DateTime.Now && x.Rabies >= DateTime.Now.AddDays(-365)) != null;
 
@@ -143,20 +143,21 @@
 
                     var hasCurrentVetRecord = hasCurrentRabies && hasCurrentBordetella;
 
-                    var checkInDate = item.StartDate == DateTime.Now.Date;
+                    var checkInDate = item.StartDate == DateTime.Now.Date || item.StartDate < DateTime.Now.Date;
 
+                    var hasRecentCheckInDate = item.CheckinTime <= DateTime.Now.Date;
 
-                    var hasRecentCheckInDate = item.CheckinTime >= DateTime.Now.Date;
-                    var noCheckOutDate = item.CheckoutTime == default(DateTime);
+                    var noCheckOutTime = item.CheckoutTime == default(DateTime);
+
+                    var notCheckedIn = item.CheckinTime == default(DateTime);
                 }
-            </div>
+                </div>
 
                 <div class="card border-info">
                     <div class="card-header font-weight-bold text-center">
                         @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
 
-
-                        @if (!hasCurrentVetRecord || !checkInDate)
+                        @if (!hasCurrentVetRecord || notCheckedIn || !checkInDate)
                         {
                             @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
                             {
@@ -164,7 +165,7 @@
                                 <input class="btn btn-sm btn-info disabled" type="submit" disabled value="Check-In" />
                             }
                         }
-                        else if (hasCurrentVetRecord && checkInDate && !hasRecentCheckInDate)
+                        else if (hasCurrentVetRecord && checkInDate && !hasRecentCheckInDate && notCheckedIn)
                         {
                             @using (Html.BeginForm("CheckInPet", "ServicePets", FormMethod.Post))
                             {
@@ -179,7 +180,7 @@
                                 <input class="btn btn-sm btn-info" type="submit" value="Check-In" />
                             }
                         }
-                        else if (hasCurrentVetRecord && noCheckOutDate)
+                        else if (hasCurrentVetRecord && noCheckOutTime && hasRecentCheckInDate)
                         {
                             @using (Html.BeginForm("CheckOutPet", "ServicePets", FormMethod.Post))
                             {
@@ -199,7 +200,7 @@
                         {
                             @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
                             {
-                                <input type="hidden" asp-for="Id" name="PetId" />
+                                <input type="hidden" asp-for="@item.Id" name="PetId" />
                                 <input class="btn btn-sm btn-info" type="submit" disabled value="Complete" />
                             }
                         }
@@ -232,50 +233,6 @@
             }
         </div>
         <br />
-        @*<div>
-            @{
-                var hasCurrentRabies = Model.VetRecords.FirstOrDefault(x => x.Rabies <= DateTime.Now && x.Rabies >= DateTime.Now.AddDays(-365)) != null;
-
-                var hasCurrentBordetella = true;
-
-                if (Model.AnimalTypeId == 1)
-                {
-                    hasCurrentBordetella = Model.VetRecords.FirstOrDefault(x => x.Bordetella <= DateTime.Now && x.Bordetella >= DateTime.Now.AddDays(-365)) != null;
-                }
-
-                var hasCurrentVetRecord = hasCurrentRabies && hasCurrentBordetella;
-
-                var checkInDate = Model.ServicePets.FirstOrDefault(x => x.StartDate == DateTime.Now.Date) != null;
-
-                var checkOutDate = Model.ServicePets.FirstOrDefault(x => x.CheckinTime <= DateTime.Now.Date) != null;
-            }
-
-            @if (!hasCurrentVetRecord || !checkInDate)
-            {
-                @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
-                {
-                    <input type="hidden" asp-for="Id" name="PetId" />
-                    <input class="btn btn-sm btn-danger disabled mr-sm-4" type="submit" disabled value="Check-In Pet" />
-                }
-            }
-            else if (hasCurrentVetRecord && checkInDate)
-            {
-                @using (Html.BeginForm("CheckInPet", "ServicePets", FormMethod.Post))
-                {
-                    <input type="hidden" asp-for="Id" name="PetId" />
-                    <input type="hidden"asp-for="s" name="Id" />
-                    <input class="btn btn-sm btn-danger mr-sm-4" type="submit" value="Check-In Pet" />
-                }
-            }
-            else if (hasCurrentVetRecord && checkOutDate)
-            {
-                @using (Html.BeginForm("CheckOutPet", "ServicePets", FormMethod.Post))
-                {
-                    <input type="hidden" asp-for="Id" name="PetId" />
-                    <input class="btn btn-sm btn-danger disabled mr-sm-4" type="submit" value="Check-Out Pet" />
-                }
-            }
-        </div>*@
     </div>
 </div>
 
@@ -355,7 +312,6 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Rabies)
                         </td>
-
                         <td>
                             @Html.DisplayFor(modelItem => item.Bordetella)
                         </td>
@@ -439,8 +395,8 @@
                     </td>
                     <td>
                         <input type="hidden" asp-for="Id" name="PetId" />
-                        <a asp-controller="Owners" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-controller="Owners" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a asp-controller="Owners" asp-action="Edit" asp-route-id="@item.OwnerId">Edit</a> |
+                        <a asp-controller="Owners" asp-action="Details" asp-route-id="@item.OwnerId">Details</a>
                     </td>
                 </tr>
             }
@@ -488,11 +444,11 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.EmergencyContact.WorkPhone)
                         </td>
-                        <td>
+                        <td class="text-right">
                             <input type="hidden" asp-for="Id" name="PetId" />
-                            <a asp-controller="EmergencyContacts" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-controller="EmergencyContacts" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-controller="EmergencyContacts" asp-action="Edit" asp-route-id="@item.EmergencyContactId">Edit</a> |
+                            <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.EmergencyContactId">Details</a> |
+                            <a asp-controller="EmergencyContacts" asp-action="Delete" asp-route-id="@item.EmergencyContactId">Delete</a>
 
                         </td>
                     </tr>
