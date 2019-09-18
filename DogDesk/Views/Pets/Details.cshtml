@@ -143,9 +143,11 @@
 
                     var hasCurrentVetRecord = hasCurrentRabies && hasCurrentBordetella;
 
-                    var checkInDate = item.StartDate == DateTime.Now.Date || item.StartDate < DateTime.Now.Date;
+                    var hasntReachedStartDate = item.StartDate.Date > DateTime.Now.Date;
 
-                    var hasRecentCheckInDate = item.CheckinTime <= DateTime.Now.Date;
+                    var startDate = item.StartDate.Date == DateTime.Now.Date || item.StartDate.Date < DateTime.Now.Date;
+
+                    var hasRecentCheckInDate = item.CheckinTime != default(DateTime) && item.CheckinTime.Date <= DateTime.Now.Date;
 
                     var noCheckOutTime = item.CheckoutTime == default(DateTime);
 
@@ -157,7 +159,7 @@
                     <div class="card-header font-weight-bold text-center">
                         @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
 
-                        @if (!hasCurrentVetRecord || notCheckedIn || !checkInDate)
+                        @if (!hasCurrentVetRecord || hasntReachedStartDate)
                         {
                             @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
                             {
@@ -165,7 +167,7 @@
                                 <input class="btn btn-sm btn-info disabled" type="submit" disabled value="Check-In" />
                             }
                         }
-                        else if (hasCurrentVetRecord && checkInDate && !hasRecentCheckInDate && notCheckedIn)
+                        else if (hasCurrentVetRecord && startDate && !hasRecentCheckInDate && notCheckedIn)
                         {
                             @using (Html.BeginForm("CheckInPet", "ServicePets", FormMethod.Post))
                             {
