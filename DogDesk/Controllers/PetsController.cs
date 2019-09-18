@@ -10,6 +10,10 @@ using DogDesk.Models;
 using Microsoft.AspNetCore.Identity;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 
 namespace DogDesk
 {
@@ -17,11 +21,15 @@ namespace DogDesk
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHostingEnvironment _appEnvironment;
+
         public PetsController(ApplicationDbContext context,
-                          UserManager<ApplicationUser> userManager)
+                          UserManager<ApplicationUser> userManager,
+                          IHostingEnvironment appEnvironment)
         {
             _userManager = userManager;
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -221,30 +229,54 @@ namespace DogDesk
         }
 
         [HttpPost("FileUpload")]
-        public async Task<IActionResult> UploadImage(List<IFormFile> files)
+        public async Task<IActionResult> UploadImage(PetImage model)
         {
-            long size = files.Sum(f => f.Length);
+            var formFile = model.ImageFile;
+            var originalFilename = Path.GetFileName(formFile.FileName);
+            var newFileName = Path.GetFileNameWithoutExtension(formFile.FileName) + "_" + model.PetId + ".jpg";
 
-            var filePaths = new List<string>();
-            foreach (var formFile in files)
+            var uploadpath = Path.Combine(_appEnvironment.WebRootPath, "images");
+            //using (var fileStream = new FileStream(Path.Combine(uploadpath, newFileName), FileMode.Create))
+           // {
+                var bitMap = new Bitmap(formFile.OpenReadStream());
+                Size original = new Size(bitMap.Width, bitMap.Height);
+
+                int maxSize = 300;
+
+                float percent = (new List<float> { (float)maxSize / (float)original.Width, (float)maxSize / (float)original.Height }).Min();
+
+                Size resultSize = new Size((int)Math.Floor(original.Width * percent), (int)Math.Floor(original.Height * percent));
+
+                Bitmap target = new Bitmap(resultSize.Width, resultSize.Height);
+                Graphics graphic = Graphics.FromImage(target);
+
+                graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphic.SmoothingMode = SmoothingMode.HighQuality;
+                graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                graphic.CompositingQuality = CompositingQuality.HighQuality;
+                graphic.DrawImage(bitMap, 0, 0, resultSize.Width, resultSize.Height);
+
+
+                target.Save(Path.Combine(uploadpath, newFileName), ImageFormat.Jpeg);
+                //await formFile.CopyToAsync(fileStream);
+                string filePath = "images\\" + newFileName;
+                string baseUrl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
+            //}
+
+            var pet = _context.Pets.FirstOrDefault(x => x.Id == model.PetId);
+
+            if(pet != null)
             {
-                if (formFile.Length > 0)
-                {
-                    // full path to file in temp location
-                    var filePath = Path.GetTempFileName();
-                    filePaths.Add(filePath);
+                pet.PetImage = newFileName;
 
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
-                }
+                _context.Update(pet);
+                await _context.SaveChangesAsync();
             }
 
             // process uploaded files
             // Don't rely on or trust the FileName property without validation.
 
-            return Ok(new { count = files.Count, size, filePaths });
+            return RedirectToAction("Details", "Pets", new { id = model.PetId });
         }
 
 
