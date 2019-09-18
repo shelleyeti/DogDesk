@@ -10,46 +10,59 @@
 <div class="btn-group">
     <div>
         @using (Html.BeginForm("Create", "VetRecords", FormMethod.Get))
-        {
+{
             <input type="hidden" asp-for="Id" name="PetId" />
             <input class="btn btn-sm btn-primary mr-sm-4" type="submit" value="Add New Vet Record" />
-        }
+}
     </div>
     <div>
         @using (Html.BeginForm("MainCalendar", "ServicePets", FormMethod.Get))
-        {
+{
             <input type="hidden" asp-for="Id" name="PetId" />
             <input class="btn btn-sm btn-secondary mr-sm-4" type="submit" value="Schedule Boarding" />
-        }
+}
     </div>
     <div>
         @using (Html.BeginForm("TimeLineCalendar", "ServicePets", FormMethod.Get))
-        {
+{
             <input type="hidden" asp-for="Id" name="PetId" />
             <input class="btn btn-sm btn-info mr-sm-4" type="submit" value="Schedule Add-On Service" />
-        }
+}
     </div>
     <div>
         @using (Html.BeginForm("AddOwner", "Owners", FormMethod.Get))
-        {
+{
             <input type="hidden" asp-for="Id" name="PetId" />
             <input class="btn btn-sm btn-warning mr-sm-4" type="submit" value="Add New Owner" />
-        }
+}
     </div>
     <div>
         @using (Html.BeginForm("Create", "EmergencyContacts", FormMethod.Get))
-        {
+{
             <input type="hidden" asp-for="Id" name="PetId" />
             <input class="btn btn-sm btn-danger mr-sm-4" type="submit" value="Add New Contact" />
-        }
+}
     </div>
 </div>
 <br />
 
 <div class="form-group">
     <br />
-    <label>Add Picture</label>
-    <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+    <form method="post" enctype="multipart/form-data" asp-controller="Pets" asp-action="UploadImage">
+        <div class="form-group">
+            <input type="hidden" asp-for="Id" name="PetId" />
+            <div class="col-md-10">
+                <p>Upload an image:</p>
+                <input type="file" name="ImageFile">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Upload">
+            </div>
+        </div>
+    </form>
+
 </div>
 <br />
 
@@ -58,7 +71,10 @@
         <div class="col col-md-4">
             <h5>Details</h5>
             <div class="card bg-light">
-                <img class="card-img-top" src="..." alt="Card image cap">
+                @if (!string.IsNullOrEmpty(Model.PetImage))
+                {
+                <img class="card-img-top" src="~/images/@Model.PetImage" alt="pet image">
+                }
                 <div class="card-body">
                     <h5 class="card-title font-weight-bold text-center"> @Html.DisplayFor(model => model.Name)</h5>
                     <p class="card-text">
@@ -436,7 +452,7 @@
 @* Contacts *@
 <div>
     <h5>Emergency Contacts</h5>
-    @if (Model.PetContacts != null)
+    @if (Model.PetContacts != null && Model.PetContacts.Count > 0)
     {
         <table class="table">
             <thead>
