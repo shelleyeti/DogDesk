@@ -40,11 +40,11 @@ namespace DogDesk.Controllers
                 .Include(p => p.PetContacts)
                 .Include(p => p.ServicePets)
                 .ThenInclude(x => x.NameOfService)
-                .FirstOrDefaultAsync();
+                .ToListAsync();
 
-            pet.PetOwners.ToList().ForEach(x => x.Owner = _context.Owners.FirstOrDefault(y => y.Id == x.OwnerId));
-            pet.PetContacts.ToList().ForEach(x => x.EmergencyContact = _context.EmergencyContacts.FirstOrDefault(y => y.Id == x.EmergencyContactId));
-            pet.VetRecords = pet.VetRecords.OrderByDescending(x => x.Id).Take(3).ToList();
+            //pet.PetOwners.ToList().ForEach(x => x.Owner = _context.Owners.FirstOrDefault(y => y.Id == x.OwnerId));
+            //pet.PetContacts.ToList().ForEach(x => x.EmergencyContact = _context.EmergencyContacts.FirstOrDefault(y => y.Id == x.EmergencyContactId));
+            //pet.VetRecords = pet.VetRecords.OrderByDescending(x => x.Id).Take(3).ToList();
 
             if (pet == null)
             {

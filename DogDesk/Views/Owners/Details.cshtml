@@ -133,8 +133,8 @@
                         @Html.DisplayFor(modelItem => item.Pet.Breed)
                     </td>
                     <td>
-                        <a asp-controller="Pets" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-controller="Pets" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a asp-controller="Pets" asp-action="Edit" asp-route-id="@item.Pet.Id">Edit</a> |
+                        <a asp-controller="Pets" asp-action="Details" asp-route-id="@item.Pet.Id">Details</a>
                     </td>
                 </tr>
             }

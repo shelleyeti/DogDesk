@@ -200,7 +200,7 @@
                         {
                             @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
                             {
-                                <input type="hidden" asp-for="Id" name="PetId" />
+                                <input type="hidden" asp-for="@item.Id" name="PetId" />
                                 <input class="btn btn-sm btn-info" type="submit" disabled value="Complete" />
                             }
                         }
@@ -312,7 +312,6 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Rabies)
                         </td>
-
                         <td>
                             @Html.DisplayFor(modelItem => item.Bordetella)
                         </td>
@@ -396,8 +395,8 @@
                     </td>
                     <td>
                         <input type="hidden" asp-for="Id" name="PetId" />
-                        <a asp-controller="Owners" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-controller="Owners" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a asp-controller="Owners" asp-action="Edit" asp-route-id="@item.OwnerId">Edit</a> |
+                        <a asp-controller="Owners" asp-action="Details" asp-route-id="@item.OwnerId">Details</a>
                     </td>
                 </tr>
             }
@@ -445,11 +444,11 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.EmergencyContact.WorkPhone)
                         </td>
-                        <td>
+                        <td class="text-right">
                             <input type="hidden" asp-for="Id" name="PetId" />
-                            <a asp-controller="EmergencyContacts" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-controller="EmergencyContacts" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-controller="EmergencyContacts" asp-action="Edit" asp-route-id="@item.EmergencyContactId">Edit</a> |
+                            <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.EmergencyContactId">Details</a> |
+                            <a asp-controller="EmergencyContacts" asp-action="Delete" asp-route-id="@item.EmergencyContactId">Delete</a>
 
                         </td>
                     </tr>

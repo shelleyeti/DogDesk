@@ -25,11 +25,11 @@ namespace DogDesk
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: VetRecords
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var vetRecord = _context.VetRecords
+            var vetRecord = await _context.VetRecords
                 .Include(x => x.Pet)
-                .Where(x => x.Id == x.PetId);
+                .ToListAsync();
 
             return View(vetRecord);
         }
@@ -44,7 +44,6 @@ namespace DogDesk
 
             var vetRecord = await _context.VetRecords
                 .Include(x => x.Pet)
-                .Where(x => x.Id == x.PetId)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vetRecord == null)
             {
