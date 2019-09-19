@@ -83,7 +83,8 @@ namespace DogDesk
             {
                 _context.Add(vetRecord);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var PetId = vetRecord.PetId;
+                return RedirectToAction("Details", "Pets", new { id = PetId });
             }
             return View(vetRecord);
         }
@@ -100,7 +101,9 @@ namespace DogDesk
                 .Include(x => x.Pet)
                 .FirstOrDefault(x => x.Id == x.PetId);
 
-            var vetRecord = await _context.VetRecords.FindAsync(id);
+            var vetRecord = await _context.VetRecords
+                .Include(x => x.Pet)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (vetRecord == null)
             {
@@ -139,7 +142,8 @@ namespace DogDesk
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                var PetId = vetRecord.PetId;
+                return RedirectToAction("Details", "Pets", new { id = PetId });
             }
             return View(vetRecord);
         }

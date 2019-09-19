@@ -111,7 +111,8 @@ namespace DogDesk
                 _context.PetOwners.Add(petOwner);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Pets");
+                var petId = petOwner.PetId;
+                return RedirectToAction("Details", "Pets", new { id = petId });
             }
             return View(petOwner);
         }
