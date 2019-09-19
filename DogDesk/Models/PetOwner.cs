@@ -13,7 +13,6 @@ namespace DogDesk.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required]
         public int PetId { get; set; }
 
         public Pet Pet { get; set; }

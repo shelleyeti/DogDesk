@@ -213,9 +213,10 @@ namespace DogDesk
         }
 
         [HttpPost]
-        public IActionResult CreatePet([FromBody]ServicePet servicePet)
+        public async Task<IActionResult> CreatePet([FromBody]ServicePet servicePet)
         {
-            servicePet.UserId = _userManager.GetUserAsync(HttpContext.User).Result.Id;
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            servicePet.UserId = user.Id;
 
             _context.Add(servicePet);
                 _context.SaveChanges();

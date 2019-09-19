@@ -14,7 +14,7 @@
                     <h5>Incoming Pets</h5>
                     @if (Model.Any(x => x.ServicePets != null && x.ServicePets.Count > 0 && x.ServicePets.Any(y => y.StartDate.Date == DateTime.Now.Date)))
                     {
-                        <div class="card-deck">
+                        <div class="card-columns">
                             @foreach (var pet in Model)
                             {
                                 @foreach (var item in pet.ServicePets.Where(x => x.CheckinTime == default(DateTime) && x.StartDate.Date == DateTime.Now.Date))
@@ -53,7 +53,7 @@
                     <h5>Current Pets</h5>
                     @if (Model.Any(x => x.ServicePets != null && x.ServicePets.Count > 0 && x.ServicePets.Any(y => y.CheckoutDate.Date >= DateTime.Now.Date)))
                     {
-                        <div class="card-deck">
+                        <div class="card-columns">
                             @foreach (var pet in Model)
                             {
                                 @foreach (var item in pet.ServicePets.Where(x => x.CheckinTime != default(DateTime) && x.CheckoutTime == default(DateTime) && x.CheckoutDate.Date >= DateTime.Now.Date))
