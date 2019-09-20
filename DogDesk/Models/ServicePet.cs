@@ -40,9 +40,9 @@ namespace DogDesk.Models
         public string ServiceNote { get; set; }
 
         [Display(Name = "Check-In Time")]
-        public DateTime CheckinTime { get; set; }
+        public DateTime? CheckinTime { get; set; }
 
         [Display(Name = "Check-Out Time")]
-        public DateTime CheckoutTime { get; set; }
+        public DateTime? CheckoutTime { get; set; }
     }
 }

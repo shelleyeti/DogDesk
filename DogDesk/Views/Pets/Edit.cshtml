@@ -66,6 +66,9 @@
         </div>
     </div>
     <div class="col-md-12 form-group text-right">
+        <input type="hidden" asp-for="@Model.Id" name="PetId" />
+        <input type="hidden" asp-for="@Model.PetImage" name="PetImage" />
+
         <input type="submit" value="Save" class="btn btn-primary mt-sm-2" />
     </div>
 </form>

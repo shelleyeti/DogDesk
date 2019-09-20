@@ -125,10 +125,10 @@
         </div>
         <div class="col col-sm-8">
             <h5>Upcoming Services</h5>
-            @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate > DateTime.Now))
+            @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate.Date >= DateTime.Now.Date))
             {
                 <div class="card-columns">
-            @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate > DateTime.Now).OrderBy(x => x.StartDate))
+            @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate.Date >= DateTime.Now.Date).OrderBy(x => x.StartDate))
             {
                 <div>
                 @{
@@ -147,7 +147,7 @@
 
                     var startDate = item.StartDate.Date == DateTime.Now.Date || item.StartDate.Date < DateTime.Now.Date;
 
-                    var hasRecentCheckInDate = item.CheckinTime != default(DateTime) && item.CheckinTime.Date <= DateTime.Now.Date;
+                    var hasRecentCheckInDate = item.CheckinTime != default(DateTime) && item.CheckinTime.Value.Date <= DateTime.Now.Date;
 
                     var noCheckOutTime = item.CheckoutTime == default(DateTime);
 

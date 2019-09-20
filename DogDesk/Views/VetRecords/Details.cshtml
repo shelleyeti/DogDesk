@@ -79,6 +79,9 @@
     </dl>
 </div>
 <div>
+    <input type="hidden" asp-for="Pet.Id" name="PetId" />
+    <input type="hidden" asp-for="@Model.Pet" name="PetId" />
+
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

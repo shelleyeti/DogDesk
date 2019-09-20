@@ -14,7 +14,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="NameOfService" class="control-label"></label>
-                <input disabled asp-for="NameOfService.ServiceName" class="form-control" />
+                <input asp-for="NameOfService.ServiceName" disabled class="form-control" />
                 <span asp-validation-for="ServiceType" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -24,12 +24,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
+                <input asp-for="StartDate" disabled class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CheckoutDate" class="control-label"></label>
-                <input asp-for="CheckoutDate" class="form-control" />
+                <input asp-for="CheckoutDate" disabled class="form-control" />
                 <span asp-validation-for="CheckoutDate" class="text-danger"></span>
             </div>
         </div>
@@ -51,6 +51,13 @@
         </div>
     </div>
     <div class="col-md-12 form-group text-right">
+        <input type="hidden" asp-for="@Model.PetId" name="PetId" />
+        <input type="hidden" asp-for="@Model.IdOfPet" name="IdOfPet" />
+        <input type="hidden" asp-for="@Model.NameOfService" name="NameOfService" />
+        <input type="hidden" asp-for="@Model.ServiceType" name="ServiceType" />
+        <input type="hidden" asp-for="@Model.ServiceNote" name="ServiceNote" />
+        <input type="hidden" asp-for="@Model.UserId" name="UserId" />
+
         <input type="submit" value="Save" class="btn btn-primary" />
     </div>
 </form>

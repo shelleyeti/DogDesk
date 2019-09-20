@@ -41,7 +41,7 @@ namespace DogDesk.Models
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime Rabies { get; set; }
+        public DateTime? Rabies { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? Bordetella { get; set; }

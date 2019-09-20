@@ -12,13 +12,13 @@
             <div class="row">
                 <div class="col col-md-5">
                     <h5>Incoming Pets</h5>
-                    @if (Model.Any(x => x.ServicePets != null && x.ServicePets.Count > 0 && x.ServicePets.Any(y => y.StartDate.Date == DateTime.Now.Date)))
+                    @if (Model.Any(x => x.ServicePets != null && x.ServicePets.Count > 0 && x.ServicePets.Any(y => y.StartDate.Date == DateTime.Now.Date && y.CheckinTime == default(DateTime))))
                     {
-                        <div class="card-deck">
+                        <div class="card-columns">
                             @foreach (var pet in Model)
-                    {
+                            {
                                 @foreach (var item in pet.ServicePets.Where(x => x.CheckinTime == default(DateTime) && x.StartDate.Date == DateTime.Now.Date))
-                    {
+                                {
                                     <div class="card border-info">
                                         <div class="card-body">
                                             <h6 class="card-title">@Html.DisplayFor(modelItem => item.IdOfPet.Name)</h6>
@@ -33,19 +33,19 @@
                                             </p>
                                             <div class="card-img-bottom">
                                                 @if (!string.IsNullOrEmpty(item.IdOfPet.PetImage))
-                    {
+                                                {
                                                     <img class="card-img-top" src="~/images/@item.IdOfPet.PetImage" alt="pet image">
-                    }
+                                                }
                                             </div>
                                         </div>
                                     </div>
-                    }
-                    }
+                                }
+                            }
                         </div>
                     }
                     else
                     {
-                        <p>No Upcoming Services Scheduled</p>
+                        <p>No Incoming Pet Scheduled</p>
                     }
                 </div>
 
@@ -53,11 +53,11 @@
                     <h5>Current Pets</h5>
                     @if (Model.Any(x => x.ServicePets != null && x.ServicePets.Count > 0 && x.ServicePets.Any(y => y.CheckoutDate.Date >= DateTime.Now.Date)))
                     {
-                        <div class="card-deck">
+                        <div class="card-columns">
                             @foreach (var pet in Model)
-                    {
+                            {
                                 @foreach (var item in pet.ServicePets.Where(x => x.CheckinTime != default(DateTime) && x.CheckoutTime == default(DateTime) && x.CheckoutDate.Date >= DateTime.Now.Date))
-                    {
+                                {
                                     <div class="card border-info">
                                         <div class="card-body">
                                             <h6 class="card-title">@Html.DisplayFor(modelItem => item.IdOfPet.Name)</h6>
@@ -72,14 +72,14 @@
                                             </p>
                                             <div class="card-img-bottom">
                                                 @if (!string.IsNullOrEmpty(item.IdOfPet.PetImage))
-                    {
+                                                {
                                                     <img class="card-img-top" src="~/images/@item.IdOfPet.PetImage" alt="pet image">
-                    }
+                                                }
                                             </div>
                                         </div>
                                     </div>
-                    }
-                    }
+                                }
+                            }
                         </div>
                     }
                     else
@@ -89,6 +89,15 @@
                 </div>
                 <br />
             </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <div>
+            <h1>Welcome to Dog Desk</h1>
+            <p>Please log in</p>
         </div>
     </div>
 }
