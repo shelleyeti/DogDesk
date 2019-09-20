@@ -147,7 +147,7 @@
 
                     var startDate = item.StartDate.Date == DateTime.Now.Date || item.StartDate.Date < DateTime.Now.Date;
 
-                    var hasRecentCheckInDate = item.CheckinTime != default(DateTime) && item.CheckinTime.Date <= DateTime.Now.Date;
+                    var hasRecentCheckInDate = item.CheckinTime != default(DateTime) && item.CheckinTime.Value.Date <= DateTime.Now.Date;
 
                     var noCheckOutTime = item.CheckoutTime == default(DateTime);
 

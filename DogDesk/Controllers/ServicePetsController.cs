@@ -171,7 +171,15 @@ namespace DogDesk
             }
 
             var servicePet = await _context.ServicePets
+                .Include(x => x.NameOfService)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var userName = _context.ApplicationUsers.FirstOrDefault(x => x.Id == servicePet.UserId);
+            if (userName != null)
+            {
+            servicePet.UserId = userName.FullName;
+            }
+
             if (servicePet == null)
             {
                 return NotFound();
@@ -272,11 +280,6 @@ namespace DogDesk
                     ServiceName = _context.ServiceTypes.FirstOrDefault(s => s.Id == sp.ServiceType).ServiceName
                 };
             }
-            //.Include(p => p.IdOfPet)
-            //.Include(s => s.NameOfService).ToListAsync();
-
-            //servicePets.ToList().ForEach(p => p.IdOfPet = _context.Pets.FirstOrDefault(pt => pt.Id == p.PetId));
-            //servicePets.ToList().ForEach(s => s.NameOfService = _context.ServiceTypes.FirstOrDefault(st => st.Id == s.ServiceType));
 
             return Json(servicePets.ToList());
         }
