@@ -147,11 +147,11 @@
 
                     var startDate = item.StartDate.Date == DateTime.Now.Date || item.StartDate.Date < DateTime.Now.Date;
 
-                    var hasRecentCheckInDate = item.CheckinTime != default(DateTime) && item.CheckinTime.Value.Date <= DateTime.Now.Date;
+                    var hasRecentCheckInDate = item.CheckinTime != null && item.CheckinTime != default(DateTime) && item.CheckinTime.Value.Date <= DateTime.Now.Date;
 
-                    var noCheckOutTime = item.CheckoutTime == default(DateTime);
+                    var noCheckOutTime = item.CheckoutTime == null || item.CheckoutTime == default(DateTime);
 
-                    var notCheckedIn = item.CheckinTime == default(DateTime);
+                    var notCheckedIn = item.CheckinTime == null || item.CheckinTime == default(DateTime);
                 }
                 </div>
 

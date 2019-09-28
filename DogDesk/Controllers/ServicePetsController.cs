@@ -226,8 +226,8 @@ namespace DogDesk
             var user = await _userManager.GetUserAsync(HttpContext.User);
             servicePet.UserId = user.Id;
 
-            _context.Add(servicePet);
-                _context.SaveChanges();
+            await _context.AddAsync(servicePet);
+             await   _context.SaveChangesAsync();
                 return Json(servicePet);
         }
 

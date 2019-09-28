@@ -12,12 +12,12 @@
             <div class="row">
                 <div class="col col-md-5">
                     <h5>Incoming Pets</h5>
-                    @if (Model.Any(x => x.ServicePets != null && x.ServicePets.Count > 0 && x.ServicePets.Any(y => y.StartDate.Date == DateTime.Now.Date && y.CheckinTime == default(DateTime))))
+                    @if (Model.Any(x => x.ServicePets != null && x.ServicePets.Count > 0 && x.ServicePets.Any(y => y.StartDate.Date == DateTime.Now.Date && (y.CheckinTime == null ||  y.CheckinTime == default(DateTime)))))
                     {
                         <div class="card-columns">
                             @foreach (var pet in Model)
                             {
-                                @foreach (var item in pet.ServicePets.Where(x => x.CheckinTime == default(DateTime) && x.StartDate.Date == DateTime.Now.Date))
+                                @foreach (var item in pet.ServicePets.Where(x => (x.CheckinTime == null || x.CheckinTime == default(DateTime)) && x.StartDate.Date == DateTime.Now.Date))
                                 {
                                     <div class="card border-info">
                                         <div class="card-body">
@@ -56,7 +56,7 @@
                         <div class="card-columns">
                             @foreach (var pet in Model)
                             {
-                                @foreach (var item in pet.ServicePets.Where(x => x.CheckinTime != default(DateTime) && x.CheckoutTime == default(DateTime) && x.CheckoutDate.Date >= DateTime.Now.Date))
+                                @foreach (var item in pet.ServicePets.Where(x => x.CheckinTime != null && x.CheckinTime != default(DateTime) && (x.CheckoutTime == null ||  x.CheckoutTime == default(DateTime)) && x.CheckoutDate.Date >= DateTime.Now.Date))
                                 {
                                     <div class="card border-info">
                                         <div class="card-body">
