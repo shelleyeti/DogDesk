@@ -10,38 +10,38 @@
 <div class="btn-group">
     <div>
         @using (Html.BeginForm("Create", "VetRecords", FormMethod.Get))
-{
+        {
             <input type="hidden" asp-for="Id" name="PetId" />
             <input class="btn btn-sm btn-primary mr-sm-4" type="submit" value="Add New Vet Record" />
-}
+        }
     </div>
     <div>
         @using (Html.BeginForm("MainCalendar", "ServicePets", FormMethod.Get))
-{
+        {
             <input type="hidden" asp-for="Id" name="PetId" />
             <input class="btn btn-sm btn-secondary mr-sm-4" type="submit" value="Schedule Boarding" />
-}
+        }
     </div>
     <div>
         @using (Html.BeginForm("TimeLineCalendar", "ServicePets", FormMethod.Get))
-{
+        {
             <input type="hidden" asp-for="Id" name="PetId" />
             <input class="btn btn-sm btn-info mr-sm-4" type="submit" value="Schedule Add-On Service" />
-}
+        }
     </div>
     <div>
-        @using (Html.BeginForm("AddOwner", "Owners", FormMethod.Get))
-{
+        @using (Html.BeginForm("AddOwnerExisting", "Owners", FormMethod.Get))
+        {
             <input type="hidden" asp-for="Id" name="PetId" />
             <input class="btn btn-sm btn-warning mr-sm-4" type="submit" value="Add New Owner" />
-}
+        }
     </div>
     <div>
         @using (Html.BeginForm("Create", "EmergencyContacts", FormMethod.Get))
-{
+        {
             <input type="hidden" asp-for="Id" name="PetId" />
             <input class="btn btn-sm btn-danger mr-sm-4" type="submit" value="Add New Contact" />
-}
+        }
     </div>
 </div>
 <br />
@@ -73,7 +73,7 @@
             <div class="card bg-light">
                 @if (!string.IsNullOrEmpty(Model.PetImage))
                 {
-                <img class="card-img-top" src="~/images/@Model.PetImage" alt="pet image">
+                    <img class="card-img-top" src="~/images/@Model.PetImage" alt="pet image">
                 }
                 <div class="card-body">
                     <h5 class="card-title font-weight-bold text-center"> @Html.DisplayFor(model => model.Name)</h5>
@@ -128,106 +128,114 @@
             @if (Model.ServicePets != null && Model.ServicePets.Count > 0 && Model.ServicePets.Any(x => x.CheckoutDate.Date >= DateTime.Now.Date))
             {
                 <div class="card-columns">
-            @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate.Date >= DateTime.Now.Date).OrderBy(x => x.StartDate))
-            {
-                <div>
-                @{
-                    var hasCurrentRabies = Model.VetRecords.FirstOrDefault(x => x.Rabies <= DateTime.Now && x.Rabies >= DateTime.Now.AddDays(-365)) != null;
-
-                    var hasCurrentBordetella = true;
-
-                    if (Model.AnimalTypeId == 1)
+                    @foreach (var item in Model.ServicePets.Where(x => x.CheckoutDate.Date >= DateTime.Now.Date).OrderBy(x => x.StartDate))
                     {
-                        hasCurrentBordetella = Model.VetRecords.FirstOrDefault(x => x.Bordetella <= DateTime.Now && x.Bordetella >= DateTime.Now.AddDays(-365)) != null;
-                    }
+                        <div>
+                            @{
+                                var hasCurrentRabies = Model.VetRecords.FirstOrDefault(x => x.Rabies <= DateTime.Now && x.Rabies >= DateTime.Now.AddDays(-365)) != null;
 
-                    var hasCurrentVetRecord = hasCurrentRabies && hasCurrentBordetella;
+                                var hasCurrentBordetella = true;
 
-                    var hasntReachedStartDate = item.StartDate.Date > DateTime.Now.Date;
+                                if (Model.AnimalTypeId == 1)
+                                {
+                                    hasCurrentBordetella = Model.VetRecords.FirstOrDefault(x => x.Bordetella <= DateTime.Now && x.Bordetella >= DateTime.Now.AddDays(-365)) != null;
+                                }
 
-                    var startDate = item.StartDate.Date == DateTime.Now.Date || item.StartDate.Date < DateTime.Now.Date;
+                                var hasCurrentVetRecord = hasCurrentRabies && hasCurrentBordetella;
 
-                    var hasRecentCheckInDate = item.CheckinTime != null && item.CheckinTime != default(DateTime) && item.CheckinTime.Value.Date <= DateTime.Now.Date;
+                                var hasntReachedStartDate = item.StartDate.Date > DateTime.Now.Date;
 
-                    var noCheckOutTime = item.CheckoutTime == null || item.CheckoutTime == default(DateTime);
+                                var startDate = item.StartDate.Date == DateTime.Now.Date || item.StartDate.Date < DateTime.Now.Date;
 
-                    var notCheckedIn = item.CheckinTime == null || item.CheckinTime == default(DateTime);
-                }
-                </div>
+                                var hasRecentCheckInDate = item.CheckinTime != null && item.CheckinTime != default(DateTime) && item.CheckinTime.Value.Date <= DateTime.Now.Date;
 
-                <div class="card border-info">
-                    <div class="card-header font-weight-bold text-center">
-                        @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
+                                var noCheckOutTime = item.CheckoutTime == null || item.CheckoutTime == default(DateTime);
 
-                        @if (!hasCurrentVetRecord || hasntReachedStartDate)
-                        {
-                            @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
-                            {
-                                <input type="hidden" asp-for="Id" name="PetId" />
-                                <input class="btn btn-sm btn-info disabled" type="submit" disabled value="Check-In" />
+                                var notCheckedIn = item.CheckinTime == null || item.CheckinTime == default(DateTime);
                             }
-                        }
-                        else if (hasCurrentVetRecord && startDate && !hasRecentCheckInDate && notCheckedIn)
-                        {
-                            @using (Html.BeginForm("CheckInPet", "ServicePets", FormMethod.Post))
-                            {
-                                <input type="hidden" asp-for="Id" name="PetId" />
-                                <input type="hidden" asp-for="@item.Id" name="Id" />
-                                <input type="hidden" asp-for="@item.ServiceType" name="ServiceType" />
-                                <input type="hidden" asp-for="@item.UserId" name="UserId" />
-                                <input type="hidden" asp-for="@item.ServiceNote" name="ServiceNote" />
-                                <input type="hidden" asp-for="@item.StartDate" name="StartDate" />
-                                <input type="hidden" asp-for="@item.CheckoutDate" name="CheckoutDate" />
-
-                                <input class="btn btn-sm btn-info" type="submit" value="Check-In" />
-                            }
-                        }
-                        else if (hasCurrentVetRecord && noCheckOutTime && hasRecentCheckInDate)
-                        {
-                            @using (Html.BeginForm("CheckOutPet", "ServicePets", FormMethod.Post))
-                            {
-                                <input type="hidden" asp-for="Id" name="PetId" />
-                                <input type="hidden" asp-for="@item.Id" name="Id" />
-                                <input type="hidden" asp-for="@item.ServiceType" name="ServiceType" />
-                                <input type="hidden" asp-for="@item.UserId" name="UserId" />
-                                <input type="hidden" asp-for="@item.ServiceNote" name="ServiceNote" />
-                                <input type="hidden" asp-for="@item.StartDate" name="StartDate" />
-                                <input type="hidden" asp-for="@item.CheckoutDate" name="CheckoutDate" />
-                                <input type="hidden" asp-for="@item.CheckinTime" name="CheckinTime" />
-
-                                <input class="btn btn-sm btn-info" type="submit" value="Check-Out" />
-                            }
-                        }
-                        else
-                        {
-                            @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
-                            {
-                                <input type="hidden" asp-for="@item.Id" name="PetId" />
-                                <input class="btn btn-sm btn-info" type="submit" disabled value="Complete" />
-                            }
-                        }
-
-                    </div>
-
-                    <div class="card-body">
-                        <p class="card-text">
-                            @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
-                        </p>
-                        <p class="card-text">
-                            @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
-                        </p>
-                        <div class="text-center">
-                            <input type="hidden" asp-for="Id" name="PetId" />
-                            <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <span> | </span>
-                            <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
-                            <span> | </span>
-                            <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                         </div>
-                    </div>
+
+                        <div class="card border-info">
+                            <div class="card-header font-weight-bold text-center">
+                                @Html.DisplayFor(modelItem => item.NameOfService.ServiceName)
+
+                                @if (!hasCurrentVetRecord || hasntReachedStartDate)
+                                {
+                                    @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
+                                    {
+                                        <input type="hidden" asp-for="Id" name="PetId" />
+                                        <input class="btn btn-sm btn-info disabled" type="submit" disabled value="Check-In" />
+                                    }
+                                }
+                                else if (hasCurrentVetRecord && startDate && !hasRecentCheckInDate && notCheckedIn)
+                                {
+                                    @using (Html.BeginForm("CheckInPet", "ServicePets", FormMethod.Post))
+                                    {
+                                        <input type="hidden" asp-for="Id" name="PetId" />
+                                        <input type="hidden" asp-for="@item.Id" name="Id" />
+                                        <input type="hidden" asp-for="@item.ServiceType" name="ServiceType" />
+                                        <input type="hidden" asp-for="@item.UserId" name="UserId" />
+                                        <input type="hidden" asp-for="@item.ServiceNote" name="ServiceNote" />
+                                        <input type="hidden" asp-for="@item.StartDate" name="StartDate" />
+                                        <input type="hidden" asp-for="@item.CheckoutDate" name="CheckoutDate" />
+
+                                        <input class="btn btn-sm btn-info" type="submit" value="Check-In" />
+                                    }
+                                }
+                                else if (hasCurrentVetRecord && noCheckOutTime && hasRecentCheckInDate)
+                                {
+                                    @using (Html.BeginForm("CheckOutPet", "ServicePets", FormMethod.Post))
+                                    {
+                                        <input type="hidden" asp-for="Id" name="PetId" />
+                                        <input type="hidden" asp-for="@item.Id" name="Id" />
+                                        <input type="hidden" asp-for="@item.ServiceType" name="ServiceType" />
+                                        <input type="hidden" asp-for="@item.UserId" name="UserId" />
+                                        <input type="hidden" asp-for="@item.ServiceNote" name="ServiceNote" />
+                                        <input type="hidden" asp-for="@item.StartDate" name="StartDate" />
+                                        <input type="hidden" asp-for="@item.CheckoutDate" name="CheckoutDate" />
+                                        <input type="hidden" asp-for="@item.CheckinTime" name="CheckinTime" />
+
+                                        <input class="btn btn-sm btn-info" type="submit" value="Check-Out" />
+                                    }
+                                }
+                                else
+                                {
+                                    @using (Html.BeginForm("Action", "Controller", FormMethod.Get))
+                                    {
+                                        <input type="hidden" asp-for="@item.Id" name="PetId" />
+                                        <input class="btn btn-sm btn-info" type="submit" disabled value="Complete" />
+                                    }
+                                }
+
+                            </div>
+
+                            <div class="card-body">
+                                <p class="card-text">
+                                    @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().StartDate): @Html.DisplayFor(modelItem => item.StartDate)
+                                </p>
+                                <p class="card-text">
+                                    @Html.DisplayNameFor(model => model.ServicePets.FirstOrDefault().CheckoutDate): @Html.DisplayFor(modelItem => item.CheckoutDate)
+                                </p>
+                                <div class="text-center">
+                                    <input type="hidden" asp-for="Id" name="PetId" />
+                                    <input type="hidden" asp-for="@item.Id" name="Id" />
+                                    <input type="hidden" asp-for="@item.ServiceType" name="ServiceType" />
+                                    <input type="hidden" asp-for="@item.UserId" name="UserId" />
+                                    <input type="hidden" asp-for="@item.ServiceNote" name="ServiceNote" />
+                                    <input type="hidden" asp-for="@item.StartDate" name="StartDate" />
+                                    <input type="hidden" asp-for="@item.CheckoutDate" name="CheckoutDate" />
+                                    <input type="hidden" asp-for="@item.CheckinTime" name="CheckinTime" />
+
+                                    <a class="card-link" asp-controller="ServicePets" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <span> | </span>
+                                    <a class="card-link" asp-controller="ServicePets" asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                                    <span> | </span>
+                                    <a class="card-link" asp-controller="ServicePets" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
-            }
-        </div>
             }
             else
             {

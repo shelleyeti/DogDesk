@@ -71,7 +71,7 @@ namespace DogDesk
                 await _context.SaveChangesAsync();
 
                 petContact.EmergencyContactId = petContact.EmergencyContact.Id;
-                _context.PetContactss.Add(petContact);
+                _context.PetContacts.Add(petContact);
                 await _context.SaveChangesAsync();
 
                 var petId = petContact.PetId;

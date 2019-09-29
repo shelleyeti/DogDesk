@@ -40,6 +40,50 @@ namespace DogDesk
             return View(await _context.Owners.ToListAsync());
         }
 
+        // GET: Owners Existing
+        public async Task<IActionResult> AddOwnerExisting(string searchString, int? PetId)
+        {
+            var owners = _context.Owners
+                    .Include(o => o.PetOwners)
+                    .ToList();
+            if (PetId != null)
+            {
+                ViewData["PetId"] = PetId;
+            }
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                owners = owners
+                    .Where(o => o.FullName.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                return View(owners);
+            }
+
+            return View(owners);
+        }
+
+        // POST: Owners/AddOwnerExisting
+        [HttpPost]
+        public async Task<IActionResult> AddOwnerExisting(PetOwner petOwner)
+        {
+            _context.PetOwners.Add(petOwner);
+            await _context.SaveChangesAsync();
+
+            var petId = petOwner.PetId;
+            return RedirectToAction("Details", "Pets", new { id = petId });
+        }
+
+        // POST: Owners/Delete/ExistingOwner
+        [HttpPost]
+        public async Task<IActionResult> DeleteExisting(int id)
+        {
+            var petOwner = await _context.PetOwners.FindAsync(id);
+            _context.PetOwners.Remove(petOwner);
+            await _context.SaveChangesAsync();
+
+            var petId = petOwner.PetId;
+            return RedirectToAction("Details", "Pets", new { id = petId });
+        }
+
         // GET: Owners/Details/5
         public async Task<IActionResult> Details(int? id)
         {
