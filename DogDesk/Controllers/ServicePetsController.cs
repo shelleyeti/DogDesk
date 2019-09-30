@@ -100,31 +100,24 @@ namespace DogDesk
         {
             ViewData["ServiceTypes"] = GetServiceTypes();
 
-            var servicePetDetails = _context.ServicePets
-                .Include(x => x.IdOfPet)
-                .Include(x => x.NameOfService);
-
-            foreach (var item in servicePetDetails)
-            {
-                var userName = _context.ApplicationUsers.FirstOrDefault(x => x.Id == item.UserId);
-                if (userName != null)
-                {
-                    item.UserId = userName.FullName;
-                }
-            }
-
             if (id == null)
             {
                 return NotFound();
             }
 
-            var servicePet = await _context.ServicePets.FindAsync(id);
+            var servicePetDetails = await _context.ServicePets
+                .Include(x => x.IdOfPet)
+                .Include(x => x.NameOfService)
+                .FirstAsync(x => x.Id == id);
 
-            if (servicePet == null)
+            var userId = servicePetDetails.UserId;
+            var userName = _context.ApplicationUsers.FirstOrDefault(x => x.Id == userId);
+            if (userName != null)
             {
-                return NotFound();
+                ViewData["UserName"] = userName.FullName;
             }
-            return View(servicePet);
+
+            return View(servicePetDetails);
         }
 
         // POST: ServicePets/Edit/5
@@ -132,7 +125,7 @@ namespace DogDesk
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ServiceType,PetId,StartDate,CheckoutDate,ServiceNote")] ServicePet servicePet)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ServiceType,PetId,StartDate,CheckoutDate,ServiceNote,CheckinTime,CheckoutTime")] ServicePet servicePet)
         {
             if (id != servicePet.Id)
             {
@@ -226,8 +219,8 @@ namespace DogDesk
             var user = await _userManager.GetUserAsync(HttpContext.User);
             servicePet.UserId = user.Id;
 
-            _context.Add(servicePet);
-                _context.SaveChanges();
+            await _context.AddAsync(servicePet);
+             await   _context.SaveChangesAsync();
                 return Json(servicePet);
         }
 

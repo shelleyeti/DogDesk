@@ -9,7 +9,7 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" disabled class="form-control" />
+                <input name="UserName" asp-for="@ViewData["UserName"]" disabled class="form-control" />
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -24,12 +24,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" disabled class="form-control" />
+                <input asp-for="StartDate" name="StartDate" disabled class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CheckoutDate" class="control-label"></label>
-                <input asp-for="CheckoutDate" disabled class="form-control" />
+                <input asp-for="CheckoutDate" name="CheckoutDate" disabled class="form-control" />
                 <span asp-validation-for="CheckoutDate" class="text-danger"></span>
             </div>
         </div>
@@ -40,23 +40,24 @@
             </div>
             <div class="form-group">
                 <label asp-for="CheckinTime" class="control-label"></label>
-                <input asp-for="CheckinTime" disabled class="form-control" />
+                <input asp-for="CheckinTime" name="CheckinTime" disabled class="form-control" />
                 <span asp-validation-for="CheckinTime" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CheckoutTime" class="control-label"></label>
-                <input asp-for="CheckoutTime" disabled class="form-control" />
+                <input asp-for="CheckoutTime" name="CheckoutTime" disabled class="form-control" />
                 <span asp-validation-for="CheckoutTime" class="text-danger"></span>
             </div>
         </div>
     </div>
     <div class="col-md-12 form-group text-right">
         <input type="hidden" asp-for="@Model.PetId" name="PetId" />
-        <input type="hidden" asp-for="@Model.IdOfPet" name="IdOfPet" />
-        <input type="hidden" asp-for="@Model.NameOfService" name="NameOfService" />
         <input type="hidden" asp-for="@Model.ServiceType" name="ServiceType" />
-        <input type="hidden" asp-for="@Model.ServiceNote" name="ServiceNote" />
         <input type="hidden" asp-for="@Model.UserId" name="UserId" />
+        <input type="hidden" asp-for="@Model.StartDate" name="StartDate" />
+        <input type="hidden" asp-for="@Model.CheckoutDate" name="CheckoutDate" />
+        <input type="hidden" asp-for="@Model.CheckinTime" name="CheckinTime" />
+        <input type="hidden" asp-for="@Model.CheckoutTime" name="CheckoutTime" />
 
         <input type="submit" value="Save" class="btn btn-primary" />
     </div>

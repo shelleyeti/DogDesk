@@ -1,0 +1,87 @@
+﻿@model IEnumerable<DogDesk.Models.EmergencyContact>
+
+@{
+    ViewData["Title"] = "AddContactExisting";
+}
+
+<h3>All Emergency Contacts</h3>
+<br />
+
+<form class="form-inline my-2 my-lg-0" role="search" asp-controller="EmergencyContacts" asp-action="AddContactExisting">
+    <input class="form-control form-control-sm mr-sm-2" type="text" name="SearchString" placeholder="Search Existing Contacts">
+    <button class="btn btn-primary my-sm-0 mr-sm-5 btn-sm" type="submit" value="Search">Search</button>
+</form>
+<br />
+
+<div>
+    @using (Html.BeginForm("Create", "EmergencyContacts", FormMethod.Get))
+        {
+    <input type="hidden" asp-for="@ViewData["PetId"]" name="PetId" />
+    <input class="btn btn-sm btn-warning mr-sm-4" type="submit" value="Create New Contact" />
+        }
+</div>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HomePhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CellPhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkPhone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HomePhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CellPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkPhone)
+            </td>
+            <td>
+                @if (item.PetContacts != null && !item.PetContacts.Any(x => x.EmergencyContactId == item.Id && x.PetId == Convert.ToInt32(ViewData["PetId"])))
+                {
+                @using (Html.BeginForm("AddContactExisting", "EmergencyContacts", FormMethod.Post))
+                    {
+                <input type="hidden" asp-for="@ViewData["PetId"]" name="PetId" />
+                <input type="hidden" name="EmergencyContactId" asp-for="@item.Id" />
+                <input type="submit" value="Add" class="form-control" />
+                    }}
+                else
+                {
+                @using (Html.BeginForm("DeleteExisting", "EmergencyContacts", FormMethod.Post))
+                    {
+                <input type="hidden" asp-for="@ViewData["PetId"]" name="PetId" />
+                <input type="hidden" name="EmergencyContactId" asp-for="@item.Id" />
+                <input type="hidden" name="Id" asp-for="@item.PetContacts.First(x => x.EmergencyContactId == item.Id && x.PetId == Convert.ToInt32(ViewData["PetId"])).Id" />
+                <input type="submit" value="Remove" class="form-control" />
+                    }}
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

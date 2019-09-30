@@ -1,0 +1,105 @@
+﻿@model IEnumerable<DogDesk.Models.Owner>
+
+@{
+    ViewData["Title"] = "AddOwnerExisting";
+}
+
+<h3>All Clients</h3>
+<br />
+
+<form class="form-inline my-2 my-lg-0" role="search" asp-controller="Owners" asp-action="AddOwnerExisting">
+    <input class="form-control form-control-sm mr-sm-2" type="text" name="SearchString" placeholder="Search Existing Owners">
+    <button class="btn btn-primary my-sm-0 mr-sm-5 btn-sm" type="submit" value="Search">Search</button>
+</form>
+<br />
+
+<div>
+    @using (Html.BeginForm("AddOwner", "Owners", FormMethod.Get))
+        {
+    <input type="hidden" asp-for="@ViewData["PetId"]" name="PetId" />
+    <input class="btn btn-sm btn-warning mr-sm-4" type="submit" value="Create New Owner" />
+        }
+</div>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StreetAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ZipCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HomePhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CellPhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkPhone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StreetAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZipCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HomePhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CellPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkPhone)
+            </td>
+            <td>
+                @if (item.PetOwners != null && !item.PetOwners.Any(x => x.OwnerId == item.Id && x.PetId == Convert.ToInt32(ViewData["PetId"])))
+                {
+                    @using (Html.BeginForm("AddOwnerExisting", "Owners", FormMethod.Post))
+                    {
+                        <input type="hidden" asp-for="@ViewData["PetId"]" name="PetId" />
+                        <input type="hidden" name="OwnerId" asp-for="@item.Id" />
+                        <input type="submit" value="Add" class="form-control" />
+                    }}
+                else
+                {
+                    @using (Html.BeginForm("DeleteExisting", "Owners", FormMethod.Post))
+                    {
+                        <input type="hidden" asp-for="@ViewData["PetId"]" name="PetId" />
+                        <input type="hidden" name="OwnerId" asp-for="@item.Id" />
+                        <input type="hidden" name="Id" asp-for="@item.PetOwners.First(x => x.OwnerId == item.Id && x.PetId == Convert.ToInt32(ViewData["PetId"])).Id" />
+                        <input type="submit" value="Remove" class="form-control" />
+                    }}
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

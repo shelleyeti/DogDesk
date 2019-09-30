@@ -41,6 +41,6 @@ namespace DogDesk.Models
             { return $"{FirstName} {LastName}"; }
         }
 
-
+        public virtual ICollection<PetContact> PetContacts { get; set; }
     }
 }
