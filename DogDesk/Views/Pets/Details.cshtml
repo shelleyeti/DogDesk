@@ -37,7 +37,7 @@
         }
     </div>
     <div>
-        @using (Html.BeginForm("Create", "EmergencyContacts", FormMethod.Get))
+        @using (Html.BeginForm("AddContactExisting", "EmergencyContacts", FormMethod.Get))
         {
             <input type="hidden" asp-for="Id" name="PetId" />
             <input class="btn btn-sm btn-danger mr-sm-4" type="submit" value="Add New Contact" />
@@ -457,9 +457,7 @@
                         <td class="text-right">
                             <input type="hidden" asp-for="Id" name="PetId" />
                             <a asp-controller="EmergencyContacts" asp-action="Edit" asp-route-id="@item.EmergencyContactId">Edit</a> |
-                            <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.EmergencyContactId">Details</a> |
-                            <a asp-controller="EmergencyContacts" asp-action="Delete" asp-route-id="@item.EmergencyContactId">Delete</a>
-
+                            <a asp-controller="EmergencyContacts" asp-action="Details" asp-route-id="@item.EmergencyContactId">Details</a>
                         </td>
                     </tr>
                 }

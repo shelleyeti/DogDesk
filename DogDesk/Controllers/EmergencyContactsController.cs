@@ -30,6 +30,50 @@ namespace DogDesk
             return View(await _context.EmergencyContacts.ToListAsync());
         }
 
+        // GET: EmergencyContacts Existing
+        public IActionResult AddContactExisting(string searchString, int? PetId)
+        {
+            var contacts = _context.EmergencyContacts
+                    .Include(o => o.PetContacts)
+                    .ToList();
+            if (PetId != null)
+            {
+                ViewData["PetId"] = PetId;
+            }
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                contacts = contacts
+                    .Where(o => o.FullName.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                return View(contacts);
+            }
+
+            return View(contacts);
+        }
+
+        // POST: EmergencyContact/AddContactExisting
+        [HttpPost]
+        public async Task<IActionResult> AddContactExisting(PetContact petContact)
+        {
+            _context.PetContacts.Add(petContact);
+            await _context.SaveChangesAsync();
+
+            var petId = petContact.PetId;
+            return RedirectToAction("Details", "Pets", new { id = petId });
+        }
+
+        // POST: EmergencyContact/Delete/ContactExisting
+        [HttpPost]
+        public async Task<IActionResult> DeleteExisting(int id)
+        {
+            var petContact = await _context.PetContacts.FindAsync(id);
+            _context.PetContacts.Remove(petContact);
+            await _context.SaveChangesAsync();
+
+            var petId = petContact.PetId;
+            return RedirectToAction("Details", "Pets", new { id = petId });
+        }
+
         // GET: EmergencyContacts/Details/5
         public async Task<IActionResult> Details(int? id)
         {

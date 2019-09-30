@@ -41,7 +41,7 @@ namespace DogDesk
         }
 
         // GET: Owners Existing
-        public async Task<IActionResult> AddOwnerExisting(string searchString, int? PetId)
+        public IActionResult AddOwnerExisting(string searchString, int? PetId)
         {
             var owners = _context.Owners
                     .Include(o => o.PetOwners)
